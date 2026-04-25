@@ -1,4 +1,7 @@
-import {fetchLayoutNavItems, type LayoutNavApiModel} from '../api/layout.api';
+import {
+  fetchTvMazeLayoutNavItems,
+  type LayoutNavApiModel
+} from '../../tvmaze/api/tvmaze.api';
 import {mapHeaderNavItemsToViewModel} from '../mappers/layout.mapper';
 import type {HeaderViewModel} from '../viewModel/layoutViewModel.type';
 
@@ -9,7 +12,7 @@ import type {HeaderViewModel} from '../viewModel/layoutViewModel.type';
 
 export const useLayoutPresenter = () => {
   const getHeaderNavItems = async (): Promise<HeaderViewModel> => {
-    const navItems: LayoutNavApiModel[] = await fetchLayoutNavItems();
+    const navItems: LayoutNavApiModel[] = await fetchTvMazeLayoutNavItems();
     return mapHeaderNavItemsToViewModel(navItems);
   };
 

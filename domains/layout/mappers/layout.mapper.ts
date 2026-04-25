@@ -1,4 +1,4 @@
-import type {LayoutNavApiModel} from '../api/layout.api';
+import type {LayoutNavApiModel} from '../../tvmaze/api/tvmaze.api';
 import type {HeaderViewModel} from '../viewModel/layoutViewModel.type';
 
 const mapHeaderNavItemsApiToViewModel = (

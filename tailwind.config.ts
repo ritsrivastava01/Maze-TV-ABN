@@ -1,4 +1,4 @@
-import type {Config} from 'tailwindcss';
+import scrollbar from 'tailwind-scrollbar';
 
 export default {
   content: [
@@ -13,5 +13,5 @@ export default {
   theme: {
     extend: {}
   },
-  plugins: []
-} satisfies Config;
+  plugins: [scrollbar]
+};

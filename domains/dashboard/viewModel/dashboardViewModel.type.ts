@@ -8,8 +8,6 @@ export interface DashboardGenreRow {
 }
 
 export interface DashboardViewModel {
-  shows: ShowViewModel[];
   featuredShow: ShowViewModel | null;
   genreRows: DashboardGenreRow[];
-  genres: string[];
 }
