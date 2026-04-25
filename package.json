@@ -12,7 +12,9 @@
     "test:watch": "vitest --passWithNoTests"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^10.2.4",
     "@nuxtjs/tailwindcss": "^6.14.0",
+    "@phosphor-icons/vue": "^2.2.1",
     "nuxt": "^4.4.2",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"

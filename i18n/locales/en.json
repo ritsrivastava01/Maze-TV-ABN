@@ -1,0 +1,23 @@
+{
+  "brand": {
+    "appName": "MAZE TV"
+  },
+  "nav": {
+    "movies": "Movies",
+    "tvShows": "TV Shows",
+    "documentaries": "Documentaries"
+  },
+  "actions": {
+    "search": "Search",
+    "signUp": "Sign Up",
+    "watchNow": "Watch Now",
+    "trailer": "Trailer"
+  },
+  "labels": {
+    "featuredShow": "Featured show",
+    "showsCount": "{count} shows",
+    "ratingOutOfTen": "{rating}/10",
+    "loadingShows": "Loading shows...",
+    "switchLanguage": "Switch language"
+  }
+}

@@ -1,6 +1,8 @@
-const TVMAZE_BASE_URL = "https://api.tvmaze.com";
+import {$fetch} from 'ofetch';
 
-export interface TvMazeShow {
+const BASE_URL = 'https://api.tvmaze.com';
+
+export interface ShowApiModel {
   id: number;
   name: string;
   summary: string | null;
@@ -8,7 +10,7 @@ export interface TvMazeShow {
   rating: {
     average: number | null;
   };
-  image: {
+  image?: {
     medium: string;
     original: string;
   } | null;
@@ -16,15 +18,22 @@ export interface TvMazeShow {
 
 export interface TvMazeSearchShowItem {
   score: number;
-  show: TvMazeShow;
+  show: ShowApiModel;
 }
 
-export const fetchAllShows = async (): Promise<TvMazeShow[]> => {
-  return await $fetch<TvMazeShow[]>(`${TVMAZE_BASE_URL}/shows`);
+export interface NavApiModel {
+  value: 'movies' | 'tv-shows' | 'documentaries';
+  labelKey: 'nav.movies' | 'nav.tvShows' | 'nav.documentaries';
+  order: number;
+  enabled: boolean;
+}
+
+export const fetchAllShows = async (): Promise<ShowApiModel[]> => {
+  return await $fetch<ShowApiModel[]>(`${BASE_URL}/shows`);
 };
 
 export const searchShows = async (
-  query: string,
+  query: string
 ): Promise<TvMazeSearchShowItem[]> => {
   const normalizedQuery = query.trim();
 
@@ -32,16 +41,26 @@ export const searchShows = async (
     return [];
   }
 
-  return await $fetch<TvMazeSearchShowItem[]>(
-    `${TVMAZE_BASE_URL}/search/shows`,
-    {
-      query: {
-        q: normalizedQuery,
-      },
-    },
-  );
+  return await $fetch<TvMazeSearchShowItem[]>(`${BASE_URL}/search/shows`, {
+    query: {
+      q: normalizedQuery
+    }
+  });
 };
 
-export const fetchShowById = async (id: number): Promise<TvMazeShow> => {
-  return await $fetch<TvMazeShow>(`${TVMAZE_BASE_URL}/shows/${id}`);
+export const fetchShowById = async (id: number): Promise<ShowApiModel> => {
+  return await $fetch<ShowApiModel>(`${BASE_URL}/shows/${id}`);
+};
+
+export const fetchDashboardNavItems = async (): Promise<NavApiModel[]> => {
+  return [
+    {value: 'tv-shows', labelKey: 'nav.tvShows', order: 1, enabled: true},
+    {value: 'movies', labelKey: 'nav.movies', order: 2, enabled: true},
+    {
+      value: 'documentaries',
+      labelKey: 'nav.documentaries',
+      order: 3,
+      enabled: true
+    }
+  ];
 };
