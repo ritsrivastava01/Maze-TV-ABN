@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type {ShowDetailEpisodeViewModel} from '../../domains/show/viewModel/showDetailViewModel.type';
+import type {EpisodeViewModel} from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 import CardSkeleton from './CardSkeleton.vue';
 
 defineProps<{
   /** Omit or `null` to show a skeleton tile (same idea as `Card` without `show`). */
-  episode?: ShowDetailEpisodeViewModel | null;
+  episode?: EpisodeViewModel | null;
 }>();
 </script>
 
@@ -27,10 +27,7 @@ defineProps<{
       Stack (bottom → top): image, gradient, then labels.
       No opacity-0 on the img (avoids “stuck” invisible when load doesn’t fire for cached/broken src).
     -->
-    <div
-      v-else
-      class="relative overflow-hidden"
-    >
+    <div v-else class="relative overflow-hidden">
       <img
         :src="episode.image"
         :alt="episode.title"
@@ -38,26 +35,28 @@ defineProps<{
         loading="lazy"
       />
       <div
-        class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black via-black/50 to-transparent"
+        class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent"
         aria-hidden="true"
       />
       <div
         v-if="episode.rating"
-        class="absolute right-3 top-3 z-20 rounded-full bg-black/50 px-2 py-1 text-xs font-bold text-white backdrop-blur"
+        class="absolute right-3 top-3 z-20 rounded-full bg-black/55 px-2.5 py-1 text-xs font-bold tabular-nums text-pink-100 shadow-lg shadow-black/40 backdrop-blur-sm"
       >
         {{ episode.rating }}/10
       </div>
-      <div class="absolute bottom-3 left-3 right-3 z-20 text-left">
+      <div
+        class="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 pb-3 pt-10 text-left"
+      >
         <p
-          class="text-base font-black uppercase leading-none tracking-[0.04em] text-white drop-shadow-md"
+          class="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-pink-300/95 drop-shadow-sm"
         >
-          S{{ episode.season }}E{{ episode.number }}
+          S{{ episode.seasonNumber }}E{{ episode.episodeNumber }}
         </p>
-        <h3
-          class="mt-2 line-clamp-2 text-xl font-black leading-tight text-white drop-shadow-md"
+        <p
+          class="mt-1 line-clamp-2 text-sm font-semibold text-white drop-shadow-md"
         >
           {{ episode.title }}
-        </h3>
+        </p>
       </div>
     </div>
   </article>

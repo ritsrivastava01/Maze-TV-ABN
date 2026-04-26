@@ -8,14 +8,14 @@ import CastCard from '../../components/CastCard.vue';
 import EpisodeCard from '../../components/EpisodeCard.vue';
 import RatingStars from '../../components/RatingStars.vue';
 import Rail from '../../components/Rail.vue';
-import type {ShowDetailViewModel} from '../../../domains/show/viewModel/showDetailViewModel.type';
+import type {ShowDetailsPageViewModel} from '../../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const {t} = useI18n();
 const route = useRoute();
 const showId = computed(() => Number(route.params.id));
 
-const {data, error} = useFetch<ShowDetailViewModel>(
-  () => `/api/show/${showId.value}`,
+const {data, error} = useFetch<ShowDetailsPageViewModel>(
+  () => `/api/${showId.value}`,
   {
     key: () => `show-detail-${showId.value}`,
     /** Only refetch when navigating to a different show — season is client-only filtering on cached payload. */
@@ -43,7 +43,7 @@ const detailItems = computed(() => {
 
   return [
     {label: 'Status', value: show.value.status},
-    {label: 'Premiered', value: show.value.premiered},
+    {label: 'Premiered', value: show.value.premiereDate},
     {label: 'Ended', value: show.value.ended},
     {label: 'Country', value: show.value.country},
     {label: 'Days', value: show.value.scheduleDays},
@@ -196,13 +196,13 @@ watch(
               v-html="show.summary"
             />
 
-            <div class="mt-6 flex flex-wrap gap-2">
+            <div class="mt-6 flex flex-wrap gap-3">
               <a
                 v-if="show.officialSite"
                 :href="show.officialSite"
                 target="_blank"
                 rel="noreferrer"
-                class="rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-slate-200"
+                class="rounded-full bg-pink-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-pink-500/30 transition hover:bg-pink-400"
               >
                 Official site
               </a>
@@ -211,7 +211,7 @@ watch(
                 :href="show.imdbUrl"
                 target="_blank"
                 rel="noreferrer"
-                class="rounded-full px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+                class="rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
               >
                 IMDb
               </a>

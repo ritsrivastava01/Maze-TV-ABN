@@ -1,4 +1,4 @@
-import {useShowPresenter} from '../../../domains/show/presenters/show.presenter';
+import {useShowDetailsPresenter} from '../../domains/showDetails/presenters/showDetails.presenter';
 
 export default defineEventHandler(async (event) => {
   const id = Number(event.context.params?.id);
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const {getShowDetail} = useShowPresenter();
+  const {getShowDetails} = useShowDetailsPresenter();
 
-  return await getShowDetail(id);
+  return await getShowDetails(id);
 });

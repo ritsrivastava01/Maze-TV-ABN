@@ -38,7 +38,7 @@ export const useAppNavigation = () => {
 
   const getShowPath = (showId: number): string => {
     return localePath({
-      path: `/show/${showId}`,
+      path: `/shows/${showId}`,
       query: {
         type: selectedCategory.value
       }

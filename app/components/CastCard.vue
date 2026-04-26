@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type {ShowDetailCastMemberViewModel} from '../../domains/show/viewModel/showDetailViewModel.type';
+import type {CastViewModel} from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 defineProps<{
-  cast: ShowDetailCastMemberViewModel;
+  cast: CastViewModel;
 }>();
 </script>
 
@@ -20,10 +20,14 @@ defineProps<{
       class="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/45 to-transparent"
     />
     <div class="absolute bottom-3 left-3 right-3 z-20">
-      <h3 class="line-clamp-2 font-black leading-tight text-pink-300 drop-shadow-md">
+      <h3
+        class="line-clamp-2 font-black leading-tight text-pink-300 drop-shadow-md"
+      >
         {{ cast.name }}
       </h3>
-      <p class="mt-1 line-clamp-2 text-sm font-semibold text-white drop-shadow-md">
+      <p
+        class="mt-1 line-clamp-2 text-sm font-semibold text-white drop-shadow-md"
+      >
         {{ cast.characterName }}
       </p>
     </div>
