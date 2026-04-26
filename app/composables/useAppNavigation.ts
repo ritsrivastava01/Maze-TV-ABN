@@ -37,7 +37,12 @@ export const useAppNavigation = () => {
   };
 
   const getShowPath = (showId: number): string => {
-    return localePath(`/show/${showId}`);
+    return localePath({
+      path: `/show/${showId}`,
+      query: {
+        type: selectedCategory.value
+      }
+    });
   };
 
   const goToShow = async (showId: number): Promise<void> => {

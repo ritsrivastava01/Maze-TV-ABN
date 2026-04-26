@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, useSlots} from 'vue';
-import CardSkeleton from './CardSkeleton.vue';
+import Card from './Card.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -52,19 +52,16 @@ const onScroll = (event: Event): void => {
 
       <div
         data-rail-scroll
-        class="relative z-10 flex gap-7 overflow-y-visible py-14 pl-7 pr-28"
+        class="relative z-10 flex gap-7 overflow-y-visible py-16 pl-7 pr-28"
         :class="railOverflowClass"
         @scroll.passive="onScroll"
       >
         <!-- Rail owns the loading placeholder for consistent card spacing. -->
         <template v-if="loading">
-          <div
-            v-for="card in skeletonCount"
-            :key="`skeleton-card-${card}`"
-            class="block h-[195px] min-w-[140px] max-w-[140px] shrink-0 first:ml-0 last:mr-14"
-          >
-            <CardSkeleton />
-          </div>
+          <Card
+            v-for="n in skeletonCount"
+            :key="`skeleton-card-${n}`"
+          />
         </template>
         <slot v-else />
       </div>
