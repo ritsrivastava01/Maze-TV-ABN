@@ -7,6 +7,7 @@ import type {
   DashboardCategory,
   DashboardViewModel
 } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
+import {useAppNavigation} from '#imports';
 import Card from '../components/Card.vue';
 import Rail from '../components/Rail.vue';
 import type {ShowViewModel} from '~~/domains/dashboard/viewModel/show.type';
@@ -20,6 +21,12 @@ const visibleRailCount = ref(RAIL_COUNT);
 const visibleCountByGenre = ref<Record<string, number>>({});
 const route = useRoute();
 const {t} = useI18n();
+const {getShowPath} = useAppNavigation();
+
+const railShowClass = 'block h-72 w-52 min-w-52 shrink-0';
+
+const railShowShellClass =
+  ' block h-72 w-52 min-w-52 shrink-0 origin-center transform-gpu transition-transform duration-300 ease-out will-change-transform hover:z-30 hover:scale-125 hover:border-pink-300/80 hover:ring-2 hover:ring-pink-400/80 hover:shadow-[0_0_28px_rgba(236,72,153,0.38)]';
 
 // used to validate the category from the query string
 const getDashboardCategory = (value: unknown): DashboardCategory => {
@@ -211,12 +218,19 @@ onBeforeUnmount(() => {
         }
       "
     >
-      <Card
+      <template
         v-for="(card, index) in row.cards"
         :key="card?.id ?? `${row.key}-${index}`"
-        class="h-72 w-52 min-w-52"
-        :show="card"
-      />
+      >
+        <NuxtLink v-if="card" :to="getShowPath(card.id)" :class="railShowClass">
+          <Card
+            :preview="card"
+            class="h-full w-full"
+            :shell-class="railShowShellClass"
+          />
+        </NuxtLink>
+        <Card v-else :preview="null" :class="railShowClass" />
+      </template>
     </Rail>
   </section>
 </template>

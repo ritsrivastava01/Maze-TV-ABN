@@ -1,60 +1,56 @@
 <script setup lang="ts">
-import {ref} from 'vue';
-import {useAppNavigation} from '#imports';
+import {computed} from 'vue';
 import type {ShowViewModel} from '../../domains/dashboard/viewModel/show.type';
+import {cn} from '../utils/cn';
 import CardSkeleton from './CardSkeleton.vue';
 
-const props = defineProps<{
-  show?: ShowViewModel | null;
-}>();
+export type CardPreview = {id: number | string; title: string; image: string};
 
-const imageLoaded = ref(false);
-const {getShowPath} = useAppNavigation();
+const PANEL_BASE =
+  'absolute inset-0 isolate overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50';
 
-const markImageLoaded = (): void => {
-  imageLoaded.value = true;
-};
+const props = withDefaults(
+  defineProps<{
+    preview?: CardPreview | null;
+    imageLoading?: 'lazy' | 'eager';
+    shellClass?: string;
+  }>(),
+  {
+    imageLoading: 'lazy'
+  }
+);
+
+const panelClass = computed(() => cn(PANEL_BASE, props.shellClass));
 </script>
 
 <template>
   <div
-    :role="!show ? 'presentation' : undefined"
-    :aria-hidden="!show ? true : undefined"
+    class="relative min-h-0 max-w-full"
+    :role="!preview ? 'presentation' : undefined"
+    :aria-hidden="!preview ? true : undefined"
   >
-    <div
-      v-if="!show"
-      class="h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-800/30"
-    >
-      <CardSkeleton />
+    <div v-if="!preview" class="absolute inset-0">
+      <CardSkeleton class="h-full w-full" />
     </div>
 
-    <NuxtLink
-      v-else-if="show"
-      :to="getShowPath(show.id)"
-      class="group relative z-0 block h-full w-full origin-center transform-gpu transition-transform duration-300 ease-out will-change-transform hover:z-30 hover:scale-125"
-    >
-      <div
-        class="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-800/60 transition duration-300 group-hover:border-pink-300/80 group-hover:ring-2 group-hover:ring-pink-400/80 group-hover:shadow-[0_0_28px_rgba(236,72,153,0.38)]"
-      >
-        <div
-          v-show="!imageLoaded"
-          class="absolute inset-0 z-10 animate-pulse bg-slate-700/70"
-          aria-hidden="true"
-        />
-        <img
-          :src="show.image"
-          :alt="show.title"
-          class="relative z-20 h-full w-full object-cover transition-opacity duration-300"
-          :class="imageLoaded ? 'opacity-100' : 'opacity-0'"
-          loading="lazy"
-          @load="markImageLoaded"
-          @error="markImageLoaded"
-        />
-        <div
-          v-show="imageLoaded"
-          class="pointer-events-none absolute inset-0 z-[30] bg-gradient-to-t from-black/65 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-80"
-        />
+    <div v-else :class="panelClass">
+      <img
+        :src="preview.image"
+        :alt="preview.title"
+        class="absolute inset-0 z-0 h-full w-full object-cover"
+        :loading="imageLoading"
+        :fetchpriority="imageLoading === 'eager' ? 'high' : undefined"
+        decoding="async"
+      />
+      <div v-if="$slots.header" class="absolute right-0 top-0 z-10 p-3">
+        <slot name="header" />
       </div>
-    </NuxtLink>
+      <div
+        v-if="$slots.footer"
+        class="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-3 pb-3 pt-12"
+      >
+        <slot name="footer" />
+      </div>
+    </div>
   </div>
 </template>

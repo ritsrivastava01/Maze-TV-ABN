@@ -4,10 +4,10 @@ import {computed, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useFetch} from 'nuxt/app';
 import {useRoute} from 'vue-router';
-import CastCard from '../../components/CastCard.vue';
-import EpisodeCard from '../../components/EpisodeCard.vue';
+import Card from '../../components/Card.vue';
+import CastPanel from '../../components/CastPanel.vue';
+import EpisodePanel from '../../components/EpisodePanel.vue';
 import RatingStars from '../../components/RatingStars.vue';
-import Rail from '../../components/Rail.vue';
 import type {ShowDetailsPageViewModel} from '../../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const {t} = useI18n();
@@ -26,12 +26,6 @@ const {data, error} = useFetch<ShowDetailsPageViewModel>(
 const show = computed(() => data.value?.show ?? null);
 const selectedSeason = ref<number | null>(null);
 const seasons = computed(() => data.value?.seasons ?? []);
-const selectedSeasonEpisodes = computed(() => {
-  return (
-    seasons.value.find((season) => season.season === selectedSeason.value)
-      ?.episodes ?? []
-  );
-});
 const castPreview = computed(() => data.value?.cast ?? []);
 /** Detail grid: network & runtime stay under the title only. */
 const detailItems = computed(() => {
@@ -63,17 +57,10 @@ const backPath = computed(() => {
   };
 });
 
-watch(
-  seasons,
-  (availableSeasons) => {
-    if (selectedSeason.value || availableSeasons.length === 0) {
-      return;
-    }
-
-    selectedSeason.value = availableSeasons[0].season;
-  },
-  {immediate: true}
-);
+/** New show: clear season so `EpisodePanel` picks a valid default from fresh `seasons`. */
+watch(showId, () => {
+  selectedSeason.value = null;
+});
 </script>
 
 <template>
@@ -110,23 +97,11 @@ watch(
           class="grid grid-cols-1 gap-8 md:grid-cols-12 md:items-start md:gap-10 lg:gap-12"
         >
         <div class="md:col-span-5 lg:col-span-4">
-          <div
-            class="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-xl shadow-black/40 aspect-[2/3] max-w-sm mx-auto md:max-w-none md:mx-0"
-          >
-            <img
-              v-if="show"
-              :src="show.image"
-              :alt="show.title"
-              class="h-full w-full object-cover"
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-            />
-            <div
-              v-else
-              class="absolute inset-0 animate-pulse bg-slate-800/80"
-            />
-          </div>
+          <Card
+            :preview="show"
+            image-loading="eager"
+            class="aspect-[2/3] max-w-sm mx-auto md:max-w-none md:mx-0 shadow-xl shadow-black/40"
+          />
         </div>
 
         <div class="min-w-0 md:col-span-7 lg:col-span-8">
@@ -248,85 +223,9 @@ watch(
       "
       class="mt-16 space-y-10 border-t border-white/[0.08] pt-16 px-4 sm:px-6 lg:px-10 md:mt-20 md:space-y-12 md:pt-20"
     >
-      <section v-if="seasons.length > 0">
-        <Rail>
-          <template #header>
-            <div>
-              <p class="text-xs uppercase tracking-[0.24em] text-slate-500">
-                {{ t('showDetail.episodes') }}
-              </p>
-              <h2 class="mt-2 min-h-[2rem] text-2xl font-black text-white">
-                <template v-if="selectedSeason != null">
-                  {{ t('showDetail.seasonWithNumber', {n: selectedSeason}) }}
-                </template>
-                <span
-                  v-else
-                  class="inline-block h-8 w-48 max-w-full animate-pulse rounded bg-slate-700/60"
-                />
-              </h2>
-            </div>
+      <EpisodePanel v-model:selected-season="selectedSeason" :seasons="seasons" />
 
-            <div class="flex flex-wrap items-center gap-3">
-              <span class="text-sm text-slate-400">
-                {{
-                  t('showDetail.episodeCount', {
-                    n: selectedSeasonEpisodes.length
-                  })
-                }}
-              </span>
-              <select
-                v-model.number="selectedSeason"
-                :aria-label="t('showDetail.selectSeason')"
-                class="h-10 min-w-[9.5rem] cursor-pointer appearance-none rounded-full border border-white/40 bg-black/20 py-0 pl-4 pr-12 text-sm font-semibold text-white outline-none transition hover:bg-white/10 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40 [background-size:1.15rem_1.15rem] [background-position:right_0.75rem_center] [background-repeat:no-repeat] [background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2220%22%20height=%2220%22%20fill=%22%23e2e8f0%22%20viewBox=%220%200%20256%20256%22%3E%3Cpath%20d=%22M213.66%20101.66l-80%2080a8%208%200%200%201-11.32%200l-80-80A8%208%200%200%201%2043.31%2088L128%20172.69%20212.69%2088a8%208%200%200%201%2011.32%2011.32Z%22/%3E%3C/svg%3E')]"
-              >
-                <option
-                  v-for="season in seasons"
-                  :key="season.season"
-                  :value="season.season"
-                >
-                  {{ t('showDetail.seasonWithNumber', {n: season.season}) }}
-                </option>
-              </select>
-            </div>
-          </template>
-
-          <template v-if="selectedSeasonEpisodes.length > 0">
-            <EpisodeCard
-              v-for="episode in selectedSeasonEpisodes"
-              :key="episode.id"
-              :episode="episode"
-            />
-          </template>
-          <template v-else-if="!selectedSeason && seasons.length > 0">
-            <EpisodeCard
-              v-for="n in 6"
-              :key="`episode-skeleton-${n}`"
-              :episode="null"
-            />
-          </template>
-          <p
-            v-else
-            class="pl-2 text-sm text-slate-400"
-          >
-            {{ t('showDetail.noEpisodesInSeason') }}
-          </p>
-        </Rail>
-      </section>
-
-      <section v-if="castPreview.length > 0">
-        <p
-          class="text-xs uppercase tracking-[0.24em] text-slate-500"
-        >
-          {{ t('showDetail.cast') }}
-        </p>
-        <Rail class="!mb-0 mt-3">
-          <CastCard
-            v-for="castMember in castPreview"
-            :key="castMember.id"
-            :cast="castMember"
-          />
-        </Rail>
-      </section>
+      <CastPanel :cast="castPreview" />
     </div>
   </div>
 </template>
