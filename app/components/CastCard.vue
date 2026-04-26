@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <article
-    class="relative isolate h-72 w-52 min-w-52 shrink-0 first:ml-0 last:mr-14 overflow-hidden rounded-2xl bg-slate-900/70 ring-1 ring-white/10"
+    class="relative isolate h-72 w-52 min-w-52 overflow-hidden rounded-2xl bg-slate-900/70 ring-1 ring-white/10"
   >
     <img
       :src="cast.image"

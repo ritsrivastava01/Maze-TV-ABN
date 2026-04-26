@@ -1,11 +1,29 @@
 <script setup lang="ts">
-import {useSlots} from 'vue';
+import {computed, useSlots} from 'vue';
+
+const props = defineProps<{
+  /** Set to `null` for a pulse header (dashboard loading). Omit entirely when no header row (e.g. cast rail). */
+  headerTitle?: string | null;
+  headerSubtitle?: string | null;
+}>();
 
 const emit = defineEmits<{
   railScroll: [event: Event];
 }>();
 
 const slots = useSlots();
+const hasHeaderSlot = computed(() => !!slots.header);
+
+const showPropHeader = computed(() => {
+  const t = props.headerTitle;
+  return typeof t === 'string' && t.length > 0;
+});
+
+const showHeaderSkeleton = computed(() => {
+  const t = props.headerTitle;
+  return t === null || t === '';
+});
+
 const scrollableRailClass =
   'overflow-x-scroll scrollbar-thin scrollbar-track-slate-700/70 scrollbar-thumb-pink-500 hover:scrollbar-thumb-pink-400';
 
@@ -17,10 +35,31 @@ const onScroll = (event: Event): void => {
 <template>
   <section class="mb-6">
     <div
-      v-if="slots.header"
+      v-if="hasHeaderSlot"
       class="mb-3 flex min-h-7 items-center justify-between px-2"
     >
       <slot name="header" />
+    </div>
+    <div
+      v-else-if="showPropHeader"
+      class="mb-3 flex min-h-7 items-center justify-between px-2"
+    >
+      <h3 class="text-xl font-bold">
+        {{ headerTitle }}
+      </h3>
+      <span
+        v-if="headerSubtitle != null && headerSubtitle !== ''"
+        class="text-xs text-slate-300"
+      >
+        {{ headerSubtitle }}
+      </span>
+    </div>
+    <div
+      v-else-if="showHeaderSkeleton"
+      class="mb-3 flex min-h-7 items-center justify-between px-2"
+    >
+      <div class="h-7 w-28 animate-pulse rounded bg-slate-700/80" />
+      <div class="h-4 w-16 animate-pulse rounded bg-slate-700/60" />
     </div>
 
     <div class="relative">

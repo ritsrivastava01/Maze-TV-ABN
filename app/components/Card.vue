@@ -18,7 +18,6 @@ const markImageLoaded = (): void => {
 
 <template>
   <div
-    class="h-72 w-52 min-w-52 shrink-0 first:ml-0 last:mr-14"
     :role="!show ? 'presentation' : undefined"
     :aria-hidden="!show ? true : undefined"
   >

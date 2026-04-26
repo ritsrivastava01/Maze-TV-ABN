@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <article
-    class="w-80 shrink-0 first:ml-0 last:mr-14 overflow-hidden rounded-2xl bg-slate-900/80 ring-1 ring-white/10"
+    class="w-80 overflow-hidden rounded-2xl bg-slate-900/80 ring-1 ring-white/10"
     :role="!episode ? 'presentation' : undefined"
     :aria-hidden="!episode ? true : undefined"
   >

@@ -62,6 +62,30 @@ const getVisibleShows = (
 };
 
 /**
+ * Get the actual show card or skeleton cards for the genre rows
+ * . */
+const dashboardRails = computed(() => {
+  if (status.value === 'pending' || visibleGenreRows.value.length === 0) {
+    return Array.from({length: RAIL_COUNT}, (_, i) => {
+      return {
+        key: `placeholder-${i}`,
+        genre: null,
+        shows: [],
+        cards: Array.from({length: RAIL_CARD_BATCH_SIZE}, () => null)
+      };
+    });
+  }
+  return visibleGenreRows.value.map((r) => {
+    return {
+      key: r.genre,
+      genre: r.genre,
+      shows: r.shows,
+      cards: getVisibleShows(r.genre, r.shows)
+    };
+  });
+});
+
+/**
  *   used to handle the scroll event for the rail
  *   used to load more cards when the user scrolls to the end of the rail
  */
@@ -170,35 +194,28 @@ onBeforeUnmount(() => {
     v-else
     class="relative z-20 -mt-20 mx-auto container px-4 pb-10 sm:px-6 lg:px-10"
   >
-    <section v-if="status === 'pending' || visibleGenreRows.length === 0">
-      <Rail v-for="row in RAIL_COUNT" :key="`loading-row-${row}`">
-        <template #header>
-          <div class="h-7 w-28 animate-pulse rounded bg-slate-700/80" />
-          <div class="h-4 w-16 animate-pulse rounded bg-slate-700/60" />
-        </template>
-        <Card
-          v-for="n in RAIL_CARD_BATCH_SIZE"
-          :key="`skeleton-card-${row}-${n}`"
-        />
-      </Rail>
-    </section>
     <Rail
-      v-for="row in visibleGenreRows"
-      v-else
-      :key="row.genre"
-      @rail-scroll="onRailScroll($event, row.genre)"
+      v-for="row in dashboardRails"
+      :key="row.key"
+      :header-title="row.genre"
+      :header-subtitle="
+        row.genre
+          ? t('labels.showsCount', {count: row.shows.length})
+          : undefined
+      "
+      @rail-scroll="
+        (event) => {
+          if (row.genre) {
+            onRailScroll(event, row.genre);
+          }
+        }
+      "
     >
-      <template #header>
-        <h3 class="text-xl font-bold">{{ row.genre }}</h3>
-        <span class="text-xs text-slate-300">
-          {{ t('labels.showsCount', {count: row.shows.length}) }}
-        </span>
-      </template>
-
       <Card
-        v-for="show in getVisibleShows(row.genre, row.shows)"
-        :key="show.id"
-        :show="show"
+        v-for="(card, index) in row.cards"
+        :key="card?.id ?? `${row.key}-${index}`"
+        class="h-72 w-52 min-w-52"
+        :show="card"
       />
     </Rail>
   </section>
