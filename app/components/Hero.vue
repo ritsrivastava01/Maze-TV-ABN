@@ -37,11 +37,13 @@ const {getShowPath} = useAppNavigation();
       class="container relative z-10 mx-auto flex h-full min-h-[inherit] px-4 pb-28 pt-28 sm:px-6 lg:px-10"
     >
       <div v-if="show" class="mt-auto w-full max-w-xl">
-        <p
-          class="text-sm font-semibold uppercase tracking-[0.3em] text-pink-300"
-        >
-          {{ t('labels.featuredShow') }}
-        </p>
+        <slot name="eyebrow">
+          <p
+            class="text-sm font-semibold uppercase tracking-[0.3em] text-pink-300"
+          >
+            {{ t('labels.featuredShow') }}
+          </p>
+        </slot>
         <h1
           class="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-7xl"
         >

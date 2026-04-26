@@ -10,8 +10,17 @@
   "actions": {
     "search": "Search",
     "signUp": "Sign Up",
+    "backToShows": "Back to shows",
     "watchNow": "Watch Now",
     "trailer": "Trailer"
+  },
+  "showDetail": {
+    "episodes": "Episodes",
+    "episodeCount": "{n} episodes",
+    "seasonWithNumber": "Season {n}",
+    "selectSeason": "Choose season",
+    "noEpisodesInSeason": "No episodes in this season.",
+    "cast": "Cast"
   },
   "labels": {
     "featuredShow": "Featured show",

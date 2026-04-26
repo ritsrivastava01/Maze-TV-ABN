@@ -10,8 +10,17 @@
   "actions": {
     "search": "Zoeken",
     "signUp": "Registreren",
+    "backToShows": "Terug naar shows",
     "watchNow": "Nu kijken",
     "trailer": "Trailer"
+  },
+  "showDetail": {
+    "episodes": "Afleveringen",
+    "episodeCount": "{n} afleveringen",
+    "seasonWithNumber": "Seizoen {n}",
+    "selectSeason": "Kies seizoen",
+    "noEpisodesInSeason": "Geen afleveringen in dit seizoen.",
+    "cast": "Cast"
   },
   "labels": {
     "featuredShow": "Uitgelichte show",

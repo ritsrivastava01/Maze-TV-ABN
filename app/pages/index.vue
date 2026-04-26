@@ -11,7 +11,7 @@ import Card from '../components/Card.vue';
 import Rail from '../components/Rail.vue';
 import type {ShowViewModel} from '~~/domains/dashboard/viewModel/show.type';
 
-const RAIL_CARD_BATCH_SIZE = 10;
+const RAIL_CARD_BATCH_SIZE = 8;
 const RAIL_COUNT = 3;
 const PAGE_BOTTOM_LOAD_THRESHOLD_PX = 220;
 const heroHeightClass = 'h-[75vh]';
@@ -171,12 +171,16 @@ onBeforeUnmount(() => {
     class="relative z-20 -mt-20 mx-auto container px-4 pb-10 sm:px-6 lg:px-10"
   >
     <section v-if="status === 'pending' || visibleGenreRows.length === 0">
-      <Rail
-        v-for="row in RAIL_COUNT"
-        :key="`loading-row-${row}`"
-        loading
-        :skeleton-count="RAIL_CARD_BATCH_SIZE"
-      />
+      <Rail v-for="row in RAIL_COUNT" :key="`loading-row-${row}`">
+        <template #header>
+          <div class="h-7 w-28 animate-pulse rounded bg-slate-700/80" />
+          <div class="h-4 w-16 animate-pulse rounded bg-slate-700/60" />
+        </template>
+        <Card
+          v-for="n in RAIL_CARD_BATCH_SIZE"
+          :key="`skeleton-card-${row}-${n}`"
+        />
+      </Rail>
     </section>
     <Rail
       v-for="row in visibleGenreRows"
