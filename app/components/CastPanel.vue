@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {useI18n} from 'vue-i18n';
-import type {CastViewModel} from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
+import type {Cast} from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 import Card from './Card.vue';
 import Rail from './Rail.vue';
 
 defineProps<{
-  cast: CastViewModel[];
+  cast: Cast[];
 }>();
 
 const {t} = useI18n();

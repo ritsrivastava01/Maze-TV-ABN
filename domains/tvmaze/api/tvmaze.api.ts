@@ -5,7 +5,7 @@ const TVMAZE_BASE_URL = 'https://api.tvmaze.com';
 /**
  * API model for the TVMaze shows response (for individual and list views).
  */
-export interface ShowApiModel {
+export interface ShowApi {
   id: number;
   name: string;
   type?: string;
@@ -41,24 +41,18 @@ export interface ShowApiModel {
 }
 
 /**
- * API model for the TVMaze shows response (for list views).
+ * Get the shows from the TVMaze API
+ * @returns The shows from the TVMaze API
  */
-export const fetchTvMazeShows = async (): Promise<ShowApiModel[]> => {
-  return await $fetch<ShowApiModel[]>(`${TVMAZE_BASE_URL}/shows`);
+export const fetchTvMazeShows = async (): Promise<ShowApi[]> => {
+  return await $fetch<ShowApi[]>(`${TVMAZE_BASE_URL}/shows`);
 };
 
-/**
- * API model for the TVMaze show by ID response.
- */
-export const fetchTvMazeShowById = async (
-  id: number
-): Promise<ShowApiModel> => {
-  return await $fetch<ShowApiModel>(`${TVMAZE_BASE_URL}/shows/${id}`);
+export const fetchTvMazeShowById = async (id: number): Promise<ShowApi> => {
+  return await $fetch<ShowApi>(`${TVMAZE_BASE_URL}/shows/${id}`);
 };
-/**
- * API model for the TVMaze episodes response.
- */
-export interface EpisodeApiModel {
+/** TVMaze episode JSON. Maps to app `Episode` in show-details. */
+export interface EpisodeApi {
   id: number;
   name: string;
   season: number;
@@ -73,18 +67,51 @@ export interface EpisodeApiModel {
   } | null;
 }
 
+/**
+ * Get the episodes for a given show
+ * @param id - The ID of the show
+ * @returns The episodes for the given show
+ */
 export const fetchTvMazeShowEpisodes = async (
   id: number
-): Promise<EpisodeApiModel[]> => {
-  return await $fetch<EpisodeApiModel[]>(
-    `${TVMAZE_BASE_URL}/shows/${id}/episodes`
+): Promise<EpisodeApi[]> => {
+  return await $fetch<EpisodeApi[]>(`${TVMAZE_BASE_URL}/shows/${id}/episodes`);
+};
+
+/** TVMaze `GET /shows/{id}/seasons` row. Maps to app `Season` in show-details. */
+export interface SeasonApi {
+  id: number;
+  number: number;
+}
+
+/**
+ * Get the seasons for a given show
+ * @param showId - The ID of the show
+ * @returns The seasons for the given show
+ */
+export const fetchTvMazeShowSeasons = async (
+  showId: number
+): Promise<SeasonApi[]> => {
+  return await $fetch<SeasonApi[]>(
+    `${TVMAZE_BASE_URL}/shows/${showId}/seasons`
   );
 };
 
 /**
- * API model for the TVMaze cast response.
+ * Get the episodes for a given season
+ * @param seasonId - The ID of the season
+ * @returns The episodes for the given season
  */
-export interface CastApiModel {
+export const fetchTvMazeSeasonEpisodes = async (
+  seasonId: number
+): Promise<EpisodeApi[]> => {
+  return await $fetch<EpisodeApi[]>(
+    `${TVMAZE_BASE_URL}/seasons/${seasonId}/episodes`
+  );
+};
+
+/** API model for the TVMaze cast response. */
+export interface CastApi {
   person: {
     id: number;
     name: string;
@@ -99,10 +126,13 @@ export interface CastApiModel {
   };
 }
 
-export const fetchTvMazeShowCast = async (
-  id: number
-): Promise<CastApiModel[]> => {
-  return await $fetch<CastApiModel[]>(`${TVMAZE_BASE_URL}/shows/${id}/cast`);
+/**
+ * Get the cast for a given show
+ * @param id - The ID of the show
+ * @returns The cast for the given show
+ */
+export const fetchTvMazeShowCast = async (id: number): Promise<CastApi[]> => {
+  return await $fetch<CastApi[]>(`${TVMAZE_BASE_URL}/shows/${id}/cast`);
 };
 
 /**
@@ -130,6 +160,10 @@ const NAV_ITEMS: LayoutNavApiModel[] = [
   }
 ];
 
+/**
+ * Get the layout navigation items from the TVMaze API
+ * @returns The layout navigation items from the TVMaze API
+ */
 export const fetchTvMazeLayoutNavItems = async (): Promise<
   LayoutNavApiModel[]
 > => {

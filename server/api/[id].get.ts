@@ -11,6 +11,5 @@ export default defineEventHandler(async (event) => {
   }
 
   const {getShowDetails} = useShowDetailsPresenter();
-
   return await getShowDetails(id);
 });

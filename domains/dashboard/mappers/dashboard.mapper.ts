@@ -1,4 +1,4 @@
-import type {ShowApiModel} from '../../tvmaze/api/tvmaze.api';
+import type {ShowApi} from '../../tvmaze/api/tvmaze.api';
 import type {
   DashboardCategory,
   DashboardGenreRow,
@@ -27,7 +27,7 @@ const DOCUMENTARY_GENRES = new Set(['Documentary', 'History', 'Nature']);
  *   used to map the shows API model to the dashboard view model
  */
 const mapShowsApiToDashboardViewModel = (
-  shows: ShowApiModel[],
+  shows: ShowApi[],
   category: DashboardCategory
 ): DashboardViewModel => {
   const sortedShows = mapShowsApiToDashboardShows(shows);
@@ -44,7 +44,7 @@ const mapShowsApiToDashboardViewModel = (
 /**
  *   used to map the show API model to the show view model
  */
-const mapShowApiToDashboardShow = (show: ShowApiModel): ShowViewModel => {
+const mapShowApiToDashboardShow = (show: ShowApi): ShowViewModel => {
   const rating = show.rating.average ?? 0;
 
   return {
@@ -64,7 +64,7 @@ const mapShowApiToDashboardShow = (show: ShowApiModel): ShowViewModel => {
  *   and sort the shows by rating
  */
 const mapShowsApiToDashboardShows = (
-  shows: ShowApiModel[]
+  shows: ShowApi[]
 ): ShowViewModel[] => {
   return shows
     .map(mapShowApiToDashboardShow)

@@ -1,20 +1,21 @@
 import type {
-  CastApiModel,
-  EpisodeApiModel,
-  ShowApiModel
+  CastApi,
+  EpisodeApi,
+  SeasonApi,
+  ShowApi
 } from '../../tvmaze/api/tvmaze.api';
 import type {
-  CastViewModel,
-  EpisodeViewModel,
-  SeasonViewModel,
-  ShowDetailsPageViewModel
+  Cast,
+  Episode,
+  Season,
+  ShowDetailsViewModel
 } from '../viewModel/showDetailsViewModel.type';
 
 const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 const STAR_COUNT = 5;
 
 /** Format TVMaze date as `MMM D, YYYY` (e.g. “Apr 26, 2008”). */
-const formatTvmazeDate = (date?: string | null): string => {
+const formatDate = (date?: string | null): string => {
   if (date == null) {
     return 'Unknown';
   }
@@ -42,13 +43,30 @@ const premiereYearFromIso = (date?: string | null): number | null => {
   return Number.isNaN(d.getTime()) ? null : d.getUTCFullYear();
 };
 
-export const mapShowApiToShowDetailsViewModel = (
-  apiShow: ShowApiModel,
-  episodes: EpisodeApiModel[],
-  cast: CastApiModel[]
-): ShowDetailsPageViewModel => {
-  const mappedEpisodes = episodes.map(mapEpisodeApiToEpisodeViewModel);
+/**
+ *  Maps a TVMaze episode payload list to app `Episode` models (titles, images, ratings normalized).
+ * */
+export const mapEpisodeApiListToEpisodes = (
+  episodes: EpisodeApi[]
+): Episode[] => episodes.map(mapEpisodeApiToEpisode);
 
+/**
+ *  Maps TVMaze season rows to app `Season` models sorted by ascending season number (dropdown-ready `id` / `number`).
+ **/
+export const mapSeasonApiListToSeasons = (seasons: SeasonApi[]): Season[] =>
+  [...seasons]
+    .sort((a, b) => a.number - b.number)
+    .map((s) => ({id: s.id, number: s.number}));
+
+/**
+ * Maps TVMaze show + seasons + cast + first-season episodes into app `ShowDetailsViewModel`.
+ * */
+export const mapShowApiToShowDetailsViewModel = (
+  apiShow: ShowApi,
+  seasons: SeasonApi[],
+  cast: CastApi[],
+  firstSeasonEpisodes: EpisodeApi[] = []
+): ShowDetailsViewModel => {
   return {
     show: {
       id: apiShow.id,
@@ -62,9 +80,9 @@ export const mapShowApiToShowDetailsViewModel = (
       language: apiShow.language ?? 'Unknown',
       status: apiShow.status ?? 'Unknown',
       runtime: `${apiShow.averageRuntime ?? apiShow.runtime ?? 0} min`,
-      premiereDate: formatTvmazeDate(apiShow.premiered),
+      premiereDate: formatDate(apiShow.premiered),
       premieredYear: premiereYearFromIso(apiShow.premiered),
-      ended: formatTvmazeDate(apiShow.ended),
+      ended: formatDate(apiShow.ended),
       officialSite: apiShow.officialSite ?? null,
       network: apiShow.network?.name ?? 'Unknown',
       country: apiShow.network?.country?.name ?? 'Unknown',
@@ -74,15 +92,13 @@ export const mapShowApiToShowDetailsViewModel = (
         ? `https://www.imdb.com/title/${apiShow.externals.imdb}`
         : null
     },
-    seasons: mapEpisodesToSeasons(mappedEpisodes),
-    cast: cast.map(mapCastApiToCastViewModel)
+    seasonList: mapSeasonApiListToSeasons(seasons),
+    cast: cast.map(mapCastApiToCast),
+    episodes: mapEpisodeApiListToEpisodes(firstSeasonEpisodes)
   };
 };
 
-/** Map TVMaze episode to `EpisodeViewModel`. */
-const mapEpisodeApiToEpisodeViewModel = (
-  episode: EpisodeApiModel
-): EpisodeViewModel => {
+const mapEpisodeApiToEpisode = (episode: EpisodeApi): Episode => {
   const rating = episode.rating.average ?? 0;
 
   return {
@@ -95,22 +111,8 @@ const mapEpisodeApiToEpisodeViewModel = (
   };
 };
 
-/** One entry per distinct `seasonNumber`, each with every episode in that season. */
-const mapEpisodesToSeasons = (
-  episodes: EpisodeViewModel[]
-): SeasonViewModel[] => {
-  const seasonNumbers = [...new Set(episodes.map((e) => e.seasonNumber))].sort(
-    (a, b) => a - b
-  );
-
-  return seasonNumbers.map((season) => ({
-    season,
-    episodes: episodes.filter((e) => e.seasonNumber === season)
-  }));
-};
-
-/** Map TVMaze cast member to `CastViewModel`. */
-const mapCastApiToCastViewModel = (castMember: CastApiModel): CastViewModel => {
+/** Map TVMaze cast member to `Cast`. */
+const mapCastApiToCast = (castMember: CastApi): Cast => {
   return {
     id: castMember.person.id,
     name: castMember.person.name,
@@ -122,12 +124,12 @@ const mapCastApiToCastViewModel = (castMember: CastApiModel): CastViewModel => {
   };
 };
 
-const mapScheduleDays = (schedule: ShowApiModel['schedule']): string => {
+const mapScheduleDays = (schedule: ShowApi['schedule']): string => {
   const days = schedule?.days ?? [];
   return days.length === 0 ? 'Unknown' : days.join(', ');
 };
 
-const mapScheduleTime = (schedule: ShowApiModel['schedule']): string => {
+const mapScheduleTime = (schedule: ShowApi['schedule']): string => {
   if (!schedule) {
     return 'Unknown';
   }

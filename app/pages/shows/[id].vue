@@ -8,32 +8,133 @@ import Card from '../../components/Card.vue';
 import CastPanel from '../../components/CastPanel.vue';
 import EpisodePanel from '../../components/EpisodePanel.vue';
 import RatingStars from '../../components/RatingStars.vue';
-import type {ShowDetailsPageViewModel} from '../../../domains/showDetails/viewModel/showDetailsViewModel.type';
+import type {
+  Episode,
+  ShowDetailsViewModel
+} from '../../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const {t} = useI18n();
 const route = useRoute();
 const showId = computed(() => Number(route.params.id));
 
-const {data, error} = useFetch<ShowDetailsPageViewModel>(
+const {data, error} = useFetch<ShowDetailsViewModel>(
   () => `/api/${showId.value}`,
   {
     key: () => `show-detail-${showId.value}`,
-    /** Only refetch when navigating to a different show — season is client-only filtering on cached payload. */
     watch: [showId]
   }
 );
 
 const show = computed(() => data.value?.show ?? null);
+/** Season *number* (1, 2, …) for the dropdown — same idea as legacy `SeasonViewModel.season`; map to TVMaze season id only when calling `/api/season/:id`. */
 const selectedSeason = ref<number | null>(null);
-const seasons = computed(() => data.value?.seasons ?? []);
+const seasonList = computed(() => data.value?.seasonList ?? []);
 const castPreview = computed(() => data.value?.cast ?? []);
-/** Detail grid: network & runtime stay under the title only. */
+
+/** Episodes for seasons other than the first (first season always reads `data.episodes` from the details response). */
+const otherSeasonEpisodes = ref<Episode[]>([]);
+const episodesLoading = ref(false);
+
+/** Payload / route ids may differ by type (number vs string) after serialization; never use `===` on raw ids. */
+const sameNumericId = (a: unknown, b: unknown): boolean => {
+  const na = Number(a);
+  const nb = Number(b);
+  return Number.isFinite(na) && Number.isFinite(nb) && na === nb;
+};
+
+const panelEpisodes = computed((): Episode[] => {
+  const d = data.value;
+  const sel = selectedSeason.value;
+  const routeId = showId.value;
+  if (
+    !d ||
+    sel == null ||
+    !Number.isFinite(routeId) ||
+    !sameNumericId(d.show.id, routeId)
+  ) {
+    return [];
+  }
+  /** `selectedSeason` is season *number* (1, 2…), not TVMaze season id — compare to `seasonList[0].number`, never to `.id`. */
+  const firstNum = d.seasonList[0]?.number;
+  if (firstNum != null && Number(sel) === Number(firstNum)) {
+    return d.episodes;
+  }
+  return otherSeasonEpisodes.value;
+});
+
+watch(
+  [data, showId],
+  ([d, id]) => {
+    if (
+      !Number.isFinite(id) ||
+      !d?.seasonList?.length ||
+      !sameNumericId(d.show.id, id)
+    ) {
+      selectedSeason.value = null;
+      otherSeasonEpisodes.value = [];
+      return;
+    }
+    const firstNum = d.seasonList[0]?.number;
+    selectedSeason.value =
+      firstNum != null && Number.isFinite(Number(firstNum))
+        ? Number(firstNum)
+        : null;
+    otherSeasonEpisodes.value = [];
+  },
+  {immediate: true}
+);
+
+let seasonFetchGen = 0;
+
+watch(selectedSeason, async (sel) => {
+  const d = data.value;
+  const routeId = showId.value;
+  if (
+    sel == null ||
+    !Number.isFinite(routeId) ||
+    !d?.seasonList?.length ||
+    !sameNumericId(d.show.id, routeId)
+  ) {
+    return;
+  }
+  const firstNum = d.seasonList[0]?.number;
+  if (firstNum != null && Number(sel) === Number(firstNum)) {
+    return;
+  }
+
+  const entry = d.seasonList.find(
+    (s) => Number(s.number) === Number(sel)
+  );
+  if (!entry) {
+    return;
+  }
+
+  const gen = ++seasonFetchGen;
+  episodesLoading.value = true;
+  try {
+    const eps = await $fetch<Episode[]>(`/api/season/${entry.id}`);
+    if (
+      gen === seasonFetchGen &&
+      selectedSeason.value != null &&
+      Number(selectedSeason.value) === Number(sel) &&
+      data.value &&
+      sameNumericId(data.value.show.id, routeId)
+    ) {
+      otherSeasonEpisodes.value = eps;
+    }
+  } finally {
+    if (gen === seasonFetchGen) {
+      episodesLoading.value = false;
+    }
+  }
+});
+
 const detailItems = computed(() => {
   if (!show.value) {
     return [];
   }
 
-  const seasonCount = data.value?.seasons.length ?? 0;
+  const seasonCount = data.value?.seasonList.length ?? 0;
 
   return [
     {label: 'Status', value: show.value.status},
@@ -57,10 +158,6 @@ const backPath = computed(() => {
   };
 });
 
-/** New show: clear season so `EpisodePanel` picks a valid default from fresh `seasons`. */
-watch(showId, () => {
-  selectedSeason.value = null;
-});
 </script>
 
 <template>
@@ -219,11 +316,17 @@ watch(showId, () => {
       v-if="
         !error &&
         data &&
-        (seasons.length > 0 || castPreview.length > 0)
+        (seasonList.length > 0 || castPreview.length > 0)
       "
       class="mt-16 space-y-10 border-t border-white/[0.08] pt-16 px-4 sm:px-6 lg:px-10 md:mt-20 md:space-y-12 md:pt-20"
     >
-      <EpisodePanel v-model:selected-season="selectedSeason" :seasons="seasons" />
+      <EpisodePanel
+        v-if="seasonList.length > 0"
+        v-model:selected-season="selectedSeason"
+        :season-list="seasonList"
+        :episodes="panelEpisodes"
+        :loading="episodesLoading"
+      />
 
       <CastPanel :cast="castPreview" />
     </div>
