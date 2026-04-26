@@ -1,6 +1,6 @@
 import {
   fetchTvMazeShows,
-  type ShowApi
+  type ShowApiModel
 } from '../../tvmaze/api/tvmaze.api';
 import {mapShowsApiToDashboardViewModel} from '../mappers/dashboard.mapper';
 import type {
@@ -16,7 +16,7 @@ export const useDashboardPresenter = () => {
     category: DashboardCategory
   ): Promise<DashboardViewModel> => {
     // fetch all shows from the API
-    const shows: ShowApi[] = await fetchTvMazeShows();
+    const shows: ShowApiModel[] = await fetchTvMazeShows();
 
     return mapShowsApiToDashboardViewModel(shows, category);
   };

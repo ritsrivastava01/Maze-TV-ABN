@@ -1,0 +1,13 @@
+/**
+ * Tailwind CSS entry point.
+ *
+ * @import must come first (PostCSS resolves imports before Tailwind processes
+ * layers). Tailwind then sees all @layer declarations — including those inside
+ * design-system.css — and correctly places them in the components layer.
+ */
+
+@import './design-system.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

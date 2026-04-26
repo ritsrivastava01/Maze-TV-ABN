@@ -1,7 +1,7 @@
-import {computed} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
-import {useLocalePath} from '#imports';
-import type {LayoutNavCategory} from '../../domains/layout/viewModel/layoutViewModel.type';
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useLocalePath } from '#imports';
+import type { LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
 
 export const useAppNavigation = () => {
   const route = useRoute();
@@ -18,30 +18,29 @@ export const useAppNavigation = () => {
         path: '/',
         query: {
           ...route.query,
-          type: category
-        }
-      })
+          type: category,
+        },
+      }),
     );
   };
 
   const setSearchQuery = async (search: string): Promise<void> => {
+    const trimmed = search.trim();
+    if (!trimmed) return;
     await router.push(
       localePath({
-        path: '/',
-        query: {
-          ...route.query,
-          search: search || undefined
-        }
-      })
+        path: '/search',
+        query: { q: trimmed },
+      }),
     );
   };
 
   const getShowPath = (showId: number): string => {
     return localePath({
-      path: `/shows/${showId}`,
+      path: `/show/${showId}`,
       query: {
-        type: selectedCategory.value
-      }
+        type: selectedCategory.value,
+      },
     });
   };
 
@@ -54,6 +53,6 @@ export const useAppNavigation = () => {
     setCategory,
     setSearchQuery,
     getShowPath,
-    goToShow
+    goToShow,
   };
 };

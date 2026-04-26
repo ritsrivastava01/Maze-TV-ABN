@@ -27,6 +27,18 @@
     "showsCount": "{count} shows",
     "ratingOutOfTen": "{rating}/10",
     "loadingShows": "Loading shows...",
-    "switchLanguage": "Switch language"
+    "switchLanguage": "Switch language",
+    "noResults": "No shows found for \u201c{query}\u201d"
+  },
+  "search": {
+    "label": "Search",
+    "resultsFor": "Results for ",
+    "resultCount": "{count} results found",
+    "noResults": "No shows found",
+    "tryDifferent": "Try a different keyword.",
+    "error": "Something went wrong",
+    "showing": "Showing {visible} of {total}",
+    "loadMore": "Load more",
+    "remaining": "remaining"
   }
 }

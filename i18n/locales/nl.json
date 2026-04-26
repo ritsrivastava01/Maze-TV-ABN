@@ -27,6 +27,18 @@
     "showsCount": "{count} shows",
     "ratingOutOfTen": "{rating}/10",
     "loadingShows": "Shows laden...",
-    "switchLanguage": "Taal wisselen"
+    "switchLanguage": "Taal wisselen",
+    "noResults": "Geen shows gevonden voor \u201c{query}\u201d"
+  },
+  "search": {
+    "label": "Zoeken",
+    "resultsFor": "Resultaten voor ",
+    "resultCount": "{count} resultaten gevonden",
+    "noResults": "Geen shows gevonden",
+    "tryDifferent": "Probeer een ander zoekwoord.",
+    "error": "Er is iets misgegaan",
+    "showing": "{visible} van {total} weergegeven",
+    "loadMore": "Meer laden",
+    "remaining": "resterend"
   }
 }
