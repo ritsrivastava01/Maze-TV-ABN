@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
-import { useAppNavigation } from '#imports';
-
 import type { ShowViewModel } from '../../domains/dashboard/viewModel/show.type';
+import { useAppNavigation } from '../composables/useAppNavigation';
 import RatingStars from './RatingStars.vue';
 
 const { show } = defineProps<{
