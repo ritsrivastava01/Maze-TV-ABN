@@ -9,6 +9,7 @@
   },
   "actions": {
     "search": "Zoeken",
+    "enter": "Enter",
     "signUp": "Registreren",
     "goHome": "Ga naar home",
     "watchNow": "Nu kijken",

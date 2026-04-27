@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { PhList, PhMagnifyingGlass, PhX } from '@phosphor-icons/vue';
+import {
+  PhList,
+  PhMagnifyingGlass,
+  PhArrowRight,
+  PhX
+} from '@phosphor-icons/vue';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useFetch, showError } from 'nuxt/app';
 import { useI18n } from 'vue-i18n';
 import { useAppNavigation } from '#imports';
@@ -10,6 +16,7 @@ import type {
 } from '../../domains/layout/viewModel/layoutViewModel.type';
 
 const { locale, t } = useI18n();
+const route = useRoute();
 const { selectedCategory, setCategory, setSearchQuery } = useAppNavigation();
 const isMobileMenuOpen = ref(false);
 const isSearchOpen = ref(false);
@@ -65,6 +72,12 @@ const submitSearch = async (): Promise<void> => {
 const closeSearch = (): void => {
   isSearchOpen.value = false;
   searchQuery.value = '';
+};
+
+// open search bar, pre-filling the input with the current URL query if on search page
+const openSearch = (): void => {
+  searchQuery.value = typeof route.query.q === 'string' ? route.query.q : '';
+  isSearchOpen.value = true;
 };
 
 // manages scroll lock and focus trap whenever the mobile menu opens or closes
@@ -133,7 +146,7 @@ onBeforeUnmount(() => {
             class="ds-btn-icon rounded-full"
             type="button"
             :aria-label="t('actions.search')"
-            @click.stop="isSearchOpen ? closeSearch() : (isSearchOpen = true)"
+            @click.stop="isSearchOpen ? closeSearch() : openSearch()"
           >
             <PhMagnifyingGlass
               v-if="!isSearchOpen"
@@ -191,15 +204,39 @@ onBeforeUnmount(() => {
 
       <div v-if="isSearchOpen" class="pb-2">
         <div class="ds-input-search">
-          <PhMagnifyingGlass class="h-4 w-4 text-slate-200" weight="bold" />
+          <PhMagnifyingGlass
+            class="size-4 shrink-0 text-slate-200"
+            weight="bold"
+          />
           <input
             v-model="searchQuery"
-            type="search"
+            type="text"
             :placeholder="t('actions.search')"
             class="w-full bg-transparent text-sm text-white placeholder:text-slate-300 focus:outline-none"
             @keydown.enter="submitSearch"
             @keydown.escape="closeSearch"
           />
+          <!-- Clear input — same glass style as the search toggle X button -->
+          <button
+            v-if="searchQuery"
+            type="button"
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/40 bg-black/20 transition hover:bg-white/10"
+            :aria-label="t('actions.search')"
+            @click="searchQuery = ''"
+          >
+            <PhX class="size-4 text-white" weight="bold" />
+          </button>
+          <!-- Submit — glass pill with text, like the Sign Up button -->
+          <button
+            v-if="searchQuery.trim()"
+            type="button"
+            class="ds-btn-light inline-flex h-8 shrink-0 items-center gap-1.5 px-3"
+            :aria-label="t('actions.search')"
+            @click="submitSearch"
+          >
+            <span class="text-xs">{{ t('actions.enter') }}</span>
+            <PhArrowRight class="h-3 w-3" weight="bold" />
+          </button>
         </div>
       </div>
     </div>

@@ -16,11 +16,9 @@ export const useAppNavigation = () => {
     await router.push(
       localePath({
         path: '/',
-        query: {
-          ...route.query,
-          type: category,
-        },
-      }),
+
+        query: { type: category }
+      })
     );
   };
 
@@ -30,8 +28,8 @@ export const useAppNavigation = () => {
     await router.push(
       localePath({
         path: '/search',
-        query: { q: trimmed },
-      }),
+        query: { ...route.query, q: trimmed }
+      })
     );
   };
 
@@ -39,8 +37,8 @@ export const useAppNavigation = () => {
     return localePath({
       path: `/show/${showId}`,
       query: {
-        type: selectedCategory.value,
-      },
+        type: selectedCategory.value
+      }
     });
   };
 
@@ -53,6 +51,6 @@ export const useAppNavigation = () => {
     setCategory,
     setSearchQuery,
     getShowPath,
-    goToShow,
+    goToShow
   };
 };

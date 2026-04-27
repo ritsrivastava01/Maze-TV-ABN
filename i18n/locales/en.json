@@ -9,6 +9,7 @@
   },
   "actions": {
     "search": "Search",
+    "enter": "Enter",
     "signUp": "Sign Up",
     "goHome": "Go to home",
     "watchNow": "Watch Now",
