@@ -1,7 +1,14 @@
-import {useLayoutPresenter} from '../../domains/layout/presenters/layout.presenter';
+import { useLayoutPresenter } from '../../domains/layout/presenters/layout.presenter';
 
 export default defineEventHandler(async () => {
-  const {getHeaderNavItems} = useLayoutPresenter();
+  const { getHeaderNavItems } = useLayoutPresenter();
 
-  return await getHeaderNavItems();
+  try {
+    return await getHeaderNavItems();
+  } catch {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'errors.headerLoadFailed'
+    });
+  }
 });

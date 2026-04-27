@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue';
-import { useFetch } from 'nuxt/app';
+import { useFetch, showError } from 'nuxt/app';
 import { useRoute } from 'vue-router';
 import type { SearchViewModel } from '../../domains/search/viewModel/searchViewModel.type';
 
@@ -10,9 +10,12 @@ export const useSearch = () => {
 
   const searchQuery = computed<string>(() => (typeof route.query.q === 'string' ? route.query.q.trim() : ''));
 
-  const { data, status, error } = useFetch<SearchViewModel>('/api/search', {
+  const { data, status } = useFetch<SearchViewModel>('/api/search', {
     query: computed(() => ({ q: searchQuery.value })),
     watch: [() => route.query.q],
+    onResponseError({ response }) {
+      showError({ statusCode: response.status, statusMessage: response._data?.statusMessage ?? response.statusText, fatal: true });
+    },
   });
 
   // ── Lazy reveal: show PAGE_SIZE results at a time ───────────────────────
@@ -35,7 +38,6 @@ export const useSearch = () => {
     searchQuery,
     data,
     status,
-    error,
     visibleResults,
     hasMore,
     loadMore,

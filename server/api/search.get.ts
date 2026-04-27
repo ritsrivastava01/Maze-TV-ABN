@@ -15,7 +15,15 @@ export default defineCachedEventHandler(
     }
 
     const { getSearchResults } = useSearchPresenter();
-    return await getSearchResults(query);
+
+    try {
+      return await getSearchResults(query);
+    } catch {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'errors.searchLoadFailed'
+      });
+    }
   },
   {
     maxAge: 30, // 30 seconds — search results can change more often than browse lists
@@ -23,6 +31,6 @@ export default defineCachedEventHandler(
     getKey: (event) => {
       const { q = '' } = getQuery(event);
       return String(q).trim().toLowerCase();
-    },
-  },
+    }
+  }
 );

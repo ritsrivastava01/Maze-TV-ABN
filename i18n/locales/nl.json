@@ -10,7 +10,7 @@
   "actions": {
     "search": "Zoeken",
     "signUp": "Registreren",
-    "backToShows": "Terug naar shows",
+    "goHome": "Ga naar home",
     "watchNow": "Nu kijken",
     "trailer": "Trailer"
   },
@@ -20,7 +20,10 @@
     "seasonWithNumber": "Seizoen {n}",
     "selectSeason": "Kies seizoen",
     "noEpisodesInSeason": "Geen afleveringen in dit seizoen.",
-    "cast": "Cast"
+    "cast": "Cast",
+    "notFoundLabel": "404 · Niet gevonden",
+    "notFoundTitle": "Show niet gevonden",
+    "notFoundMessage": "De show die je zoekt bestaat niet of de link klopt niet."
   },
   "labels": {
     "featuredShow": "Uitgelichte show",
@@ -28,7 +31,8 @@
     "ratingOutOfTen": "{rating}/10",
     "loadingShows": "Shows laden...",
     "switchLanguage": "Taal wisselen",
-    "noResults": "Geen shows gevonden voor \u201c{query}\u201d"
+    "noResults": "Geen shows gevonden voor \u201c{query}\u201d",
+    "noShowsInGenre": "Geen shows beschikbaar in dit genre."
   },
   "search": {
     "label": "Zoeken",
@@ -40,5 +44,17 @@
     "showing": "{visible} van {total} weergegeven",
     "loadMore": "Meer laden",
     "remaining": "resterend"
+  },
+  "errors": {
+    "pageNotFound": "Pagina niet gevonden",
+    "pageNotFoundMessage": "De pagina die je zoekt bestaat niet of is verplaatst.",
+    "somethingWentWrong": "Er is iets misgegaan",
+    "unexpectedError": "Er is een onverwachte fout opgetreden.",
+    "headerLoadFailed": "Headergegevens konden niet worden geladen",
+    "dashboardLoadFailed": "Dashboard kon niet worden geladen",
+    "searchLoadFailed": "Zoekresultaten konden niet worden geladen",
+    "showLoadFailed": "Show kon niet worden geladen",
+    "showNotFound": "Show niet gevonden",
+    "invalidShowId": "Ongeldig show-ID"
   }
 }

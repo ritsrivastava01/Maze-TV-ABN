@@ -4,7 +4,7 @@ import SearchCard from '../components/SearchCard.vue';
 import { useSearch } from '../composables/useSearch';
 
 const { t } = useI18n();
-const { searchQuery, data, status, error, visibleResults, hasMore, loadMore, PAGE_SIZE } = useSearch();
+const { searchQuery, data, status, visibleResults, hasMore, loadMore, PAGE_SIZE } = useSearch();
 </script>
 
 <template>
@@ -23,14 +23,9 @@ const { searchQuery, data, status, error, visibleResults, hasMore, loadMore, PAG
       </p>
     </div>
 
-    <!-- ── Error state ──────────────────────────────────────────────────── -->
-    <div v-if="error" class="rounded-2xl bg-red-900/40 p-6 text-red-100 ring-1 ring-red-300/20">
-      {{ t('search.error') }}: {{ error.message }}
-    </div>
-
     <!-- ── Loading grid (skeleton) ─────────────────────────────────────── -->
     <section
-      v-else-if="status === 'pending'"
+      v-if="status === 'pending'"
       class="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
       aria-label="Loading search results"
     >

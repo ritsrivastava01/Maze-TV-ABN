@@ -12,7 +12,14 @@ export default defineCachedEventHandler(
     const category = (query.type ?? 'tv-shows') as DashboardCategory;
     const { getDashboard } = useDashboardPresenter();
 
-    return await getDashboard(category);
+    try {
+      return await getDashboard(category);
+    } catch {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'errors.dashboardLoadFailed'
+      });
+    }
   },
   {
     maxAge: 60 * 5, // 5 minutes
@@ -20,6 +27,6 @@ export default defineCachedEventHandler(
     getKey: (event) => {
       const query = getQuery(event);
       return String(query.type ?? 'tv-shows');
-    },
-  },
+    }
+  }
 );

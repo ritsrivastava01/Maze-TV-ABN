@@ -2,7 +2,7 @@
 import { PhCaretLeft } from '@phosphor-icons/vue';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useFetch } from 'nuxt/app';
+import { useFetch, showError, createError } from 'nuxt/app';
 import { useRoute } from 'vue-router';
 import CastCard from '../../components/CastCard.vue';
 import EpisodeCard from '../../components/EpisodeCard.vue';
@@ -14,11 +14,31 @@ const { t } = useI18n();
 const route = useRoute();
 const showId = computed(() => Number(route.params.id));
 
-const { data, error } = useFetch<ShowDetailViewModel>(() => `/api/show/${showId.value}`, {
+const { data, status, error } = await useFetch<ShowDetailViewModel>(() => `/api/show/${showId.value}`, {
   key: () => `show-detail-${showId.value}`,
   /** Only refetch when navigating to a different show — season is client-only filtering on cached payload. */
   watch: [showId],
 });
+
+// SSR: throw immediately so error.vue is rendered instead of the page
+if (error.value) {
+  throw createError({
+    statusCode: error.value.statusCode ?? 500,
+    statusMessage: (error.value.data as any)?.statusMessage ?? error.value.message,
+    fatal: true,
+  });
+}
+
+// CSR: watch for errors on reactive re-fetches (show navigation)
+watch(error, (err) => {
+  if (err) showError({
+    statusCode: err.statusCode ?? 500,
+    statusMessage: (err.data as any)?.statusMessage ?? err.message,
+    fatal: true,
+  });
+});
+
+const isNotFound = computed(() => status.value !== 'pending' && status.value !== 'idle' && !data.value);
 
 const show = computed(() => data.value?.show ?? null);
 const selectedSeason = ref<number | null>(null);
@@ -73,18 +93,12 @@ watch(
 <template>
   <!-- Header in layout is position:absolute, so we need top padding to clear it + breathing room like the design -->
   <div class="pb-16 pt-20 sm:pt-24 lg:pt-28">
-    <!-- Row 1: md+ two columns — poster | overview & metadata -->
     <section class="px-4 sm:px-6 lg:px-10">
-      <div v-if="error" class="rounded-3xl bg-red-900/40 p-6 text-red-100 ring-1 ring-red-300/20">
-        Failed to load show: {{ error.message }}
-      </div>
-
-      <template v-else>
         <div class="mb-6 flex justify-start sm:mb-8">
           <NuxtLink :to="backPath" class="ds-btn-glass inline-flex h-10 items-center">
             <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
               <PhCaretLeft class="shrink-0 text-current" :size="18" weight="bold" aria-hidden="true" />
-              <span>{{ t('actions.backToShows') }}</span>
+              <span>{{ t('actions.goHome') }}</span>
             </span>
           </NuxtLink>
         </div>
@@ -108,7 +122,21 @@ watch(
           </div>
 
           <div class="min-w-0 md:col-span-7 lg:col-span-8">
-            <div v-if="!data && !error" class="space-y-4">
+            <!-- Not found -->
+            <div v-if="isNotFound" class="flex h-full flex-col justify-center py-4">
+              <p class="text-xs font-semibold uppercase tracking-widest text-pink-400">
+                {{ t('showDetail.notFoundLabel') }}
+              </p>
+              <h2 class="mt-3 text-2xl font-black text-white">
+                {{ t('showDetail.notFoundTitle') }}
+              </h2>
+              <p class="mt-3 max-w-sm text-sm leading-6 text-slate-400">
+                {{ t('showDetail.notFoundMessage') }}
+              </p>
+            </div>
+
+            <!-- Loading skeleton -->
+            <div v-else-if="status === 'pending' || status === 'idle'" class="space-y-4">
               <div class="h-3 w-2/3 max-w-xs animate-pulse rounded bg-slate-700/80" />
               <div class="h-10 w-4/5 max-w-md animate-pulse rounded bg-slate-700/80" />
               <div class="h-5 w-32 animate-pulse rounded bg-slate-700/70" />
@@ -127,6 +155,7 @@ watch(
               </div>
             </div>
 
+            <!-- Loaded content -->
             <div v-else-if="show">
               <div v-if="show.genres.length" class="flex flex-wrap gap-2">
                 <span v-for="genre in show.genres" :key="genre" class="ds-badge-genre">
@@ -158,7 +187,7 @@ watch(
                   :href="show.officialSite"
                   target="_blank"
                   rel="noreferrer"
-                  class="rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-slate-200"
+                  class="ds-btn-light"
                 >
                   Official site
                 </a>
@@ -167,7 +196,7 @@ watch(
                   :href="show.imdbUrl"
                   target="_blank"
                   rel="noreferrer"
-                  class="rounded-full px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+                  class="ds-btn-subtle"
                 >
                   IMDb
                 </a>
@@ -190,12 +219,11 @@ watch(
             </div>
           </div>
         </div>
-      </template>
-    </section>
+      </section>
 
-    <!-- Row 2: episodes rail + cast rail, full width, shared top rule -->
+    <!-- Row 2: episodes rail + cast rail -->
     <div
-      v-if="!error && data && (seasons.length > 0 || castPreview.length > 0)"
+      v-if="data && (seasons.length > 0 || castPreview.length > 0)"
       class="mt-16 space-y-10 border-t border-white/[0.08] pt-16 px-4 sm:px-6 lg:px-10 md:mt-20 md:space-y-12 md:pt-20"
     >
       <section v-if="seasons.length > 0">

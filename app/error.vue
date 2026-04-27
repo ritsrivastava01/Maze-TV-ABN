@@ -1,37 +1,43 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { clearError } from 'nuxt/app';
 
 const props = defineProps<{
   error: { statusCode: number; statusMessage: string; message?: string };
 }>();
 
-const router = useRouter();
+const { t, te } = useI18n();
 
 const is404 = props.error.statusCode === 404;
 
-const handleBack = (): void => {
-  router.push('/');
-};
+const errorMessage = computed(() => {
+  const key = props.error.statusMessage;
+  if (key && te(key)) return t(key);
+  return key || props.error.message || t('errors.unexpectedError');
+});
+
+const handleGoHome = () => clearError({ redirect: '/' });
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 text-center text-white">
+  <NuxtLayout>
+    <div class="flex min-h-[65vh] flex-col items-center justify-center px-4 py-16 text-center">
     <p class="ds-label-brand mb-4">
       {{ is404 ? '404' : String(error.statusCode) }}
     </p>
 
     <h1 class="ds-heading-page mb-4">
-      {{ is404 ? 'Page not found' : 'Something went wrong' }}
+      {{ is404 ? t('errors.pageNotFound') : t('errors.somethingWentWrong') }}
     </h1>
 
-    <p class="mb-10 max-w-md text-sm leading-6 text-slate-400">
-      {{
-        is404
-          ? "The page you're looking for doesn't exist or was moved."
-          : error.statusMessage || error.message || 'An unexpected error occurred.'
-      }}
+    <p class="max-w-md text-sm leading-6 text-slate-400">
+      {{ is404 ? t('errors.pageNotFoundMessage') : errorMessage }}
     </p>
 
-    <button type="button" class="ds-btn-primary" @click="handleBack">Back to home</button>
-  </div>
+    <button type="button" class="ds-btn-primary mt-8" @click="handleGoHome">
+      {{ t('actions.goHome') }}
+    </button>
+    </div>
+  </NuxtLayout>
 </template>

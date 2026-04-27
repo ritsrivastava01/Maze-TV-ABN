@@ -11,7 +11,6 @@
  */
 
 @layer components {
-
   /* ─────────────────────────────────────────────────────────────────────
    * BUTTONS
    * ────────────────────────────────────────────────────────────────────*/
@@ -35,6 +34,24 @@
   }
 
   /**
+   * Light solid pill — white-filled, dark text. Compact size (px-4 py-2).
+   * Usage: Primary external links on dark backgrounds (e.g. "Official Site" on show detail).
+   */
+  .ds-btn-light {
+    @apply rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-950
+           transition hover:bg-slate-200;
+  }
+
+  /**
+   * Subtle ghost pill — borderless, muted text, hover lifts with white tint.
+   * Usage: Secondary external links on dark backgrounds (e.g. "IMDb" on show detail).
+   */
+  .ds-btn-subtle {
+    @apply rounded-full px-4 py-2 text-sm font-semibold text-slate-300
+           transition hover:bg-white/10 hover:text-white;
+  }
+
+  /**
    * Glass pill — frosted dark pill for nav/auxiliary actions.
    * Intentionally layout-neutral (no display, no h-*) — combine with Tailwind
    * utilities for display/sizing: e.g. `class="ds-btn-glass inline-flex h-10 items-center"`.
@@ -54,7 +71,6 @@
     @apply flex h-10 w-10 items-center justify-center border border-white/40
            bg-black/20 transition hover:bg-white/10;
   }
-
 
   /* ─────────────────────────────────────────────────────────────────────
    * CARDS
@@ -81,6 +97,17 @@
            group-hover:shadow-[0_0_28px_rgba(236,72,153,0.38)];
   }
 
+  /**
+   * Rail card animation shell — scale + pink glow on direct hover.
+   * Passed as :shell-class to Card.vue; sits inside an absolute-positioned wrapper.
+   * Includes GPU-accelerated transform, z-elevation, and glow ring.
+   * Usage: :shell-class on Card inside index.vue rails.
+   */
+  .ds-card-rail-shell {
+    @apply origin-center transform-gpu transition-transform duration-300 ease-out will-change-transform
+           hover:z-30 hover:scale-125 hover:border-pink-300/80
+           hover:ring-2 hover:ring-pink-400/80 hover:shadow-[0_0_28px_rgba(236,72,153,0.38)];
+  }
 
   /* ─────────────────────────────────────────────────────────────────────
    * BADGES
@@ -104,7 +131,6 @@
            backdrop-blur;
   }
 
-
   /* ─────────────────────────────────────────────────────────────────────
    * SKELETON / LOADING STATES
    * ────────────────────────────────────────────────────────────────────*/
@@ -124,7 +150,6 @@
   .ds-skeleton-dark {
     @apply animate-pulse bg-slate-800/80;
   }
-
 
   /* ─────────────────────────────────────────────────────────────────────
    * TYPOGRAPHY
@@ -170,7 +195,6 @@
     @apply text-sm font-semibold uppercase tracking-[0.3em] text-pink-300;
   }
 
-
   /* ─────────────────────────────────────────────────────────────────────
    * GLASS / OVERLAY PANELS
    * ────────────────────────────────────────────────────────────────────*/
@@ -183,6 +207,13 @@
     @apply rounded-xl border border-white/20 bg-slate-900/95 shadow-2xl;
   }
 
+  /**
+   * Error message panel — red-tinted surface for API or fetch error states.
+   * Usage: Error containers in dashboard (index.vue), search, and show detail pages.
+   */
+  .ds-panel-error {
+    @apply rounded-2xl bg-red-900/40 p-6 text-red-100 ring-1 ring-red-300/20;
+  }
 
   /* ─────────────────────────────────────────────────────────────────────
    * FORM CONTROLS
@@ -207,7 +238,7 @@
            border border-white/40 bg-black/20 py-0 pl-4 pr-12 text-sm
            font-semibold text-white outline-none transition hover:bg-white/10
            focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40;
-    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%23e2e8f0%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20d%3D%22M213.66%20101.66l-80%2080a8%208%200%200%201-11.32%200l-80-80A8%208%200%200%201%2043.31%2088L128%20172.69%20212.69%2088a8%208%200%200%201%2011.32%2011.32Z%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%23e2e8f0%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20d%3D%22M213.66%20101.66l-80%2080a8%208%200%200%201-11.32%200l-80-80A8%208%200%200%201%2043.31%2088L128%20172.69%20212.69%2088a8%208%200%200%201%2011.32%2011.32Z%22%2F%3E%3C%2Fsvg%3E');
     background-size: 1.15rem 1.15rem;
     background-position: right 0.75rem center;
     background-repeat: no-repeat;

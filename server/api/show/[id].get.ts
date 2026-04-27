@@ -12,7 +12,7 @@ export default defineCachedEventHandler(
     if (!Number.isInteger(id) || id <= 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid show id',
+        statusMessage: 'errors.invalidShowId',
       });
     }
 
@@ -33,7 +33,7 @@ export default defineCachedEventHandler(
 
       throw createError({
         statusCode: status,
-        statusMessage: status === 404 ? `Show with id ${id} not found` : 'Failed to load show',
+        statusMessage: status === 404 ? 'errors.showNotFound' : 'errors.showLoadFailed',
       });
     }
   },

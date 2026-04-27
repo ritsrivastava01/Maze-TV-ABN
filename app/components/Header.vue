@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PhList, PhMagnifyingGlass, PhX } from '@phosphor-icons/vue';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
-import { useFetch } from 'nuxt/app';
+import { useFetch, showError } from 'nuxt/app';
 import { useI18n } from 'vue-i18n';
 import { useAppNavigation } from '#imports';
 import type { HeaderViewModel, LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
@@ -18,7 +18,11 @@ const localeOptions = [
 ] as const;
 
 //fetch header nav items
-const { data: headerNavItemsData } = useFetch<HeaderViewModel>('/api/layout');
+const { data: headerNavItemsData } = useFetch<HeaderViewModel>('/api/layout', {
+  onResponseError({ response }) {
+    showError({ statusCode: response.status, statusMessage: response.statusText, fatal: true });
+  },
+});
 
 const navItems = computed(() => {
   return (headerNavItemsData.value?.headerNavItems ?? []).map((item) => ({

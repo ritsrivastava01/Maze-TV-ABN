@@ -10,7 +10,7 @@
   "actions": {
     "search": "Search",
     "signUp": "Sign Up",
-    "backToShows": "Back to shows",
+    "goHome": "Go to home",
     "watchNow": "Watch Now",
     "trailer": "Trailer"
   },
@@ -20,7 +20,10 @@
     "seasonWithNumber": "Season {n}",
     "selectSeason": "Choose season",
     "noEpisodesInSeason": "No episodes in this season.",
-    "cast": "Cast"
+    "cast": "Cast",
+    "notFoundLabel": "404 · Not found",
+    "notFoundTitle": "Show not found",
+    "notFoundMessage": "We couldn't find the show you're looking for. It may have been removed or the link is incorrect."
   },
   "labels": {
     "featuredShow": "Featured show",
@@ -28,7 +31,8 @@
     "ratingOutOfTen": "{rating}/10",
     "loadingShows": "Loading shows...",
     "switchLanguage": "Switch language",
-    "noResults": "No shows found for \u201c{query}\u201d"
+    "noResults": "No shows found for \u201c{query}\u201d",
+    "noShowsInGenre": "No shows available in this genre."
   },
   "search": {
     "label": "Search",
@@ -40,5 +44,17 @@
     "showing": "Showing {visible} of {total}",
     "loadMore": "Load more",
     "remaining": "remaining"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "pageNotFoundMessage": "The page you're looking for doesn't exist or was moved.",
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred.",
+    "headerLoadFailed": "Failed to load header data",
+    "dashboardLoadFailed": "Failed to load dashboard",
+    "searchLoadFailed": "Failed to load search results",
+    "showLoadFailed": "Failed to load show",
+    "showNotFound": "Show not found",
+    "invalidShowId": "Invalid show ID"
   }
 }
