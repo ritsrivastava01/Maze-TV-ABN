@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { mapShowsApiToDashboardViewModel } from '../../domains/dashboard/mappers/dashboard.mapper';
 import type { ShowApiModel } from '../../domains/tvmaze/api/tvmaze.api';
 

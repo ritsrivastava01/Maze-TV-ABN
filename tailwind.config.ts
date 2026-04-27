@@ -8,10 +8,10 @@ export default {
     './pages/**/*.{vue,js,ts}',
     './plugins/**/*.{js,ts}',
     './app.vue',
-    './error.vue'
+    './error.vue',
   ],
   theme: {
     extend: {},
   },
-  plugins: [scrollbar]
+  plugins: [scrollbar],
 };

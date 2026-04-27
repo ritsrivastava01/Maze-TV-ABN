@@ -8,7 +8,7 @@ export default defineEventHandler(async () => {
   } catch {
     throw createError({
       statusCode: 500,
-      statusMessage: 'errors.headerLoadFailed'
+      statusMessage: 'errors.headerLoadFailed',
     });
   }
 });

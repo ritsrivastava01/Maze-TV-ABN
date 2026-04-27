@@ -1,9 +1,6 @@
-import {
-  fetchTvMazeLayoutNavItems,
-  type LayoutNavApiModel
-} from '../../tvmaze/api/tvmaze.api';
-import {mapHeaderNavItemsToViewModel} from '../mappers/layout.mapper';
-import type {HeaderViewModel} from '../viewModel/layoutViewModel.type';
+import { fetchTvMazeLayoutNavItems, type LayoutNavApiModel } from '../../tvmaze/api/tvmaze.api';
+import { mapHeaderNavItemsToViewModel } from '../mappers/layout.mapper';
+import type { HeaderViewModel } from '../viewModel/layoutViewModel.type';
 
 /**
  * Presenter for the layout domain
@@ -17,6 +14,6 @@ export const useLayoutPresenter = () => {
   };
 
   return {
-    getHeaderNavItems
+    getHeaderNavItems,
   };
 };

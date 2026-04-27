@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import {
-  PhList,
-  PhMagnifyingGlass,
-  PhArrowRight,
-  PhX
-} from '@phosphor-icons/vue';
+import { PhArrowRight, PhList, PhMagnifyingGlass, PhX } from '@phosphor-icons/vue';
+import { showError, useFetch } from 'nuxt/app';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { useFetch, showError } from 'nuxt/app';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+
 import { useAppNavigation } from '#imports';
-import type {
-  HeaderViewModel,
-  LayoutNavCategory
-} from '../../domains/layout/viewModel/layoutViewModel.type';
+
+import type { HeaderViewModel, LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
 
 const { locale, t } = useI18n();
 const route = useRoute();
@@ -24,7 +18,7 @@ const searchQuery = ref('');
 const menuPanel = ref<HTMLElement | null>(null);
 const localeOptions = [
   { code: 'en', label: 'EN' },
-  { code: 'nl', label: 'NL' }
+  { code: 'nl', label: 'NL' },
 ] as const;
 
 //fetch header nav items
@@ -33,23 +27,21 @@ const { data: headerNavItemsData } = useFetch<HeaderViewModel>('/api/layout', {
     showError({
       statusCode: response.status,
       statusMessage: response.statusText,
-      fatal: true
+      fatal: true,
     });
-  }
+  },
 });
 
 const navItems = computed(() => {
   return (headerNavItemsData.value?.headerNavItems ?? []).map((item) => ({
     value: item.value as LayoutNavCategory,
-    label: t(item.labelKey)
+    label: t(item.labelKey),
   }));
 });
 
 // used to style the active locale link
 const getLocaleLinkClass = (localeCode: string): string => {
-  return locale.value === localeCode
-    ? 'bg-white text-black'
-    : 'text-white hover:bg-white/10';
+  return locale.value === localeCode ? 'bg-white text-black' : 'text-white hover:bg-white/10';
 };
 
 // used to select a category and close the mobile menu (if open)
@@ -95,8 +87,7 @@ watch(
         activeElement.blur();
       }
       nextTick(() => {
-        const firstMenuButton =
-          menuPanel.value?.querySelector<HTMLElement>('input, button');
+        const firstMenuButton = menuPanel.value?.querySelector<HTMLElement>('input, button');
         firstMenuButton?.focus();
       });
     }
@@ -114,20 +105,14 @@ onBeforeUnmount(() => {
 <template>
   <header class="absolute inset-x-0 z-50 bg-transparent">
     <div class="mx-auto container px-4 sm:px-6 lg:px-10">
-      <div
-        class="grid h-16 grid-cols-[auto_1fr] items-center gap-3 lg:grid-cols-3"
-      >
-        <nav
-          class="hidden gap-6 text-sm text-slate-200 lg:flex lg:justify-self-start"
-        >
+      <div class="grid h-16 grid-cols-[auto_1fr] items-center gap-3 lg:grid-cols-3">
+        <nav class="hidden gap-6 text-sm text-slate-200 lg:flex lg:justify-self-start">
           <button
             v-for="item in navItems"
             :key="item.value"
             type="button"
             class="transition hover:text-white"
-            :class="
-              selectedCategory === item.value ? 'font-semibold text-white' : ''
-            "
+            :class="selectedCategory === item.value ? 'font-semibold text-white' : ''"
             @click="selectCategory(item.value)"
           >
             {{ item.label }}
@@ -148,21 +133,12 @@ onBeforeUnmount(() => {
             :aria-label="t('actions.search')"
             @click.stop="isSearchOpen ? closeSearch() : openSearch()"
           >
-            <PhMagnifyingGlass
-              v-if="!isSearchOpen"
-              class="h-4 w-4 text-white"
-              weight="bold"
-            />
+            <PhMagnifyingGlass v-if="!isSearchOpen" class="h-4 w-4 text-white" weight="bold" />
             <PhX v-else class="h-4 w-4 text-white" weight="bold" />
           </button>
 
-          <div
-            class="hidden h-10 items-center gap-1 rounded-full border border-white/30 bg-black/20 p-1 lg:flex"
-          >
-            <template
-              v-for="(option, index) in localeOptions"
-              :key="option.code"
-            >
+          <div class="hidden h-10 items-center gap-1 rounded-full border border-white/30 bg-black/20 p-1 lg:flex">
+            <template v-for="(option, index) in localeOptions" :key="option.code">
               <SwitchLocalePathLink
                 :locale="option.code"
                 class="inline-flex h-8 items-center rounded-full px-2 text-xs font-semibold transition"
@@ -170,19 +146,11 @@ onBeforeUnmount(() => {
               >
                 {{ option.label }}
               </SwitchLocalePathLink>
-              <span
-                v-if="index < localeOptions.length - 1"
-                class="text-white/40"
-              >
-                |
-              </span>
+              <span v-if="index < localeOptions.length - 1" class="text-white/40"> | </span>
             </template>
           </div>
 
-          <button
-            class="ds-btn-glass hidden h-10 items-center lg:inline-flex"
-            type="button"
-          >
+          <button class="ds-btn-glass hidden h-10 items-center lg:inline-flex" type="button">
             {{ t('actions.signUp') }}
           </button>
 
@@ -192,11 +160,7 @@ onBeforeUnmount(() => {
             aria-label="Toggle menu"
             @click.stop="isMobileMenuOpen = !isMobileMenuOpen"
           >
-            <PhList
-              v-if="!isMobileMenuOpen"
-              class="h-5 w-5 text-white"
-              weight="bold"
-            />
+            <PhList v-if="!isMobileMenuOpen" class="h-5 w-5 text-white" weight="bold" />
             <PhX v-else class="h-5 w-5 text-white" weight="bold" />
           </button>
         </div>
@@ -204,10 +168,7 @@ onBeforeUnmount(() => {
 
       <div v-if="isSearchOpen" class="pb-2">
         <div class="ds-input-search">
-          <PhMagnifyingGlass
-            class="size-4 shrink-0 text-slate-200"
-            weight="bold"
-          />
+          <PhMagnifyingGlass class="size-4 shrink-0 text-slate-200" weight="bold" />
           <input
             v-model="searchQuery"
             type="text"
@@ -243,11 +204,7 @@ onBeforeUnmount(() => {
   </header>
 
   <Teleport to="body">
-    <div
-      v-show="isMobileMenuOpen"
-      class="fixed inset-0 z-40 bg-black/75 lg:hidden"
-      @click="isMobileMenuOpen = false"
-    />
+    <div v-show="isMobileMenuOpen" class="fixed inset-0 z-40 bg-black/75 lg:hidden" @click="isMobileMenuOpen = false" />
     <div
       v-show="isMobileMenuOpen"
       ref="menuPanel"
@@ -262,11 +219,7 @@ onBeforeUnmount(() => {
         :key="`mobile-${item.value}`"
         type="button"
         class="mb-1 block w-full rounded-lg px-3 py-2 text-left text-sm transition hover:bg-white/10"
-        :class="
-          selectedCategory === item.value
-            ? 'bg-white/15 text-white'
-            : 'text-slate-200'
-        "
+        :class="selectedCategory === item.value ? 'bg-white/15 text-white' : 'text-slate-200'"
         @click="selectCategory(item.value)"
       >
         {{ item.label }}
@@ -278,13 +231,8 @@ onBeforeUnmount(() => {
         <span class="text-xs font-medium tracking-[0.08em] text-slate-300">
           {{ t('labels.switchLanguage') }}
         </span>
-        <div
-          class="flex h-9 items-center gap-1 rounded-full border border-white/30 bg-black/30 p-1"
-        >
-          <template
-            v-for="(option, index) in localeOptions"
-            :key="`mobile-${option.code}`"
-          >
+        <div class="flex h-9 items-center gap-1 rounded-full border border-white/30 bg-black/30 p-1">
+          <template v-for="(option, index) in localeOptions" :key="`mobile-${option.code}`">
             <SwitchLocalePathLink
               :locale="option.code"
               class="inline-flex h-7 items-center rounded-full px-2 text-xs font-semibold transition"
@@ -292,17 +240,12 @@ onBeforeUnmount(() => {
             >
               {{ option.label }}
             </SwitchLocalePathLink>
-            <span v-if="index < localeOptions.length - 1" class="text-white/40">
-              |
-            </span>
+            <span v-if="index < localeOptions.length - 1" class="text-white/40"> | </span>
           </template>
         </div>
       </div>
 
-      <button
-        type="button"
-        class="ds-btn-glass mt-2 block w-full py-2 text-center"
-      >
+      <button type="button" class="ds-btn-glass mt-2 block w-full py-2 text-center">
         {{ t('actions.signUp') }}
       </button>
     </div>

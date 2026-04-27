@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { mapShowApiToShowDetailViewModel } from '../../domains/show/mappers/show.mapper';
 import type { CastApiModel, EpisodeApiModel, ShowApiModel } from '../../domains/tvmaze/api/tvmaze.api';
 
@@ -116,7 +117,7 @@ describe('mapShowApiToShowDetailViewModel', () => {
       const vm = mapShowApiToShowDetailViewModel(
         makeShow({ schedule: { time: '21:00', days: ['Monday', 'Thursday'] } }),
         [],
-        [],
+        []
       );
       expect(vm.show.scheduleDays).toBe('Monday, Thursday');
     });

@@ -1,4 +1,4 @@
-import type {ShowViewModel} from './show.type';
+import type { ShowViewModel } from './show.type';
 
 export type DashboardCategory = 'movies' | 'tv-shows' | 'documentaries';
 

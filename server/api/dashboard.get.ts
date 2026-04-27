@@ -17,7 +17,7 @@ export default defineCachedEventHandler(
     } catch {
       throw createError({
         statusCode: 500,
-        statusMessage: 'errors.dashboardLoadFailed'
+        statusMessage: 'errors.dashboardLoadFailed',
       });
     }
   },
@@ -27,6 +27,6 @@ export default defineCachedEventHandler(
     getKey: (event) => {
       const query = getQuery(event);
       return String(query.type ?? 'tv-shows');
-    }
+    },
   }
 );

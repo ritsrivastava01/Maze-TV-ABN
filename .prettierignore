@@ -1,0 +1,19 @@
+# Build outputs
+.nuxt
+.output
+dist
+node_modules
+coverage
+
+# Public assets
+public
+
+# Lockfiles
+package-lock.json
+
+# Test reports
+playwright-report
+test-results
+
+# Test files
+tests/

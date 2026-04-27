@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+
 import type { DashboardViewModel } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 import type { HeaderViewModel } from '../../domains/layout/viewModel/layoutViewModel.type';
 
@@ -41,10 +42,10 @@ const MOCK_DASHBOARD: DashboardViewModel = {
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/layout', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_LAYOUT) }),
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_LAYOUT) })
   );
   await page.route('/api/dashboard**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_DASHBOARD) }),
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_DASHBOARD) })
   );
 });
 

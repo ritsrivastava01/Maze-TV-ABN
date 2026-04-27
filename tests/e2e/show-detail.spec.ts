@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
-import type { ShowDetailViewModel } from '../../domains/show/viewModel/showDetailViewModel.type';
+
 import type { HeaderViewModel } from '../../domains/layout/viewModel/layoutViewModel.type';
+import type { ShowDetailViewModel } from '../../domains/show/viewModel/showDetailViewModel.type';
 
 // ─── Mock fixtures ─────────────────────────────────────────────────────────
 
@@ -99,10 +100,10 @@ const MOCK_SHOW_DETAIL: ShowDetailViewModel = {
 
 test.beforeEach(async ({ page }) => {
   await page.route('/api/layout', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_LAYOUT) }),
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_LAYOUT) })
   );
   await page.route('/api/show/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_SHOW_DETAIL) }),
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_SHOW_DETAIL) })
   );
 });
 

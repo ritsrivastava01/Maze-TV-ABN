@@ -1,10 +1,6 @@
-import type {ShowApiModel} from '../../tvmaze/api/tvmaze.api';
-import type {
-  DashboardCategory,
-  DashboardGenreRow,
-  DashboardViewModel
-} from '../viewModel/dashboardViewModel.type';
-import type {ShowViewModel} from '../viewModel/show.type';
+import type { ShowApiModel } from '../../tvmaze/api/tvmaze.api';
+import type { DashboardCategory, DashboardGenreRow, DashboardViewModel } from '../viewModel/dashboardViewModel.type';
+import type { ShowViewModel } from '../viewModel/show.type';
 
 // default fallback image
 const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
@@ -12,13 +8,7 @@ const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 const STAR_COUNT = 5;
 
 // set of movie genres
-const MOVIE_GENRES = new Set([
-  'Action',
-  'Adventure',
-  'Fantasy',
-  'Science-Fiction',
-  'Romance'
-]);
+const MOVIE_GENRES = new Set(['Action', 'Adventure', 'Fantasy', 'Science-Fiction', 'Romance']);
 
 // set of documentary genres
 const DOCUMENTARY_GENRES = new Set(['Documentary', 'History', 'Nature']);
@@ -26,10 +16,7 @@ const DOCUMENTARY_GENRES = new Set(['Documentary', 'History', 'Nature']);
 /**
  *   used to map the shows API model to the dashboard view model
  */
-const mapShowsApiToDashboardViewModel = (
-  shows: ShowApiModel[],
-  category: DashboardCategory
-): DashboardViewModel => {
+const mapShowsApiToDashboardViewModel = (shows: ShowApiModel[], category: DashboardCategory): DashboardViewModel => {
   const sortedShows = mapShowsApiToDashboardShows(shows);
   const filteredShows = filterShowsByCategory(sortedShows, category);
   // if there are no filtered shows, use the sorted shows
@@ -37,7 +24,7 @@ const mapShowsApiToDashboardViewModel = (
 
   return {
     featuredShow: effectiveShows[0] ?? null, // the featured show
-    genreRows: mapShowsToGenreRows(effectiveShows) // the genre rows
+    genreRows: mapShowsToGenreRows(effectiveShows), // the genre rows
   };
 };
 
@@ -55,7 +42,7 @@ const mapShowApiToDashboardShow = (show: ShowApiModel): ShowViewModel => {
     rating,
     ratingStarFills: mapRatingToStarFills(rating),
     genres: show.genres ?? [],
-    summary: show.summary ?? ''
+    summary: show.summary ?? '',
   };
 };
 
@@ -63,34 +50,23 @@ const mapShowApiToDashboardShow = (show: ShowApiModel): ShowViewModel => {
  *   used to map the shows API model to the dashboard shows view model
  *   and sort the shows by rating
  */
-const mapShowsApiToDashboardShows = (
-  shows: ShowApiModel[]
-): ShowViewModel[] => {
-  return shows
-    .map(mapShowApiToDashboardShow)
-    .sort((a, b) => b.rating - a.rating);
+const mapShowsApiToDashboardShows = (shows: ShowApiModel[]): ShowViewModel[] => {
+  return shows.map(mapShowApiToDashboardShow).sort((a, b) => b.rating - a.rating);
 };
 
 /*
  *   used to filter the shows by category
  */
-const filterShowsByCategory = (
-  shows: ShowViewModel[],
-  category: DashboardCategory
-): ShowViewModel[] => {
+const filterShowsByCategory = (shows: ShowViewModel[], category: DashboardCategory): ShowViewModel[] => {
   if (category === 'tv-shows') {
     return shows;
   }
 
   if (category === 'movies') {
-    return shows.filter((show) =>
-      show.genres.some((genre) => MOVIE_GENRES.has(genre))
-    );
+    return shows.filter((show) => show.genres.some((genre) => MOVIE_GENRES.has(genre)));
   }
 
-  return shows.filter((show) =>
-    show.genres.some((genre) => DOCUMENTARY_GENRES.has(genre))
-  );
+  return shows.filter((show) => show.genres.some((genre) => DOCUMENTARY_GENRES.has(genre)));
 };
 
 /**
@@ -113,7 +89,7 @@ const mapShowsToGenreRows = (shows: ShowViewModel[]): DashboardGenreRow[] => {
   return [...genreMap.entries()]
     .map(([genre, genreShows]) => ({
       genre,
-      shows: genreShows
+      shows: genreShows,
     }))
     .sort((a, b) => b.shows.length - a.shows.length);
 };
@@ -126,15 +102,12 @@ const mapShowsToGenreRows = (shows: ShowViewModel[]): DashboardGenreRow[] => {
  */
 const mapRatingToStarFills = (rating: number): number[] => {
   const ratingOnFiveScale = rating / 2;
-  const ratingStarsOnFiveScale = Math.max(
-    0,
-    Math.min(5, Math.round(ratingOnFiveScale * 4) / 4)
-  );
+  const ratingStarsOnFiveScale = Math.max(0, Math.min(5, Math.round(ratingOnFiveScale * 4) / 4));
 
-  return Array.from({length: STAR_COUNT}, (_, index) => {
+  return Array.from({ length: STAR_COUNT }, (_, index) => {
     const fill = Math.max(0, Math.min(1, ratingStarsOnFiveScale - index));
     return fill * 100;
   });
 };
 
-export {mapShowsApiToDashboardViewModel};
+export { mapShowsApiToDashboardViewModel };

@@ -2,16 +2,10 @@ import {
   fetchTvMazeSeasonEpisodes,
   fetchTvMazeShowById,
   fetchTvMazeShowCast,
-  fetchTvMazeShowSeasons
+  fetchTvMazeShowSeasons,
 } from '../../tvmaze/api/tvmaze.api';
-import {
-  mapEpisodeApiListToEpisodes,
-  mapShowApiToShowDetailsViewModel
-} from '../mappers/showDetails.mapper';
-import type {
-  Episode,
-  ShowDetailsViewModel
-} from '../viewModel/showDetailsViewModel.type';
+import { mapEpisodeApiListToEpisodes, mapShowApiToShowDetailsViewModel } from '../mappers/showDetails.mapper';
+import type { Episode, ShowDetailsViewModel } from '../viewModel/showDetailsViewModel.type';
 
 /** Show-details use-case: TVMaze data to `ShowDetailsViewModel`, plus per-season episode loading for API routes. */
 export const useShowDetailsPresenter = () => {
@@ -20,21 +14,14 @@ export const useShowDetailsPresenter = () => {
     const [apiShow, seasons, cast] = await Promise.all([
       fetchTvMazeShowById(id),
       fetchTvMazeShowSeasons(id),
-      fetchTvMazeShowCast(id)
+      fetchTvMazeShowCast(id),
     ]);
 
     const sorted = [...seasons].sort((a, b) => a.number - b.number);
     const firstSeason = sorted[0];
-    const firstSeasonEpisodesApi = firstSeason
-      ? await fetchTvMazeSeasonEpisodes(firstSeason.id)
-      : [];
+    const firstSeasonEpisodesApi = firstSeason ? await fetchTvMazeSeasonEpisodes(firstSeason.id) : [];
 
-    return mapShowApiToShowDetailsViewModel(
-      apiShow,
-      seasons,
-      cast,
-      firstSeasonEpisodesApi
-    );
+    return mapShowApiToShowDetailsViewModel(apiShow, seasons, cast, firstSeasonEpisodesApi);
   };
 
   /**
@@ -47,6 +34,6 @@ export const useShowDetailsPresenter = () => {
 
   return {
     getShowDetails,
-    getSeasonEpisodes
+    getSeasonEpisodes,
   };
 };

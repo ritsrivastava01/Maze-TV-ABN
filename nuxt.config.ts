@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: {enabled: true},
+  devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/eslint'],
 
   /**
@@ -15,11 +15,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: [
-        '@vue/devtools-core',
-        '@vue/devtools-kit',
-        '@phosphor-icons/vue',
-      ],
+      include: ['@vue/devtools-core', '@vue/devtools-kit', '@phosphor-icons/vue'],
     },
   },
 
@@ -28,8 +24,8 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     langDir: 'locales',
     locales: [
-      {code: 'en', language: 'en-US', file: 'en.json', name: 'English'},
-      {code: 'nl', language: 'nl-NL', file: 'nl.json', name: 'Nederlands'}
-    ]
-  }
+      { code: 'en', language: 'en-US', file: 'en.json', name: 'English' },
+      { code: 'nl', language: 'nl-NL', file: 'nl.json', name: 'Nederlands' },
+    ],
+  },
 });

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+
 import type { Cast } from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 import Card from './Card.vue';
 import Rail from './Rail.vue';
@@ -10,8 +11,7 @@ defineProps<{
 
 const { t } = useI18n();
 
-const cardClass =
-  'relative isolate h-72 w-52 min-w-52 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10';
+const cardClass = 'relative isolate h-72 w-52 min-w-52 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10';
 </script>
 
 <template>
@@ -26,19 +26,15 @@ const cardClass =
         :preview="{
           id: member.id,
           title: member.name,
-          image: member.image
+          image: member.image,
         }"
         :class="cardClass"
       >
         <template #footer>
-          <h3
-            class="line-clamp-2 font-black leading-tight text-pink-300 drop-shadow-md"
-          >
+          <h3 class="line-clamp-2 font-black leading-tight text-pink-300 drop-shadow-md">
             {{ member.name }}
           </h3>
-          <p
-            class="mt-1 line-clamp-2 text-sm font-semibold text-white drop-shadow-md"
-          >
+          <p class="mt-1 line-clamp-2 text-sm font-semibold text-white drop-shadow-md">
             {{ member.characterName }}
           </p>
         </template>

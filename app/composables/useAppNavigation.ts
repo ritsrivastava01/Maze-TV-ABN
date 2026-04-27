@@ -1,6 +1,8 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
 import { useLocalePath } from '#imports';
+
 import type { LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
 
 export const useAppNavigation = () => {
@@ -17,7 +19,7 @@ export const useAppNavigation = () => {
       localePath({
         path: '/',
 
-        query: { type: category }
+        query: { type: category },
       })
     );
   };
@@ -28,7 +30,7 @@ export const useAppNavigation = () => {
     await router.push(
       localePath({
         path: '/search',
-        query: { ...route.query, q: trimmed }
+        query: { ...route.query, q: trimmed },
       })
     );
   };
@@ -37,8 +39,8 @@ export const useAppNavigation = () => {
     return localePath({
       path: `/shows/${showId}`,
       query: {
-        type: selectedCategory.value
-      }
+        type: selectedCategory.value,
+      },
     });
   };
 
@@ -51,6 +53,6 @@ export const useAppNavigation = () => {
     setCategory,
     setSearchQuery,
     getShowPath,
-    goToShow
+    goToShow,
   };
 };

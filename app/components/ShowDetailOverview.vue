@@ -19,7 +19,7 @@ const detailItems = computed(() => {
     { label: t('showDetail.meta.time'), value: props.show.scheduleTime },
     { label: t('showDetail.meta.seasons'), value: String(props.seasonCount) },
     { label: t('showDetail.meta.type'), value: props.show.type },
-    { label: t('showDetail.meta.language'), value: props.show.language }
+    { label: t('showDetail.meta.language'), value: props.show.language },
   ];
 });
 </script>
@@ -55,42 +55,27 @@ const detailItems = computed(() => {
 
     <h1 class="ds-heading-page mt-4 text-white">{{ show.title }}</h1>
 
-    <div
-      class="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
-    >
+    <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
       <p class="text-sm text-slate-300">
         {{ show.network }} ·
         <span v-if="show.premieredYear != null">{{ show.premieredYear }}</span>
         · {{ show.status }} · {{ show.runtime }}
       </p>
-      <RatingStars
-        :rating="show.rating"
-        :rating-star-fills="show.ratingStarFills"
-      />
+      <RatingStars :rating="show.rating" :rating-star-fills="show.ratingStarFills" />
     </div>
 
+    <!-- eslint-disable vue/no-v-html -- TVMaze summary is trusted API HTML, not user input -->
     <div
       class="mt-6 line-clamp-none max-w-3xl overflow-hidden text-sm leading-7 text-slate-200 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] sm:[-webkit-line-clamp:8] md:[-webkit-line-clamp:none] [&_p]:m-0"
       v-html="show.summary"
     />
+    <!-- eslint-enable vue/no-v-html -->
 
     <div class="mt-6 flex flex-wrap gap-3">
-      <a
-        v-if="show.officialSite"
-        :href="show.officialSite"
-        target="_blank"
-        rel="noreferrer"
-        class="ds-btn-primary"
-      >
+      <a v-if="show.officialSite" :href="show.officialSite" target="_blank" rel="noreferrer" class="ds-btn-primary">
         {{ t('showDetail.meta.officialSite') }}
       </a>
-      <a
-        v-if="show.imdbUrl"
-        :href="show.imdbUrl"
-        target="_blank"
-        rel="noreferrer"
-        class="ds-btn-ghost"
-      >
+      <a v-if="show.imdbUrl" :href="show.imdbUrl" target="_blank" rel="noreferrer" class="ds-btn-ghost">
         {{ t('showDetail.meta.imdb') }}
       </a>
     </div>

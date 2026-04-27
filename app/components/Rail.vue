@@ -34,30 +34,18 @@ const onScroll = (event: Event): void => {
 
 <template>
   <section class="mb-6">
-    <div
-      v-if="hasHeaderSlot"
-      class="mb-3 flex min-h-7 items-center justify-between px-2"
-    >
+    <div v-if="hasHeaderSlot" class="mb-3 flex min-h-7 items-center justify-between px-2">
       <slot name="header" />
     </div>
-    <div
-      v-else-if="showPropHeader"
-      class="mb-3 flex min-h-7 items-center justify-between px-2"
-    >
+    <div v-else-if="showPropHeader" class="mb-3 flex min-h-7 items-center justify-between px-2">
       <h3 class="text-xl font-bold">
         {{ headerTitle }}
       </h3>
-      <span
-        v-if="headerSubtitle != null && headerSubtitle !== ''"
-        class="text-xs text-slate-300"
-      >
+      <span v-if="headerSubtitle != null && headerSubtitle !== ''" class="text-xs text-slate-300">
         {{ headerSubtitle }}
       </span>
     </div>
-    <div
-      v-else-if="showHeaderSkeleton"
-      class="mb-3 flex min-h-7 items-center justify-between px-2"
-    >
+    <div v-else-if="showHeaderSkeleton" class="mb-3 flex min-h-7 items-center justify-between px-2">
       <div class="h-7 w-28 animate-pulse rounded bg-slate-700/80" />
       <div class="h-4 w-16 animate-pulse rounded bg-slate-700/60" />
     </div>

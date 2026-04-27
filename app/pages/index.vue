@@ -1,16 +1,15 @@
 <script setup lang="ts">
+import { createError, showError, useFetch } from 'nuxt/app';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { useFetch, showError, createError } from 'nuxt/app';
-import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import type {
-  DashboardCategory,
-  DashboardViewModel
-} from '../../domains/dashboard/viewModel/dashboardViewModel.type';
+import { useRoute } from 'vue-router';
+
 import { useAppNavigation } from '#imports';
+import type { ShowViewModel } from '~~/domains/dashboard/viewModel/show.type';
+
+import type { DashboardCategory, DashboardViewModel } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 import Card from '../components/Card.vue';
 import Rail from '../components/Rail.vue';
-import type { ShowViewModel } from '~~/domains/dashboard/viewModel/show.type';
 
 const RAIL_CARD_BATCH_SIZE = 8;
 const RAIL_COUNT = 3;
@@ -27,25 +26,19 @@ const railShowClass = 'block h-72 w-52 min-w-52 shrink-0';
 
 const selectedCategory = computed<DashboardCategory>(() => {
   const v = route.query.type;
-  return v === 'movies' || v === 'documentaries' || v === 'tv-shows'
-    ? v
-    : 'tv-shows';
+  return v === 'movies' || v === 'documentaries' || v === 'tv-shows' ? v : 'tv-shows';
 });
 
-const { data, status, error } = await useFetch<DashboardViewModel>(
-  '/api/dashboard',
-  {
-    query: computed(() => ({ type: selectedCategory.value }))
-  }
-);
+const { data, status, error } = await useFetch<DashboardViewModel>('/api/dashboard', {
+  query: computed(() => ({ type: selectedCategory.value })),
+});
 
 // SSR: throw immediately so error.vue is rendered instead of the page
 if (error.value) {
   throw createError({
     statusCode: error.value.statusCode ?? 500,
-    statusMessage:
-      (error.value.data as any)?.statusMessage ?? error.value.message,
-    fatal: true
+    statusMessage: (error.value.data as { statusMessage?: string })?.statusMessage ?? error.value.message,
+    fatal: true,
   });
 }
 
@@ -54,18 +47,15 @@ watch(error, (err) => {
   if (err)
     showError({
       statusCode: err.statusCode ?? 500,
-      statusMessage: (err.data as any)?.statusMessage ?? err.message,
-      fatal: true
+      statusMessage: (err.data as { statusMessage?: string })?.statusMessage ?? err.message,
+      fatal: true,
     });
 });
 
 /**
  *   used to get the visible shows for the given genre
  */
-const getVisibleShows = (
-  genre: string,
-  shows: ShowViewModel[]
-): ShowViewModel[] => {
+const getVisibleShows = (genre: string, shows: ShowViewModel[]): ShowViewModel[] => {
   const existingCount = visibleCountByGenre.value[genre];
   if (!existingCount) {
     visibleCountByGenre.value[genre] = RAIL_CARD_BATCH_SIZE;
@@ -84,21 +74,19 @@ const dashboardRails = computed(() => {
         genre: null,
         shows: [],
         cards: Array.from({ length: RAIL_CARD_BATCH_SIZE }, () => null),
-        isEmpty: false
+        isEmpty: false,
       };
     });
   }
-  return (data.value?.genreRows.slice(0, visibleRailCount.value) ?? []).map(
-    (r) => {
-      return {
-        key: r.genre,
-        genre: r.genre,
-        shows: r.shows,
-        cards: getVisibleShows(r.genre, r.shows),
-        isEmpty: r.shows.length === 0
-      };
-    }
-  );
+  return (data.value?.genreRows.slice(0, visibleRailCount.value) ?? []).map((r) => {
+    return {
+      key: r.genre,
+      genre: r.genre,
+      shows: r.shows,
+      cards: getVisibleShows(r.genre, r.shows),
+      isEmpty: r.shows.length === 0,
+    };
+  });
 });
 
 /**
@@ -130,10 +118,7 @@ const loadMoreRails = (): void => {
     return;
   }
 
-  visibleRailCount.value = Math.min(
-    visibleRailCount.value + RAIL_COUNT,
-    rowCount
-  );
+  visibleRailCount.value = Math.min(visibleRailCount.value + RAIL_COUNT, rowCount);
 };
 
 /**
@@ -142,8 +127,7 @@ const loadMoreRails = (): void => {
 const onWindowScroll = (): void => {
   const viewportBottom = window.scrollY + window.innerHeight;
   const pageBottom = document.documentElement.scrollHeight;
-  const isNearBottom =
-    viewportBottom >= pageBottom - PAGE_BOTTOM_LOAD_THRESHOLD_PX;
+  const isNearBottom = viewportBottom >= pageBottom - PAGE_BOTTOM_LOAD_THRESHOLD_PX;
 
   if (isNearBottom) {
     loadMoreRails();
@@ -169,26 +153,16 @@ onBeforeUnmount(() => {
 
 <template>
   <Hero
-    :show="
-      status === 'pending' || status === 'idle'
-        ? null
-        : (data?.featuredShow ?? null)
-    "
+    :show="status === 'pending' || status === 'idle' ? null : (data?.featuredShow ?? null)"
     :class="heroHeightClass"
   />
 
-  <section
-    class="relative z-20 -mt-20 mx-auto container px-4 pb-10 sm:px-6 lg:px-10"
-  >
+  <section class="relative z-20 -mt-20 mx-auto container px-4 pb-10 sm:px-6 lg:px-10">
     <Rail
       v-for="row in dashboardRails"
       :key="row.key"
       :header-title="row.genre"
-      :header-subtitle="
-        row.genre
-          ? t('labels.showsCount', { count: row.shows.length })
-          : undefined
-      "
+      :header-subtitle="row.genre ? t('labels.showsCount', { count: row.shows.length }) : undefined"
       @rail-scroll="
         (event) => {
           if (row.genre) {
@@ -201,21 +175,9 @@ onBeforeUnmount(() => {
         {{ t('labels.noShowsInGenre') }}
       </p>
       <template v-else>
-        <div
-          v-for="(card, index) in row.cards"
-          :key="card?.id ?? `${row.key}-${index}`"
-          :class="railShowClass"
-        >
-          <NuxtLink
-            v-if="card"
-            :to="getShowPath(card.id)"
-            class="block h-full w-full"
-          >
-            <Card
-              :preview="card"
-              class="h-full w-full"
-              :shell-class="'ds-card-rail-shell'"
-            />
+        <div v-for="(card, index) in row.cards" :key="card?.id ?? `${row.key}-${index}`" :class="railShowClass">
+          <NuxtLink v-if="card" :to="getShowPath(card.id)" class="block h-full w-full">
+            <Card :preview="card" class="h-full w-full" :shell-class="'ds-card-rail-shell'" />
           </NuxtLink>
           <Card v-else :preview="null" class="h-full w-full" />
         </div>

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (!Number.isInteger(id)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid show id'
+      statusMessage: 'Invalid show id',
     });
   }
 

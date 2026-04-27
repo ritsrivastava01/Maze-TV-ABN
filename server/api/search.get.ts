@@ -21,7 +21,7 @@ export default defineCachedEventHandler(
     } catch {
       throw createError({
         statusCode: 500,
-        statusMessage: 'errors.searchLoadFailed'
+        statusMessage: 'errors.searchLoadFailed',
       });
     }
   },
@@ -31,6 +31,6 @@ export default defineCachedEventHandler(
     getKey: (event) => {
       const { q = '' } = getQuery(event);
       return String(q).trim().toLowerCase();
-    }
+    },
   }
 );

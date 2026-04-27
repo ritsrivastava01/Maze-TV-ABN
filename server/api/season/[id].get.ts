@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (!Number.isInteger(seasonId)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid TVMaze season id'
+      statusMessage: 'Invalid TVMaze season id',
     });
   }
 

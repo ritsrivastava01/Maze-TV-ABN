@@ -6,6 +6,7 @@
  * correctly without hitting the network.
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import type { ShowApiModel } from '../../domains/tvmaze/api/tvmaze.api';
 
 // Mock the TVMaze API module — keep all other implementations intact
@@ -17,8 +18,8 @@ vi.mock('../../domains/tvmaze/api/tvmaze.api', async (importOriginal) => {
   };
 });
 
-import { fetchTvMazeShows } from '../../domains/tvmaze/api/tvmaze.api';
 import { useDashboardPresenter } from '../../domains/dashboard/presenters/dashboard.presenter';
+import { fetchTvMazeShows } from '../../domains/tvmaze/api/tvmaze.api';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────
 

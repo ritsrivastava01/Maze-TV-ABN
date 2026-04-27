@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+
 import { useAppNavigation } from '#imports';
-import RatingStars from './RatingStars.vue';
+
 import type { ShowViewModel } from '../../domains/dashboard/viewModel/show.type';
+import RatingStars from './RatingStars.vue';
 
 const { show } = defineProps<{
   show: ShowViewModel | null;
@@ -40,10 +42,12 @@ const { getShowPath } = useAppNavigation();
 
         <RatingStars class="mt-5" :rating="show.rating" :rating-star-fills="show.ratingStarFills" />
 
+        <!-- eslint-disable vue/no-v-html -- TVMaze summary is trusted API HTML, not user input -->
         <div
           class="mt-5 line-clamp-none max-w-xl overflow-hidden text-sm leading-6 text-slate-200 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:4] [&_p]:m-0 md:[-webkit-line-clamp:8] lg:[display:block]"
           v-html="show.summary"
         />
+        <!-- eslint-enable vue/no-v-html -->
 
         <div class="mt-8 flex flex-wrap gap-3">
           <NuxtLink :to="getShowPath(show.id)" class="ds-btn-primary">
