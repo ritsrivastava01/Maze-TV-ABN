@@ -77,27 +77,6 @@
    * ────────────────────────────────────────────────────────────────────*/
 
   /**
-   * Base card shell — dark surface, rounded corners, subtle ring.
-   * Usage: CastCard, EpisodeCard outer wrappers, poster frame.
-   */
-  .ds-card {
-    @apply overflow-hidden rounded-2xl border border-white/10 bg-slate-900;
-  }
-
-  /**
-   * Interactive card hover layer — pink glow ring on group-hover.
-   * Apply together with base card utilities (NOT necessarily with ds-card).
-   * Usage: Show cards in the Rail component.
-   */
-  .ds-card-interactive {
-    @apply transition duration-300
-           group-hover:border-pink-300/80
-           group-hover:ring-2
-           group-hover:ring-pink-400/80
-           group-hover:shadow-[0_0_28px_rgba(236,72,153,0.38)];
-  }
-
-  /**
    * Rail card animation shell — scale + pink glow on direct hover.
    * Passed as :shell-class to Card.vue; sits inside an absolute-positioned wrapper.
    * Includes GPU-accelerated transform, z-elevation, and glow ring.
@@ -106,7 +85,7 @@
   .ds-card-rail-shell {
     @apply origin-center transform-gpu transition-transform duration-300 ease-out will-change-transform
            hover:z-30 hover:scale-125 hover:border-pink-300/80
-           hover:ring-2 hover:ring-pink-400/80 hover:shadow-[0_0_28px_rgba(236,72,153,0.38)];
+           hover:ring-2 hover:ring-pink-400/80 hover:shadow-[0_0_28px_var(--tw-shadow-color)] hover:shadow-pink-500/40;
   }
 
   /* ─────────────────────────────────────────────────────────────────────
@@ -119,16 +98,7 @@
    */
   .ds-badge-genre {
     @apply rounded-full border border-violet-500/30 bg-violet-950/50 px-3 py-1
-           text-xs font-bold uppercase tracking-[0.18em] text-violet-200;
-  }
-
-  /**
-   * Floating rating badge — dark glass overlay on media cards.
-   * Usage: Episode card rating chip.
-   */
-  .ds-badge-rating {
-    @apply rounded-full bg-black/50 px-2 py-1 text-xs font-bold text-white
-           backdrop-blur;
+           text-xs font-bold uppercase tracking-[.18em] text-violet-200;
   }
 
   /* ─────────────────────────────────────────────────────────────────────
@@ -141,14 +111,6 @@
    */
   .ds-skeleton {
     @apply animate-pulse rounded bg-slate-700/70;
-  }
-
-  /**
-   * Dark skeleton pulse — deeper slate for image/block placeholders.
-   * Usage: Hero image, poster, full-area loading states.
-   */
-  .ds-skeleton-dark {
-    @apply animate-pulse bg-slate-800/80;
   }
 
   /* ─────────────────────────────────────────────────────────────────────
@@ -176,7 +138,7 @@
    * Usage: "Status", "Language" metadata keys; "Episodes" / "Cast" eyebrows.
    */
   .ds-label-section {
-    @apply text-xs font-medium uppercase tracking-[0.2em] text-slate-500;
+    @apply text-xs font-medium uppercase tracking-[.2em] text-slate-500;
   }
 
   /**
@@ -184,7 +146,7 @@
    * Usage: Detail-grid <dt> labels.
    */
   .ds-label-meta {
-    @apply text-[0.65rem] font-medium uppercase tracking-[0.2em] text-slate-500;
+    @apply text-[0.65rem] font-medium uppercase tracking-[.2em] text-slate-500;
   }
 
   /**
@@ -192,7 +154,7 @@
    * Usage: "Featured Show" above the hero title; "Episodes" rail section heading.
    */
   .ds-label-brand {
-    @apply text-sm font-semibold uppercase tracking-[0.3em] text-pink-300;
+    @apply text-sm font-semibold uppercase tracking-[.3em] text-pink-300;
   }
 
   /* ─────────────────────────────────────────────────────────────────────
@@ -234,7 +196,7 @@
    * Usage: Season selector on show detail page.
    */
   .ds-select {
-    @apply h-10 min-w-[9.5rem] cursor-pointer appearance-none rounded-full
+    @apply h-10 min-w-40 cursor-pointer appearance-none rounded-full
            border border-white/40 bg-black/20 py-0 pl-4 pr-12 text-sm
            font-semibold text-white outline-none transition hover:bg-white/10
            focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40;

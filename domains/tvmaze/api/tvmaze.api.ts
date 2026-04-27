@@ -50,7 +50,9 @@ export const fetchTvMazeShows = async (): Promise<ShowApiModel[]> => {
 /**
  * API model for the TVMaze show by ID response.
  */
-export const fetchTvMazeShowById = async (id: number): Promise<ShowApiModel> => {
+export const fetchTvMazeShowById = async (
+  id: number
+): Promise<ShowApiModel> => {
   return await $fetch<ShowApiModel>(`${TVMAZE_BASE_URL}/shows/${id}`);
 };
 /**
@@ -71,8 +73,12 @@ export interface EpisodeApiModel {
   } | null;
 }
 
-export const fetchTvMazeShowEpisodes = async (id: number): Promise<EpisodeApiModel[]> => {
-  return await $fetch<EpisodeApiModel[]>(`${TVMAZE_BASE_URL}/shows/${id}/episodes`);
+export const fetchTvMazeShowEpisodes = async (
+  id: number
+): Promise<EpisodeApiModel[]> => {
+  return await $fetch<EpisodeApiModel[]>(
+    `${TVMAZE_BASE_URL}/shows/${id}/episodes`
+  );
 };
 
 /** TVMaze `GET /shows/{id}/seasons` row. Maps to app `Season` in show-details. */
@@ -86,8 +92,12 @@ export interface SeasonApi {
  * @param showId - The ID of the show
  * @returns The seasons for the given show
  */
-export const fetchTvMazeShowSeasons = async (showId: number): Promise<SeasonApi[]> => {
-  return await $fetch<SeasonApi[]>(`${TVMAZE_BASE_URL}/shows/${showId}/seasons`);
+export const fetchTvMazeShowSeasons = async (
+  showId: number
+): Promise<SeasonApi[]> => {
+  return await $fetch<SeasonApi[]>(
+    `${TVMAZE_BASE_URL}/shows/${showId}/seasons`
+  );
 };
 
 /**
@@ -95,8 +105,12 @@ export const fetchTvMazeShowSeasons = async (showId: number): Promise<SeasonApi[
  * @param seasonId - The ID of the season
  * @returns The episodes for the given season
  */
-export const fetchTvMazeSeasonEpisodes = async (seasonId: number): Promise<EpisodeApiModel[]> => {
-  return await $fetch<EpisodeApiModel[]>(`${TVMAZE_BASE_URL}/seasons/${seasonId}/episodes`);
+export const fetchTvMazeSeasonEpisodes = async (
+  seasonId: number
+): Promise<EpisodeApiModel[]> => {
+  return await $fetch<EpisodeApiModel[]>(
+    `${TVMAZE_BASE_URL}/seasons/${seasonId}/episodes`
+  );
 };
 
 // Type aliases for the showDetails domain (consistent naming with main branch)
@@ -122,7 +136,9 @@ export interface CastApiModel {
   };
 }
 
-export const fetchTvMazeShowCast = async (id: number): Promise<CastApiModel[]> => {
+export const fetchTvMazeShowCast = async (
+  id: number
+): Promise<CastApiModel[]> => {
   return await $fetch<CastApiModel[]>(`${TVMAZE_BASE_URL}/shows/${id}/cast`);
 };
 
@@ -147,11 +163,13 @@ const NAV_ITEMS: LayoutNavApiModel[] = [
     value: 'documentaries',
     labelKey: 'nav.documentaries',
     enabled: true,
-    order: 3,
-  },
+    order: 3
+  }
 ];
 
-export const fetchTvMazeLayoutNavItems = async (): Promise<LayoutNavApiModel[]> => {
+export const fetchTvMazeLayoutNavItems = async (): Promise<
+  LayoutNavApiModel[]
+> => {
   return NAV_ITEMS;
 };
 
@@ -167,6 +185,11 @@ export interface SearchResultApiModel {
  * Search shows by query string using the TVMaze search endpoint.
  * Returns up to 10 results ranked by relevance score.
  */
-export const fetchTvMazeSearchShows = async (query: string): Promise<SearchResultApiModel[]> => {
-  return await $fetch<SearchResultApiModel[]>(`${TVMAZE_BASE_URL}/search/shows`, { query: { q: query } });
+export const fetchTvMazeSearchShows = async (
+  query: string
+): Promise<SearchResultApiModel[]> => {
+  return await $fetch<SearchResultApiModel[]>(
+    `${TVMAZE_BASE_URL}/search/shows`,
+    { query: { q: query } }
+  );
 };

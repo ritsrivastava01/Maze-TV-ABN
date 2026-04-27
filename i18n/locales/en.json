@@ -17,6 +17,19 @@
     "trailer": "Trailer"
   },
   "showDetail": {
+    "meta": {
+      "status": "Status",
+      "premiered": "Premiered",
+      "ended": "Ended",
+      "country": "Country",
+      "days": "Days",
+      "time": "Time",
+      "seasons": "Seasons",
+      "type": "Type",
+      "language": "Language",
+      "officialSite": "Official site",
+      "imdb": "IMDb"
+    },
     "episodes": "Episodes",
     "episodeCount": "{n} episodes",
     "seasonWithNumber": "Season {n}",

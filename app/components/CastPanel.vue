@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {useI18n} from 'vue-i18n';
-import type {Cast} from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
+import { useI18n } from 'vue-i18n';
+import type { Cast } from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 import Card from './Card.vue';
 import Rail from './Rail.vue';
 
@@ -8,7 +8,7 @@ defineProps<{
   cast: Cast[];
 }>();
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 const cardClass =
   'relative isolate h-72 w-52 min-w-52 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10';

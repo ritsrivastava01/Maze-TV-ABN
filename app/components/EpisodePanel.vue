@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import {computed} from 'vue';
-import {useI18n} from 'vue-i18n';
 import type {
   Episode,
   Season
-} from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
-import Card from './Card.vue';
-import Rail from './Rail.vue';
+} from '~/domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const props = defineProps<{
   seasonList: Season[];
@@ -14,8 +10,17 @@ const props = defineProps<{
   loading?: boolean;
 }>();
 
-/** Season number (1, 2, …) — matches legacy `season.season` binding; avoids `<select>` string/id coercion bugs with TVMaze season ids. */
+/** Season number (1, 2, …) bound to the dropdown; kept in sync with the parent's selectedSeason. */
 const selectedSeason = defineModel<number | null>('selectedSeason');
+
+const emit = defineEmits<{ 'season-select': [season: Season] }>();
+
+function onSeasonChange(e: Event) {
+  const num = Number((e.target as HTMLSelectElement).value);
+  selectedSeason.value = num;
+  const season = props.seasonList.find((s) => s.number === num);
+  if (season) emit('season-select', season);
+}
 
 /** Season label when v-model is still null (before parent sync); `seasonList` is ascending from the mapper. */
 const displaySeasonNumber = computed(() => {
@@ -31,7 +36,7 @@ const showEpisodeCountSkeleton = computed(
     (props.loading === true || displaySeasonNumber.value == null)
 );
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 const EPISODE_CARD_CLASS =
   'aspect-video w-80 min-w-80 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10';
@@ -53,7 +58,7 @@ const toPreview = (e: Episode) => ({
           </p>
           <h2 class="mt-2 min-h-[2rem] text-2xl font-black text-white">
             <template v-if="displaySeasonNumber != null">
-              {{ t('showDetail.seasonWithNumber', {n: displaySeasonNumber}) }}
+              {{ t('showDetail.seasonWithNumber', { n: displaySeasonNumber }) }}
             </template>
             <span
               v-else
@@ -72,21 +77,22 @@ const toPreview = (e: Episode) => ({
               aria-hidden="true"
             />
             <template v-else>
-              {{ t('showDetail.episodeCount', {n: episodes.length}) }}
+              {{ t('showDetail.episodeCount', { n: episodes.length }) }}
             </template>
           </span>
           <select
-            v-model.number="selectedSeason"
+            :value="displaySeasonNumber"
+            @change="onSeasonChange"
             :disabled="loading"
             :aria-label="t('showDetail.selectSeason')"
-            class="h-10 min-w-[9.5rem] cursor-pointer appearance-none rounded-full border border-white/40 bg-black/20 py-0 pl-4 pr-12 text-sm font-semibold text-white outline-none transition hover:bg-white/10 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40 enabled:cursor-pointer disabled:cursor-wait disabled:opacity-60 [background-size:1.15rem_1.15rem] [background-position:right_0.75rem_center] [background-repeat:no-repeat] [background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2220%22%20height=%2220%22%20fill=%22%23e2e8f0%22%20viewBox=%220%200%20256%20256%22%3E%3Cpath%20d=%22M213.66%20101.66l-80%2080a8%208%200%200%201-11.32%200l-80-80A8%208%200%200%201%2043.31%2088L128%20172.69%20212.69%2088a8%208%200%200%201%2011.32%2011.32Z%22/%3E%3C/svg%3E')]"
+            class="ds-select"
           >
             <option
               v-for="season in seasonList"
               :key="season.id"
               :value="season.number"
             >
-              {{ t('showDetail.seasonWithNumber', {n: season.number}) }}
+              {{ t('showDetail.seasonWithNumber', { n: season.number }) }}
             </option>
           </select>
         </div>

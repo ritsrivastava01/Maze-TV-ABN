@@ -1,4 +1,4 @@
-import type {ShowViewModel} from '../../dashboard/viewModel/show.type';
+import type { ShowViewModel } from '../../dashboard/viewModel/show.type';
 
 /** One title's metadata for show details: shared list fields + extra fields (nested as `ShowDetailsViewModel.show`). */
 export interface ShowDetails extends Omit<ShowViewModel, 'heroImage'> {

@@ -11,7 +11,7 @@ const mapRatingToStarFills = (rating: number): number[] => {
 };
 
 const mapSearchResultApiToViewModel = (result: SearchResultApiModel): SearchResultViewModel => {
-  const { show, score } = result;
+  const { show } = result;
   const rating = show.rating.average ?? 0;
 
   return {
@@ -20,9 +20,6 @@ const mapSearchResultApiToViewModel = (result: SearchResultApiModel): SearchResu
     image: show.image?.medium ?? show.image?.original ?? FALLBACK_IMAGE,
     rating,
     ratingStarFills: mapRatingToStarFills(rating),
-    genres: show.genres ?? [],
-    summary: show.summary ?? '',
-    score,
   };
 };
 

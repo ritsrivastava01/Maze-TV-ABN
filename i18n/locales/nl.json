@@ -17,6 +17,19 @@
     "trailer": "Trailer"
   },
   "showDetail": {
+    "meta": {
+      "status": "Status",
+      "premiered": "Première",
+      "ended": "Geëindigd",
+      "country": "Land",
+      "days": "Dagen",
+      "time": "Tijd",
+      "seasons": "Seizoenen",
+      "type": "Type",
+      "language": "Taal",
+      "officialSite": "Officiële site",
+      "imdb": "IMDb"
+    },
     "episodes": "Afleveringen",
     "episodeCount": "{n} afleveringen",
     "seasonWithNumber": "Seizoen {n}",

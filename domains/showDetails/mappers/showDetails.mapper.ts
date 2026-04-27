@@ -46,8 +46,9 @@ const premiereYearFromIso = (date?: string | null): number | null => {
 /**
  * Maps a TVMaze episode payload list to app `Episode` models (titles, images, ratings normalized).
  */
-export const mapEpisodeApiListToEpisodes = (episodes: EpisodeApi[]): Episode[] =>
-  episodes.map(mapEpisodeApiToEpisode);
+export const mapEpisodeApiListToEpisodes = (
+  episodes: EpisodeApi[]
+): Episode[] => episodes.map(mapEpisodeApiToEpisode);
 
 /**
  * Maps TVMaze season rows to app `Season` models sorted by ascending season number (dropdown-ready `id` / `number`).
@@ -55,7 +56,7 @@ export const mapEpisodeApiListToEpisodes = (episodes: EpisodeApi[]): Episode[] =
 export const mapSeasonApiListToSeasons = (seasons: SeasonApi[]): Season[] =>
   [...seasons]
     .sort((a, b) => a.number - b.number)
-    .map((s) => ({id: s.id, number: s.number}));
+    .map((s) => ({ id: s.id, number: s.number }));
 
 /**
  * Maps TVMaze show + seasons + cast + first-season episodes into app `ShowDetailsViewModel`.
@@ -144,7 +145,7 @@ const mapRatingToStarFills = (rating: number): number[] => {
     Math.min(5, Math.round(ratingOnFiveScale * 4) / 4)
   );
 
-  return Array.from({length: STAR_COUNT}, (_, index) => {
+  return Array.from({ length: STAR_COUNT }, (_, index) => {
     const fill = Math.max(0, Math.min(1, ratingStarsOnFiveScale - index));
     return fill * 100;
   });
