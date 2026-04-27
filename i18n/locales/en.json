@@ -2,6 +2,20 @@
   "brand": {
     "appName": "MAZE TV"
   },
+  "a11y": {
+    "mainNav": "Category navigation",
+    "loadCategory": "Load category: {name}",
+    "openSearchBar": "Open search bar",
+    "closeSearchBar": "Close search bar",
+    "searchField": "Search shows",
+    "siteSearch": "Search area",
+    "clearSearch": "Clear search text",
+    "submitSearch": "Submit search",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLanguageTo": "Switch language to {lang}",
+    "trailerUnavailable": "Trailer not available yet"
+  },
   "nav": {
     "movies": "Movies",
     "tvShows": "TV Shows",
@@ -13,11 +27,11 @@
     "signUp": "Sign Up",
     "goHome": "Go to home",
     "backToShows": "Back to shows",
-    "watchNow": "Watch Now",
+    "watchNow": "Show Details",
     "trailer": "Trailer"
   },
   "showDetail": {
-    "meta": {
+    "fieldLabels": {
       "status": "Status",
       "premiered": "Premiered",
       "ended": "Ended",
@@ -52,6 +66,8 @@
   "search": {
     "label": "Search",
     "resultsFor": "Results for ",
+    "loadingGridLabel": "Loading search results",
+    "resultsGridLabel": "Search results",
     "resultCount": "{count} results found",
     "noResults": "No shows found",
     "tryDifferent": "Try a different keyword.",

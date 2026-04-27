@@ -11,15 +11,15 @@ const { t } = useI18n();
 const detailItems = computed(() => {
   if (!props.show) return [];
   return [
-    { label: t('showDetail.meta.status'), value: props.show.status },
-    { label: t('showDetail.meta.premiered'), value: props.show.premiereDate },
-    { label: t('showDetail.meta.ended'), value: props.show.ended },
-    { label: t('showDetail.meta.country'), value: props.show.country },
-    { label: t('showDetail.meta.days'), value: props.show.scheduleDays },
-    { label: t('showDetail.meta.time'), value: props.show.scheduleTime },
-    { label: t('showDetail.meta.seasons'), value: String(props.seasonCount) },
-    { label: t('showDetail.meta.type'), value: props.show.type },
-    { label: t('showDetail.meta.language'), value: props.show.language },
+    { label: t('showDetail.fieldLabels.status'), value: props.show.status },
+    { label: t('showDetail.fieldLabels.premiered'), value: props.show.premiereDate },
+    { label: t('showDetail.fieldLabels.ended'), value: props.show.ended },
+    { label: t('showDetail.fieldLabels.country'), value: props.show.country },
+    { label: t('showDetail.fieldLabels.days'), value: props.show.scheduleDays },
+    { label: t('showDetail.fieldLabels.time'), value: props.show.scheduleTime },
+    { label: t('showDetail.fieldLabels.seasons'), value: String(props.seasonCount) },
+    { label: t('showDetail.fieldLabels.type'), value: props.show.type },
+    { label: t('showDetail.fieldLabels.language'), value: props.show.language },
   ];
 });
 </script>
@@ -73,10 +73,10 @@ const detailItems = computed(() => {
 
     <div class="mt-6 flex flex-wrap gap-3">
       <a v-if="show.officialSite" :href="show.officialSite" target="_blank" rel="noreferrer" class="ds-btn-primary">
-        {{ t('showDetail.meta.officialSite') }}
+        {{ t('showDetail.fieldLabels.officialSite') }}
       </a>
       <a v-if="show.imdbUrl" :href="show.imdbUrl" target="_blank" rel="noreferrer" class="ds-btn-ghost">
-        {{ t('showDetail.meta.imdb') }}
+        {{ t('showDetail.fieldLabels.imdb') }}
       </a>
     </div>
 

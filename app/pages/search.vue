@@ -3,12 +3,12 @@ import { PhMagnifyingGlass } from '@phosphor-icons/vue';
 import { showError, useFetch } from 'nuxt/app';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-
-import { useAppNavigation, useRoute } from '#imports';
+import { useRoute } from 'vue-router';
 
 import type { SearchViewModel } from '../../domains/search/viewModel/searchViewModel.type';
 import Card from '../components/Card.vue';
 import RatingStars from '../components/RatingStars.vue';
+import { useAppNavigation } from '../composables/useAppNavigation';
 
 const GRID_CLASS = 'grid grid-cols-2 gap-8 gap-y-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5';
 
@@ -23,7 +23,7 @@ const { data, status } = useFetch<SearchViewModel>('/api/search', {
   onResponseError({ response }) {
     showError({
       statusCode: response.status,
-      statusMessage: response._data?.statusMessage ?? response.statusText,
+      statusMessage: (response._data as { statusMessage?: string } | undefined)?.statusMessage ?? response.statusText,
       fatal: true,
     });
   },
@@ -48,7 +48,7 @@ const skeletonCount = computed(() => data.value?.totalResults ?? 10);
     </div>
 
     <!-- Loading grid (skeleton) -->
-    <section v-if="status === 'pending'" :class="GRID_CLASS" aria-label="Loading search results">
+    <section v-if="status === 'pending'" :class="GRID_CLASS" :aria-label="t('search.loadingGridLabel')">
       <div v-for="n in skeletonCount" :key="`sk-${n}`" class="aspect-[2/3] w-full">
         <Card :preview="null" class="h-full w-full" />
       </div>
@@ -64,7 +64,7 @@ const skeletonCount = computed(() => data.value?.totalResults ?? 10);
     </div>
 
     <!-- Results grid -->
-    <section v-else :class="GRID_CLASS" aria-label="Search results">
+    <section v-else :class="GRID_CLASS" :aria-label="t('search.resultsGridLabel')">
       <div v-for="result in results" :key="result.id" class="aspect-[2/3] w-full">
         <NuxtLink :to="getShowPath(result.id)" class="group block h-full w-full">
           <Card :preview="result" class="h-full w-full" shell-class="ds-card-rail-shell hover:scale-110">

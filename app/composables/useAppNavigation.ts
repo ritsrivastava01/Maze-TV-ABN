@@ -1,8 +1,6 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useLocalePath } from '#imports';
-
 import type { LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
 
 export const useAppNavigation = () => {

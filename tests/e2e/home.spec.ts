@@ -65,9 +65,9 @@ test('renders the hero section with the featured show title', async ({ page }) =
 
 test('renders the "Watch Now" CTA in the hero', async ({ page }) => {
   await page.goto('/');
-  const watchNow = page.getByRole('link', { name: /watch now/i });
-  await expect(watchNow).toBeVisible({ timeout: 10_000 });
-  await expect(watchNow).toHaveAttribute('href', /\/show\/1/);
+  const showDetails = page.getByRole('link', { name: /show details/i });
+  await expect(showDetails).toBeVisible({ timeout: 10_000 });
+  await expect(showDetails).toHaveAttribute('href', /\/show\/1/);
 });
 
 test('renders the genre rail headers', async ({ page }) => {
@@ -78,9 +78,9 @@ test('renders the genre rail headers', async ({ page }) => {
 
 test('clicking "Watch Now" navigates to the show detail page', async ({ page }) => {
   await page.goto('/');
-  const watchNow = page.getByRole('link', { name: /watch now/i });
-  await watchNow.waitFor({ state: 'visible', timeout: 10_000 });
-  await watchNow.click();
+  const showDetails = page.getByRole('link', { name: /show details/i });
+  await showDetails.waitFor({ state: 'visible', timeout: 10_000 });
+  await showDetails.click();
   await expect(page).toHaveURL(/\/show\/1/);
 });
 

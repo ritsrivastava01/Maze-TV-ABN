@@ -4,6 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/eslint'],
 
+  app: {
+    head: {
+      title: 'Maze TV',
+    },
+  },
+
   /**
    * Point @nuxtjs/tailwindcss at our custom entry file.
    * tailwind.css includes @tailwind base/components/utilities and

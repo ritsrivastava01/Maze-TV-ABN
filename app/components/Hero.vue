@@ -52,7 +52,13 @@ const { getShowPath } = useAppNavigation();
           <NuxtLink :to="getShowPath(show.id)" class="ds-btn-primary">
             {{ t('actions.watchNow') }}
           </NuxtLink>
-          <button type="button" class="ds-btn-ghost">
+          <button
+            type="button"
+            class="ds-btn-ghost"
+            disabled
+            :aria-disabled="true"
+            :title="t('a11y.trailerUnavailable')"
+          >
             {{ t('actions.trailer') }}
           </button>
         </div>

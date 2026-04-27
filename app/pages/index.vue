@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { createError, showError, useFetch } from 'nuxt/app';
+import type { FetchError } from 'ofetch';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -29,27 +30,28 @@ const selectedCategory = computed<DashboardCategory>(() => {
   return v === 'movies' || v === 'documentaries' || v === 'tv-shows' ? v : 'tv-shows';
 });
 
-const { data, status, error } = await useFetch<DashboardViewModel>('/api/dashboard', {
+const { data, status, error } = await useFetch<DashboardViewModel, FetchError>('/api/dashboard', {
   query: computed(() => ({ type: selectedCategory.value })),
 });
 
-// SSR: throw immediately so error.vue is rendered instead of the page
+// SSR: await above finishes the request on the server; we can read `error` and throw before HTML is sent.
 if (error.value) {
+  const err = error.value;
   throw createError({
-    statusCode: error.value.statusCode ?? 500,
-    statusMessage: (error.value.data as { statusMessage?: string })?.statusMessage ?? error.value.message,
+    statusCode: err.statusCode ?? 500,
+    statusMessage: (err.data as { statusMessage?: string } | undefined)?.statusMessage ?? err.message,
     fatal: true,
   });
 }
 
-// CSR: watch for errors on reactive re-fetches (category switch)
+// CSR: if the user switches category, useFetch re-runs
 watch(error, (err) => {
-  if (err)
-    showError({
-      statusCode: err.statusCode ?? 500,
-      statusMessage: (err.data as { statusMessage?: string })?.statusMessage ?? err.message,
-      fatal: true,
-    });
+  if (!err) return;
+  showError({
+    statusCode: err.statusCode ?? 500,
+    statusMessage: (err.data as { statusMessage?: string } | undefined)?.statusMessage ?? err.message,
+    fatal: true,
+  });
 });
 
 /**

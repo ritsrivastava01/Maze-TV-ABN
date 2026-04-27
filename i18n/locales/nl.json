@@ -2,6 +2,20 @@
   "brand": {
     "appName": "MAZE TV"
   },
+  "a11y": {
+    "mainNav": "Categorienavigatie",
+    "loadCategory": "Categorie laden: {name}",
+    "openSearchBar": "Zoekbalk openen",
+    "closeSearchBar": "Zoekbalk sluiten",
+    "searchField": "Shows zoeken",
+    "siteSearch": "Zoekgedeelte",
+    "clearSearch": "Zoektekst wissen",
+    "submitSearch": "Zoeken verzenden",
+    "openMenu": "Menu openen",
+    "closeMenu": "Menu sluiten",
+    "switchLanguageTo": "Taal wisselen naar {lang}",
+    "trailerUnavailable": "Trailer nog niet beschikbaar"
+  },
   "nav": {
     "movies": "Films",
     "tvShows": "Tv-series",
@@ -13,11 +27,11 @@
     "signUp": "Registreren",
     "goHome": "Ga naar home",
     "backToShows": "Terug naar shows",
-    "watchNow": "Nu kijken",
+    "watchNow": "Details tonen",
     "trailer": "Trailer"
   },
   "showDetail": {
-    "meta": {
+    "fieldLabels": {
       "status": "Status",
       "premiered": "Première",
       "ended": "Geëindigd",
@@ -52,6 +66,8 @@
   "search": {
     "label": "Zoeken",
     "resultsFor": "Resultaten voor ",
+    "loadingGridLabel": "Zoekresultaten laden",
+    "resultsGridLabel": "Zoekresultaten",
     "resultCount": "{count} resultaten gevonden",
     "noResults": "Geen shows gevonden",
     "tryDifferent": "Probeer een ander zoekwoord.",
