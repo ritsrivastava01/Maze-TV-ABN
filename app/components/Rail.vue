@@ -69,7 +69,7 @@ const onScroll = (event: Event): void => {
 
       <div
         data-rail-scroll
-        class="relative z-10 flex items-start gap-10 overflow-y-visible py-16 pl-7 pr-28"
+        class="relative z-10 flex items-start gap-10 overflow-y-visible py-16 px-7"
         :class="scrollableRailClass"
         @scroll.passive="onScroll"
       >

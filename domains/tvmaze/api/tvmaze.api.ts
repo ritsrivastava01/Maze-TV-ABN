@@ -75,6 +75,35 @@ export const fetchTvMazeShowEpisodes = async (id: number): Promise<EpisodeApiMod
   return await $fetch<EpisodeApiModel[]>(`${TVMAZE_BASE_URL}/shows/${id}/episodes`);
 };
 
+/** TVMaze `GET /shows/{id}/seasons` row. Maps to app `Season` in show-details. */
+export interface SeasonApi {
+  id: number;
+  number: number;
+}
+
+/**
+ * Get the seasons for a given show
+ * @param showId - The ID of the show
+ * @returns The seasons for the given show
+ */
+export const fetchTvMazeShowSeasons = async (showId: number): Promise<SeasonApi[]> => {
+  return await $fetch<SeasonApi[]>(`${TVMAZE_BASE_URL}/shows/${showId}/seasons`);
+};
+
+/**
+ * Get the episodes for a given season
+ * @param seasonId - The ID of the season
+ * @returns The episodes for the given season
+ */
+export const fetchTvMazeSeasonEpisodes = async (seasonId: number): Promise<EpisodeApiModel[]> => {
+  return await $fetch<EpisodeApiModel[]>(`${TVMAZE_BASE_URL}/seasons/${seasonId}/episodes`);
+};
+
+// Type aliases for the showDetails domain (consistent naming with main branch)
+export type ShowApi = ShowApiModel;
+export type EpisodeApi = EpisodeApiModel;
+export type CastApi = CastApiModel;
+
 /**
  * API model for the TVMaze cast response.
  */
