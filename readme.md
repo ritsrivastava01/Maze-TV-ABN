@@ -11,9 +11,9 @@ TV dashboard application built with Nuxt and Vue. It consumes the TVMaze API and
 
 ## Specifications
 
-This implementation addresses the assignment requirements:
+The app is built around the [TVMaze API](https://www.tvmaze.com/api) and focuses on:
 
-- list TV shows by category/genre in **horizontal rails** (per assignment: “preferably horizontal list”)
+- list TV shows by category/genre in **horizontal rails** (horizontal lists per genre)
 - within each genre, shows are **sorted by rating** (highest first)
 - UI is responsive and mobile friendly
 - navigate from dashboard card to show details
@@ -169,11 +169,6 @@ Internationalization is enabled with `@nuxtjs/i18n`.
 - **Node.js**: `v22.17.0` (use the same major version when possible; run `node -v` to confirm)
 - **npm**: `11.4.2` (`npm -v`)
 
-### Before submission (assignment checklist)
-
-- Run `npm run dev`, click through dashboard → details → search, and confirm **no errors in the browser console**
-- Run `npm test` and `npm run build` successfully
-
 ### Install
 
 ```bash
@@ -211,6 +206,23 @@ npm test
 npm run test:watch
 npm run test:coverage   # runs Vitest with v8 coverage and opens HTML report
 ```
+
+## Lighthouse scores
+
+Scores from **Google Chrome Lighthouse** (April 2026), run on the **production** app.
+
+| Category           | Desktop | Mobile |
+| ------------------ | ------: | -----: |
+| **Performance**    |     100 |     95 |
+| **Accessibility**  |      90 |     90 |
+| **Best Practices** |     100 |    100 |
+| **SEO**            |     100 |    100 |
+
+Desktop and mobile use each Lighthouse device profile. Screenshots in the table below: **Desktop** (left column), **Mobile** (right column).
+
+|                            Desktop                            |                           Mobile                            |
+| :-----------------------------------------------------------: | :---------------------------------------------------------: |
+| ![Lighthouse report — desktop](./docs/lighthouse-desktop.png) | ![Lighthouse report — mobile](./docs/lighthouse-mobile.png) |
 
 Coverage report is generated in `coverage/vitest/index.html`.
 
