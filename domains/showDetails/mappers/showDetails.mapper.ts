@@ -1,8 +1,8 @@
+import { mapRatingToStarFills } from '../../dashboard/mappers/dashboard.mapper';
 import type { CastApi, EpisodeApi, SeasonApi, ShowApi } from '../../tvmaze/api/tvmaze.api';
 import type { Cast, Episode, Season, ShowDetailsViewModel } from '../viewModel/showDetailsViewModel.type';
 
 const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
-const STAR_COUNT = 5;
 
 /** Format TVMaze date as `MMM D, YYYY` (e.g. "Apr 26, 2008"). */
 const formatDate = (date?: string | null): string => {
@@ -117,14 +117,4 @@ const mapScheduleTime = (schedule: ShowApi['schedule']): string => {
 
   const t = schedule.time?.trim();
   return t ? t : 'Unknown';
-};
-
-const mapRatingToStarFills = (rating: number): number[] => {
-  const ratingOnFiveScale = rating / 2;
-  const ratingStarsOnFiveScale = Math.max(0, Math.min(5, Math.round(ratingOnFiveScale * 4) / 4));
-
-  return Array.from({ length: STAR_COUNT }, (_, index) => {
-    const fill = Math.max(0, Math.min(1, ratingStarsOnFiveScale - index));
-    return fill * 100;
-  });
 };

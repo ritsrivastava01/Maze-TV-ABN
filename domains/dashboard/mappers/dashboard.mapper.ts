@@ -100,7 +100,7 @@ const mapShowsToGenreRows = (shows: ShowViewModel[]): DashboardGenreRow[] => {
  *   and then convert it to a scale of 0 to 100
  *   the result is an array of numbers, each number is the fill percentage for the corresponding star
  */
-const mapRatingToStarFills = (rating: number): number[] => {
+export const mapRatingToStarFills = (rating: number): number[] => {
   const ratingOnFiveScale = rating / 2;
   const ratingStarsOnFiveScale = Math.max(0, Math.min(5, Math.round(ratingOnFiveScale * 4) / 4));
 
