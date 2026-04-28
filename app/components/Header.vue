@@ -107,7 +107,7 @@ onBeforeUnmount(() => {
 
 <template>
   <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-transparent backdrop-blur-md">
-    <div class="mx-auto container px-4 sm:px-6 lg:px-10">
+    <div class="ds-layout-gutter-x mx-auto container">
       <div class="grid h-16 grid-cols-[auto_1fr] items-center gap-3 lg:grid-cols-3">
         <nav class="hidden gap-6 text-sm text-slate-200 lg:flex lg:justify-self-start" :aria-label="t('a11y.mainNav')">
           <button

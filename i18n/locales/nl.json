@@ -87,5 +87,31 @@
     "showLoadFailed": "Show kon niet worden geladen",
     "showNotFound": "Show niet gevonden",
     "invalidShowId": "Ongeldig show-ID"
+  },
+  "footer": {
+    "ariaSite": "Voettekst site",
+    "ariaAbout": "Over",
+    "ariaContact": "Contact",
+    "ariaExplore": "Ontdekken",
+    "ariaLegal": "Juridisch",
+    "tagline": "Blader en zoek shows vanaf één plek. Gemaakt als demo-tvdashboard.",
+    "headingAbout": "Over",
+    "headingContact": "Contact",
+    "headingExplore": "Ontdekken",
+    "headingLegal": "Juridisch",
+    "aboutMe": "Over mij",
+    "howItWorks": "Hoe het werkt",
+    "ourTeam": "Ons team",
+    "contactUs": "Neem contact op",
+    "support": "Support",
+    "feedback": "Feedback",
+    "browseShows": "Shows bekijken",
+    "searchTips": "Zoektips",
+    "faq": "Veelgestelde vragen",
+    "privacyPolicy": "Privacybeleid",
+    "termsOfUse": "Gebruiksvoorwaarden",
+    "cookies": "Cookies",
+    "allRightsReserved": "Alle rechten voorbehouden.",
+    "dataFromTvmaze": "Showdata van TVMaze"
   }
 }

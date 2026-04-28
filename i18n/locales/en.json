@@ -87,5 +87,31 @@
     "showLoadFailed": "Failed to load show",
     "showNotFound": "Show not found",
     "invalidShowId": "Invalid show ID"
+  },
+  "footer": {
+    "ariaSite": "Site footer",
+    "ariaAbout": "About",
+    "ariaContact": "Contact",
+    "ariaExplore": "Explore",
+    "ariaLegal": "Legal",
+    "tagline": "Browse and search shows from a single place. Built as a demo TV dashboard.",
+    "headingAbout": "About",
+    "headingContact": "Contact",
+    "headingExplore": "Explore",
+    "headingLegal": "Legal",
+    "aboutMe": "About me",
+    "howItWorks": "How it works",
+    "ourTeam": "Our team",
+    "contactUs": "Contact us",
+    "support": "Support",
+    "feedback": "Feedback",
+    "browseShows": "Browse shows",
+    "searchTips": "Search tips",
+    "faq": "FAQ",
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "cookies": "Cookies",
+    "allRightsReserved": "All rights reserved.",
+    "dataFromTvmaze": "Show data from TVMaze"
   }
 }

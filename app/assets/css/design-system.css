@@ -205,4 +205,75 @@
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
   }
+
+  /* ─────────────────────────────────────────────────────────────────────
+   * PAGE LAYOUT / SHELL
+   * ────────────────────────────────────────────────────────────────────*/
+
+  /**
+   * Horizontal padding aligned with header — mobile → desktop gutters.
+   * Usage: Header bar, footer inner, full-bleed sections that align to the bar.
+   */
+  .ds-layout-gutter-x {
+    @apply px-4 sm:px-6 lg:px-10;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────
+   * FOOTER
+   * ────────────────────────────────────────────────────────────────────*/
+
+  /**
+   * Footer outer shell — dark bar, top rule, base text color.
+   */
+  .ds-footer {
+    @apply relative z-30 border-t border-white/10 bg-slate-950 text-slate-400;
+  }
+
+  /**
+   * Footer content width + vertical padding + horizontal gutters.
+   */
+  .ds-footer-inner {
+    @apply mx-auto max-w-7xl py-8 sm:py-10 ds-layout-gutter-x;
+  }
+
+  /**
+   * Column titles in the footer link grid (uppercase, muted).
+   */
+  .ds-footer-nav-heading {
+    @apply mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500;
+  }
+
+  /**
+   * Muted text link on dark footer — hover + focus ring for keyboard users.
+   * Usage: Placeholder footer links until routes exist.
+   */
+  .ds-footer-link {
+    @apply rounded-sm transition hover:text-white focus-visible:outline-none
+           focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2
+           focus-visible:ring-offset-slate-950;
+  }
+
+  /**
+   * External / attributed link in footer underline style.
+   * Usage: TVMaze attribution line.
+   */
+  .ds-footer-link-external {
+    @apply text-xs text-slate-300 underline decoration-white/20 underline-offset-4
+           transition hover:text-white hover:decoration-white/50 sm:text-sm;
+  }
+
+  /**
+   * Bottom footer row — rule, responsive stack → row.
+   */
+  .ds-footer-bottom {
+    @apply mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10
+           pt-8 sm:flex-row sm:items-center;
+  }
+
+  /**
+   * Copyright line in footer.
+   */
+  .ds-footer-copyright {
+    @apply text-center text-xs text-slate-500 sm:text-left;
+  }
 }
