@@ -1,4 +1,4 @@
-import {useShowDetailsPresenter} from '../../../domains/showDetails/presenters/showDetails.presenter';
+import { showDetailsPresenter } from '../../../domains/showDetails/presenters/showDetails.presenter';
 
 export default defineEventHandler(async (event) => {
   const seasonId = Number(event.context.params?.id);
@@ -6,10 +6,10 @@ export default defineEventHandler(async (event) => {
   if (!Number.isInteger(seasonId)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid TVMaze season id'
+      statusMessage: 'Invalid TVMaze season id',
     });
   }
 
-  const {getSeasonEpisodes} = useShowDetailsPresenter();
+  const { getSeasonEpisodes } = showDetailsPresenter();
   return await getSeasonEpisodes(seasonId);
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, useSlots} from 'vue';
+import { computed, useSlots } from 'vue';
 
 const props = defineProps<{
   /** Set to `null` for a pulse header (dashboard loading). Omit entirely when no header row (e.g. cast rail). */
@@ -34,30 +34,18 @@ const onScroll = (event: Event): void => {
 
 <template>
   <section class="mb-6">
-    <div
-      v-if="hasHeaderSlot"
-      class="mb-3 flex min-h-7 items-center justify-between px-2"
-    >
+    <div v-if="hasHeaderSlot" class="mb-3 flex min-h-7 items-center justify-between px-2">
       <slot name="header" />
     </div>
-    <div
-      v-else-if="showPropHeader"
-      class="mb-3 flex min-h-7 items-center justify-between px-2"
-    >
+    <div v-else-if="showPropHeader" class="mb-3 flex min-h-7 items-center justify-between px-2">
       <h3 class="text-xl font-bold">
         {{ headerTitle }}
       </h3>
-      <span
-        v-if="headerSubtitle != null && headerSubtitle !== ''"
-        class="text-xs text-slate-300"
-      >
+      <span v-if="headerSubtitle != null && headerSubtitle !== ''" class="text-xs text-slate-300">
         {{ headerSubtitle }}
       </span>
     </div>
-    <div
-      v-else-if="showHeaderSkeleton"
-      class="mb-3 flex min-h-7 items-center justify-between px-2"
-    >
+    <div v-else-if="showHeaderSkeleton" class="mb-3 flex min-h-7 items-center justify-between px-2">
       <div class="h-7 w-28 animate-pulse rounded bg-slate-700/80" />
       <div class="h-4 w-16 animate-pulse rounded bg-slate-700/60" />
     </div>
@@ -69,7 +57,7 @@ const onScroll = (event: Event): void => {
 
       <div
         data-rail-scroll
-        class="relative z-10 flex items-start gap-10 overflow-y-visible py-16 pl-7 pr-28"
+        class="relative z-10 flex items-start gap-10 overflow-y-visible py-16 px-7"
         :class="scrollableRailClass"
         @scroll.passive="onScroll"
       >

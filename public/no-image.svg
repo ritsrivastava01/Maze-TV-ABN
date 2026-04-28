@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <style>
+    .pulse {
+      animation: pulse 1.8s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <rect width="300" height="300" fill="#111827"/>
+
+  <g class="pulse">
+    <rect x="60" y="60" width="180" height="180" rx="18" fill="none" stroke="#9ca3af" stroke-width="2"/>
+    <circle cx="105" cy="110" r="13" fill="none" stroke="#9ca3af" stroke-width="3"/>
+    <path
+      d="M78 200 L120 155 L148 178 L222 118"
+      fill="none"
+      stroke="#9ca3af"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

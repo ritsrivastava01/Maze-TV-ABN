@@ -2,6 +2,20 @@
   "brand": {
     "appName": "MAZE TV"
   },
+  "a11y": {
+    "mainNav": "Category navigation",
+    "loadCategory": "Load category: {name}",
+    "openSearchBar": "Open search bar",
+    "closeSearchBar": "Close search bar",
+    "searchField": "Search shows",
+    "siteSearch": "Search area",
+    "clearSearch": "Clear search text",
+    "submitSearch": "Submit search",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLanguageTo": "Switch language to {lang}",
+    "trailerUnavailable": "Trailer not available yet"
+  },
   "nav": {
     "movies": "Movies",
     "tvShows": "TV Shows",
@@ -9,24 +23,95 @@
   },
   "actions": {
     "search": "Search",
+    "enter": "Enter",
     "signUp": "Sign Up",
+    "goHome": "Go to home",
     "backToShows": "Back to shows",
-    "watchNow": "Watch Now",
+    "watchNow": "Show Details",
     "trailer": "Trailer"
   },
   "showDetail": {
+    "fieldLabels": {
+      "status": "Status",
+      "premiered": "Premiered",
+      "ended": "Ended",
+      "country": "Country",
+      "days": "Days",
+      "time": "Time",
+      "seasons": "Seasons",
+      "type": "Type",
+      "language": "Language",
+      "officialSite": "Official site",
+      "imdb": "IMDb"
+    },
     "episodes": "Episodes",
     "episodeCount": "{n} episodes",
     "seasonWithNumber": "Season {n}",
     "selectSeason": "Choose season",
     "noEpisodesInSeason": "No episodes in this season.",
-    "cast": "Cast"
+    "cast": "Cast",
+    "notFoundLabel": "404 · Not found",
+    "notFoundTitle": "Show not found",
+    "notFoundMessage": "We couldn't find the show you're looking for. It may have been removed or the link is incorrect."
   },
   "labels": {
     "featuredShow": "Featured show",
     "showsCount": "{count} shows",
     "ratingOutOfTen": "{rating}/10",
     "loadingShows": "Loading shows...",
-    "switchLanguage": "Switch language"
+    "switchLanguage": "Switch language",
+    "noResults": "No shows found for \u201c{query}\u201d",
+    "noShowsInGenre": "No shows available in this genre."
+  },
+  "search": {
+    "label": "Search",
+    "resultsFor": "Results for ",
+    "loadingGridLabel": "Loading search results",
+    "resultsGridLabel": "Search results",
+    "resultCount": "{count} results found",
+    "noResults": "No shows found",
+    "tryDifferent": "Try a different keyword.",
+    "error": "Something went wrong",
+    "showing": "Showing {visible} of {total}",
+    "loadMore": "Load more",
+    "remaining": "remaining"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "pageNotFoundMessage": "The page you're looking for doesn't exist or was moved.",
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred.",
+    "headerLoadFailed": "Failed to load header data",
+    "dashboardLoadFailed": "Failed to load dashboard",
+    "searchLoadFailed": "Failed to load search results",
+    "showLoadFailed": "Failed to load show",
+    "showNotFound": "Show not found",
+    "invalidShowId": "Invalid show ID"
+  },
+  "footer": {
+    "ariaSite": "Site footer",
+    "ariaAbout": "About",
+    "ariaContact": "Contact",
+    "ariaExplore": "Explore",
+    "ariaLegal": "Legal",
+    "tagline": "Browse and search shows from a single place. Built as a demo TV dashboard.",
+    "headingAbout": "About",
+    "headingContact": "Contact",
+    "headingExplore": "Explore",
+    "headingLegal": "Legal",
+    "aboutMe": "About me",
+    "howItWorks": "How it works",
+    "ourTeam": "Our team",
+    "contactUs": "Contact us",
+    "support": "Support",
+    "feedback": "Feedback",
+    "browseShows": "Browse shows",
+    "searchTips": "Search tips",
+    "faq": "FAQ",
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "cookies": "Cookies",
+    "allRightsReserved": "All rights reserved.",
+    "dataFromTvmaze": "Show data from TVMaze"
   }
 }

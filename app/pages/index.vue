@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue';
-import {useFetch} from 'nuxt/app';
-import {useRoute} from 'vue-router';
-import {useI18n} from 'vue-i18n';
-import type {
-  DashboardCategory,
-  DashboardViewModel
-} from '../../domains/dashboard/viewModel/dashboardViewModel.type';
-import {useAppNavigation} from '#imports';
+import { createError, showError, useFetch } from 'nuxt/app';
+import type { FetchError } from 'ofetch';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+
+import { useAppNavigation } from '#imports';
+import type { ShowViewModel } from '~~/domains/dashboard/viewModel/show.type';
+
+import { DEFAULT_NAV_CATEGORY, TYPE_PARAM } from '../../domains/constants/appConstant';
+import type { DashboardCategory, DashboardViewModel } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 import Card from '../components/Card.vue';
 import Rail from '../components/Rail.vue';
-import type {ShowViewModel} from '~~/domains/dashboard/viewModel/show.type';
 
 const RAIL_CARD_BATCH_SIZE = 8;
 const RAIL_COUNT = 3;
@@ -20,47 +21,44 @@ const visibleRailCount = ref(RAIL_COUNT);
 
 const visibleCountByGenre = ref<Record<string, number>>({});
 const route = useRoute();
-const {t} = useI18n();
-const {getShowPath} = useAppNavigation();
+const { t } = useI18n();
+const { getShowPath } = useAppNavigation();
 
 const railShowClass = 'block h-72 w-52 min-w-52 shrink-0';
 
-const railShowShellClass =
-  ' block h-72 w-52 min-w-52 shrink-0 origin-center transform-gpu transition-transform duration-300 ease-out will-change-transform hover:z-30 hover:scale-125 hover:border-pink-300/80 hover:ring-2 hover:ring-pink-400/80 hover:shadow-[0_0_28px_rgba(236,72,153,0.38)]';
-
-// used to validate the category from the query string
-const getDashboardCategory = (value: unknown): DashboardCategory => {
-  if (value === 'movies' || value === 'documentaries' || value === 'tv-shows') {
-    return value;
-  }
-  return 'tv-shows';
-};
-
-// used to get the selected category from the query string
 const selectedCategory = computed<DashboardCategory>(() => {
-  return getDashboardCategory(route.query.type);
+  const v = route.query[TYPE_PARAM];
+  return v === 'movies' || v === 'documentaries' || v === DEFAULT_NAV_CATEGORY ? v : DEFAULT_NAV_CATEGORY;
 });
 
-const {data, status, error} = useFetch<DashboardViewModel>('/api/dashboard', {
-  query: computed(() => {
-    return {
-      type: selectedCategory.value
-    };
-  }),
-  watch: [() => route.query.type]
+const { data, status, error } = await useFetch<DashboardViewModel, FetchError>('/api/dashboard', {
+  query: computed(() => ({ [TYPE_PARAM]: selectedCategory.value })),
 });
 
-const visibleGenreRows = computed(() => {
-  return data.value?.genreRows.slice(0, visibleRailCount.value) ?? [];
+// SSR: await above finishes the request on the server; we can read `error` and throw before HTML is sent.
+if (error.value) {
+  const err = error.value;
+  throw createError({
+    statusCode: err.statusCode ?? 500,
+    statusMessage: (err.data as { statusMessage?: string } | undefined)?.statusMessage ?? err.message,
+    fatal: true,
+  });
+}
+
+// CSR: if the user switches category, useFetch re-runs
+watch(error, (err) => {
+  if (!err) return;
+  showError({
+    statusCode: err.statusCode ?? 500,
+    statusMessage: (err.data as { statusMessage?: string } | undefined)?.statusMessage ?? err.message,
+    fatal: true,
+  });
 });
 
 /**
  *   used to get the visible shows for the given genre
  */
-const getVisibleShows = (
-  genre: string,
-  shows: ShowViewModel[]
-): ShowViewModel[] => {
+const getVisibleShows = (genre: string, shows: ShowViewModel[]): ShowViewModel[] => {
   const existingCount = visibleCountByGenre.value[genre];
   if (!existingCount) {
     visibleCountByGenre.value[genre] = RAIL_CARD_BATCH_SIZE;
@@ -70,24 +68,26 @@ const getVisibleShows = (
 
 /**
  * Get the actual show card or skeleton cards for the genre rows
- * . */
+ */
 const dashboardRails = computed(() => {
-  if (status.value === 'pending' || visibleGenreRows.value.length === 0) {
-    return Array.from({length: RAIL_COUNT}, (_, i) => {
+  if (status.value === 'pending' || status.value === 'idle') {
+    return Array.from({ length: RAIL_COUNT }, (_, i) => {
       return {
         key: `placeholder-${i}`,
         genre: null,
         shows: [],
-        cards: Array.from({length: RAIL_CARD_BATCH_SIZE}, () => null)
+        cards: Array.from({ length: RAIL_CARD_BATCH_SIZE }, () => null),
+        isEmpty: false,
       };
     });
   }
-  return visibleGenreRows.value.map((r) => {
+  return (data.value?.genreRows.slice(0, visibleRailCount.value) ?? []).map((r) => {
     return {
       key: r.genre,
       genre: r.genre,
       shows: r.shows,
-      cards: getVisibleShows(r.genre, r.shows)
+      cards: getVisibleShows(r.genre, r.shows),
+      isEmpty: r.shows.length === 0,
     };
   });
 });
@@ -110,9 +110,6 @@ const onRailScroll = (event: Event, genre: string): void => {
   const currentCount = visibleCountByGenre.value[genre] ?? 0;
   const nextCount = currentCount + RAIL_CARD_BATCH_SIZE;
   visibleCountByGenre.value[genre] = nextCount;
-
-  // Future improvement: replace this scroll-threshold trigger with an
-  // IntersectionObserver sentinel for more efficient row-end detection.
 };
 
 /**
@@ -124,10 +121,7 @@ const loadMoreRails = (): void => {
     return;
   }
 
-  visibleRailCount.value = Math.min(
-    visibleRailCount.value + RAIL_COUNT,
-    rowCount
-  );
+  visibleRailCount.value = Math.min(visibleRailCount.value + RAIL_COUNT, rowCount);
 };
 
 /**
@@ -136,8 +130,7 @@ const loadMoreRails = (): void => {
 const onWindowScroll = (): void => {
   const viewportBottom = window.scrollY + window.innerHeight;
   const pageBottom = document.documentElement.scrollHeight;
-  const isNearBottom =
-    viewportBottom >= pageBottom - PAGE_BOTTOM_LOAD_THRESHOLD_PX;
+  const isNearBottom = viewportBottom >= pageBottom - PAGE_BOTTOM_LOAD_THRESHOLD_PX;
 
   if (isNearBottom) {
     loadMoreRails();
@@ -145,32 +138,11 @@ const onWindowScroll = (): void => {
 };
 
 /**
- *   load the more rails when the user scrolls to the end of the page
- */
-watch(
-  () => data.value?.genreRows,
-  (rows = []) => {
-    if (rows.length === 0) {
-      visibleRailCount.value = 0;
-      return;
-    }
-
-    if (rows.length < RAIL_COUNT) {
-      visibleRailCount.value = rows.length;
-      return;
-    }
-
-    visibleRailCount.value = RAIL_COUNT;
-  },
-  {immediate: true}
-);
-
-/**
  *   used to add the scroll event listener to the window
  *   used to load the more rails when the user scrolls to the end of the page
  */
 onMounted(() => {
-  window.addEventListener('scroll', onWindowScroll, {passive: true});
+  window.addEventListener('scroll', onWindowScroll, { passive: true });
   onWindowScroll();
 });
 
@@ -184,32 +156,16 @@ onBeforeUnmount(() => {
 
 <template>
   <Hero
-    :show="status === 'pending' ? null : (data?.featuredShow ?? null)"
+    :show="status === 'pending' || status === 'idle' ? null : (data?.featuredShow ?? null)"
     :class="heroHeightClass"
   />
 
-  <div
-    v-if="error"
-    class="mx-auto container rounded-2xl bg-red-900/40 px-4 py-10 text-red-100 sm:px-6 lg:px-10"
-  >
-    <div class="rounded-2xl bg-black/20 p-6">
-      Failed to load shows: {{ error.message }}
-    </div>
-  </div>
-
-  <section
-    v-else
-    class="relative z-20 -mt-20 mx-auto container px-4 pb-10 sm:px-6 lg:px-10"
-  >
+  <section class="relative z-20 -mt-20 mx-auto container px-4 pb-10 sm:px-6 lg:px-10">
     <Rail
       v-for="row in dashboardRails"
       :key="row.key"
       :header-title="row.genre"
-      :header-subtitle="
-        row.genre
-          ? t('labels.showsCount', {count: row.shows.length})
-          : undefined
-      "
+      :header-subtitle="row.genre ? t('labels.showsCount', { count: row.shows.length }) : undefined"
       @rail-scroll="
         (event) => {
           if (row.genre) {
@@ -218,18 +174,16 @@ onBeforeUnmount(() => {
         }
       "
     >
-      <template
-        v-for="(card, index) in row.cards"
-        :key="card?.id ?? `${row.key}-${index}`"
-      >
-        <NuxtLink v-if="card" :to="getShowPath(card.id)" :class="railShowClass">
-          <Card
-            :preview="card"
-            class="h-full w-full"
-            :shell-class="railShowShellClass"
-          />
-        </NuxtLink>
-        <Card v-else :preview="null" :class="railShowClass" />
+      <p v-if="row.isEmpty" class="px-1 py-8 text-sm text-slate-400">
+        {{ t('labels.noShowsInGenre') }}
+      </p>
+      <template v-else>
+        <div v-for="(card, index) in row.cards" :key="card?.id ?? `${row.key}-${index}`" :class="railShowClass">
+          <NuxtLink v-if="card" :to="getShowPath(card.id)" class="block h-full w-full">
+            <Card :preview="card" class="h-full w-full" :shell-class="'ds-card-rail-shell'" />
+          </NuxtLink>
+          <Card v-else :preview="null" class="h-full w-full" />
+        </div>
       </template>
     </Rail>
   </section>

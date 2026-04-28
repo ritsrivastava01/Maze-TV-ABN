@@ -1,27 +1,19 @@
-import {
-  fetchTvMazeShows,
-  type ShowApi
-} from '../../tvmaze/api/tvmaze.api';
-import {mapShowsApiToDashboardViewModel} from '../mappers/dashboard.mapper';
-import type {
-  DashboardCategory,
-  DashboardViewModel
-} from '../viewModel/dashboardViewModel.type';
+import { fetchTvMazeShows, type ShowApiModel } from '../../tvmaze/api/tvmaze.api';
+import { mapShowsApiToDashboardViewModel } from '../mappers/dashboard.mapper';
+import type { DashboardCategory, DashboardViewModel } from '../viewModel/dashboardViewModel.type';
 
-export const useDashboardPresenter = () => {
+export const dashboardPresenter = () => {
   /**
    *   used to get the dashboard (shows, genres and featured show) for the given category from the query string
    */
-  const getDashboard = async (
-    category: DashboardCategory
-  ): Promise<DashboardViewModel> => {
+  const getDashboard = async (category: DashboardCategory): Promise<DashboardViewModel> => {
     // fetch all shows from the API
-    const shows: ShowApi[] = await fetchTvMazeShows();
+    const shows: ShowApiModel[] = await fetchTvMazeShows();
 
     return mapShowsApiToDashboardViewModel(shows, category);
   };
 
   return {
-    getDashboard
+    getDashboard,
   };
 };

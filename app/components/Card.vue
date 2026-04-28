@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import {computed} from 'vue';
-import type {ShowViewModel} from '../../domains/dashboard/viewModel/show.type';
-import {cn} from '../utils/cn';
+import { computed } from 'vue';
+
+import { cn } from '../utils/cn';
 import CardSkeleton from './CardSkeleton.vue';
 
-export type CardPreview = {id: number | string; title: string; image: string};
+export type CardPreview = { id: number | string; title: string; image: string };
 
-const PANEL_BASE =
-  'absolute inset-0 isolate overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50';
+const PANEL_BASE = 'absolute inset-0 isolate overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50';
 
 const props = withDefaults(
   defineProps<{
@@ -16,7 +15,9 @@ const props = withDefaults(
     shellClass?: string;
   }>(),
   {
-    imageLoading: 'lazy'
+    imageLoading: 'lazy',
+    preview: null,
+    shellClass: undefined,
   }
 );
 

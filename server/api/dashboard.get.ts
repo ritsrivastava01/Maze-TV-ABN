@@ -1,13 +1,33 @@
-import {useDashboardPresenter} from '../../domains/dashboard/presenters/dashboard.presenter';
-import type {DashboardCategory} from '../../domains/dashboard/viewModel/dashboardViewModel.type';
+import { DEFAULT_NAV_CATEGORY, TYPE_PARAM } from '../../domains/constants/appConstant';
+import { dashboardPresenter } from '../../domains/dashboard/presenters/dashboard.presenter';
+import type { DashboardCategory } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 
 /**
- *   used to get the dashboard (shows, genres and featured show) for the given category from the query string
+ * Returns the dashboard view model for the requested category.
+ * Cached per-category for 5 minutes so the TVMaze API is not hit on every
+ * page load (TVMaze data changes infrequently).
  */
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
-  const category = (query.type ?? 'tv-shows') as DashboardCategory;
-  const {getDashboard} = useDashboardPresenter();
+export default defineCachedEventHandler(
+  async (event) => {
+    const query = getQuery(event);
+    const category = (query[TYPE_PARAM] ?? DEFAULT_NAV_CATEGORY) as DashboardCategory;
+    const { getDashboard } = dashboardPresenter();
 
-  return await getDashboard(category);
-});
+    try {
+      return await getDashboard(category);
+    } catch {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'errors.dashboardLoadFailed',
+      });
+    }
+  },
+  {
+    maxAge: 60 * 5, // 5 minutes
+    name: 'dashboard',
+    getKey: (event) => {
+      const query = getQuery(event);
+      return String(query[TYPE_PARAM] ?? DEFAULT_NAV_CATEGORY);
+    },
+  }
+);

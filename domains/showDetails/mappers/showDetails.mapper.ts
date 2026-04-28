@@ -1,22 +1,11 @@
-import type {
-  CastApi,
-  EpisodeApi,
-  SeasonApi,
-  ShowApi
-} from '../../tvmaze/api/tvmaze.api';
-import type {
-  Cast,
-  Episode,
-  Season,
-  ShowDetailsViewModel
-} from '../viewModel/showDetailsViewModel.type';
+import { FALLBACK_IMAGE, IMDB_TITLE_BASE_URL } from '../../constants/appConstant';
+import { mapRatingToStarFills } from '../../dashboard/mappers/dashboard.mapper';
+import type { CastApi, EpisodeApi, SeasonApi, ShowApi } from '../../tvmaze/api/tvmaze.api';
+import type { Cast, Episode, Season, ShowDetailsViewModel } from '../viewModel/showDetailsViewModel.type';
 
-const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
-const STAR_COUNT = 5;
-
-/** Format TVMaze date as `MMM D, YYYY` (e.g. “Apr 26, 2008”). */
+/** Format TVMaze date as `MMM D, YYYY` (e.g. "Apr 26, 2008"). */
 const formatDate = (date?: string | null): string => {
-  if (date == null) {
+  if (date === null || date === undefined) {
     return 'Unknown';
   }
 
@@ -29,13 +18,13 @@ const formatDate = (date?: string | null): string => {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-    timeZone: 'UTC'
+    timeZone: 'UTC',
   }).format(d);
 };
 
-/** Extract year from TVMaze date (e.g. “2008” from “Apr 26, 2008”). */
+/** Extract year from TVMaze date (e.g. "2008" from "Apr 26, 2008"). */
 const premiereYearFromIso = (date?: string | null): number | null => {
-  if (date == null) {
+  if (date === null || date === undefined) {
     return null;
   }
 
@@ -44,23 +33,19 @@ const premiereYearFromIso = (date?: string | null): number | null => {
 };
 
 /**
- *  Maps a TVMaze episode payload list to app `Episode` models (titles, images, ratings normalized).
- * */
-export const mapEpisodeApiListToEpisodes = (
-  episodes: EpisodeApi[]
-): Episode[] => episodes.map(mapEpisodeApiToEpisode);
+ * Maps a TVMaze episode payload list to app `Episode` models (titles, images, ratings normalized).
+ */
+export const mapEpisodeApiListToEpisodes = (episodes: EpisodeApi[]): Episode[] => episodes.map(mapEpisodeApiToEpisode);
 
 /**
- *  Maps TVMaze season rows to app `Season` models sorted by ascending season number (dropdown-ready `id` / `number`).
- **/
+ * Maps TVMaze season rows to app `Season` models sorted by ascending season number (dropdown-ready `id` / `number`).
+ */
 export const mapSeasonApiListToSeasons = (seasons: SeasonApi[]): Season[] =>
-  [...seasons]
-    .sort((a, b) => a.number - b.number)
-    .map((s) => ({id: s.id, number: s.number}));
+  [...seasons].sort((a, b) => a.number - b.number).map((s) => ({ id: s.id, number: s.number }));
 
 /**
  * Maps TVMaze show + seasons + cast + first-season episodes into app `ShowDetailsViewModel`.
- * */
+ */
 export const mapShowApiToShowDetailsViewModel = (
   apiShow: ShowApi,
   seasons: SeasonApi[],
@@ -88,13 +73,11 @@ export const mapShowApiToShowDetailsViewModel = (
       country: apiShow.network?.country?.name ?? 'Unknown',
       scheduleDays: mapScheduleDays(apiShow.schedule),
       scheduleTime: mapScheduleTime(apiShow.schedule),
-      imdbUrl: apiShow.externals?.imdb
-        ? `https://www.imdb.com/title/${apiShow.externals.imdb}`
-        : null
+      imdbUrl: apiShow.externals?.imdb ? `${IMDB_TITLE_BASE_URL}${apiShow.externals.imdb}` : null,
     },
     seasonList: mapSeasonApiListToSeasons(seasons),
     cast: cast.map(mapCastApiToCast),
-    episodes: mapEpisodeApiListToEpisodes(firstSeasonEpisodes)
+    episodes: mapEpisodeApiListToEpisodes(firstSeasonEpisodes),
   };
 };
 
@@ -107,7 +90,7 @@ const mapEpisodeApiToEpisode = (episode: EpisodeApi): Episode => {
     seasonNumber: episode.season,
     episodeNumber: episode.number,
     image: episode.image?.medium ?? episode.image?.original ?? FALLBACK_IMAGE,
-    rating
+    rating,
   };
 };
 
@@ -117,10 +100,7 @@ const mapCastApiToCast = (castMember: CastApi): Cast => {
     id: castMember.person.id,
     name: castMember.person.name,
     characterName: castMember.character.name,
-    image:
-      castMember.person.image?.medium ??
-      castMember.person.image?.original ??
-      FALLBACK_IMAGE
+    image: castMember.person.image?.medium ?? castMember.person.image?.original ?? FALLBACK_IMAGE,
   };
 };
 
@@ -136,17 +116,4 @@ const mapScheduleTime = (schedule: ShowApi['schedule']): string => {
 
   const t = schedule.time?.trim();
   return t ? t : 'Unknown';
-};
-
-const mapRatingToStarFills = (rating: number): number[] => {
-  const ratingOnFiveScale = rating / 2;
-  const ratingStarsOnFiveScale = Math.max(
-    0,
-    Math.min(5, Math.round(ratingOnFiveScale * 4) / 4)
-  );
-
-  return Array.from({length: STAR_COUNT}, (_, index) => {
-    const fill = Math.max(0, Math.min(1, ratingStarsOnFiveScale - index));
-    return fill * 100;
-  });
 };
