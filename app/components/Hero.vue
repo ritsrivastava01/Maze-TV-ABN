@@ -15,11 +15,12 @@ const { getShowPath } = useAppNavigation();
 
 <template>
   <section class="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden text-white">
-    <img
+    <NuxtImg
       v-if="show"
       :src="show.heroImage"
       :alt="show.title"
-      class="absolute inset-0 h-full w-full object-cover"
+      class="absolute inset-0 z-0 h-full w-full object-cover"
+      sizes="sm:100vw md:100vw lg:100vw xl:100vw"
       loading="eager"
       fetchpriority="high"
       decoding="async"

@@ -24,6 +24,14 @@ export default defineNuxtConfig({
         ],
       },
     ],
+    [
+      '@nuxt/image',
+      {
+        domains: ['static.tvmaze.com'],
+        format: ['webp', 'jpeg'],
+        quality: 82,
+      },
+    ],
     '@nuxt/eslint',
   ],
 

@@ -35,10 +35,11 @@ const panelClass = computed(() => cn(PANEL_BASE, props.shellClass));
     </div>
 
     <div v-else :class="panelClass">
-      <img
+      <NuxtImg
         :src="preview.image"
         :alt="preview.title"
         class="absolute inset-0 z-0 h-full w-full object-cover"
+        sizes="(max-width: 768px) 90vw, 320px"
         :loading="imageLoading"
         :fetchpriority="imageLoading === 'eager' ? 'high' : undefined"
         decoding="async"
