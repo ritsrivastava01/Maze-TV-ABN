@@ -16,8 +16,6 @@
     "test:watch": "vitest --passWithNoTests",
     "test:coverage": "vitest run --coverage && open coverage/vitest/index.html",
     "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:headed:running": "PLAYWRIGHT_SKIP_WEBSERVER=1 playwright test --headed",
     "test:e2e:clean": "rm -rf test-results",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report coverage/e2e",

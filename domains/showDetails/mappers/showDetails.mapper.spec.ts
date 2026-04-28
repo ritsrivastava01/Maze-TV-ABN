@@ -6,9 +6,8 @@ import {
   mapperTestBreakingBadSeasonsUnsorted,
 } from '../../../tests/mocks/show-details.scenario';
 import { makeSeasonApi, makeShowApi } from '../../../tests/mocks/tvmaze-api.factory';
+import { FALLBACK_IMAGE, IMDB_TITLE_BASE_URL } from '../../constants/appConstant';
 import { mapSeasonApiListToSeasons, mapShowApiToShowDetailsViewModel } from './showDetails.mapper';
-
-const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 
 describe('mapShowApiToShowDetailsViewModel', () => {
   it('should map the main show details view model', () => {
@@ -51,7 +50,7 @@ describe('mapShowApiToShowDetailsViewModel', () => {
       type: 'Scripted',
       runtime: '47 min',
       scheduleDays: 'Friday, Saturday',
-      imdbUrl: 'https://www.imdb.com/title/tt0903747',
+      imdbUrl: `${IMDB_TITLE_BASE_URL}tt0903747`,
     });
   });
 

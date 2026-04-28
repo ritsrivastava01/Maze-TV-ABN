@@ -1,5 +1,7 @@
 import { $fetch } from 'ofetch';
 
+import { SEARCH_PARAM } from '../../constants/appConstant';
+
 const TVMAZE_BASE_URL = 'https://api.tvmaze.com';
 
 /**
@@ -168,5 +170,7 @@ export interface SearchResultApiModel {
  * Returns up to 10 results ranked by relevance score.
  */
 export const fetchTvMazeSearchShows = async (query: string): Promise<SearchResultApiModel[]> => {
-  return await $fetch<SearchResultApiModel[]>(`${TVMAZE_BASE_URL}/search/shows`, { query: { q: query } });
+  return await $fetch<SearchResultApiModel[]>(`${TVMAZE_BASE_URL}/search/shows`, {
+    query: { [SEARCH_PARAM]: query },
+  });
 };

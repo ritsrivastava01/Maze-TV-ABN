@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { PhCaretLeft } from '@phosphor-icons/vue';
 
-import type { Episode, Season, ShowDetailsViewModel } from '~/domains/showDetails/viewModel/showDetailsViewModel.type';
+import { DEFAULT_NAV_CATEGORY, PATH_HOME, TYPE_PARAM } from '../../../domains/constants/appConstant';
+import type {
+  Episode,
+  Season,
+  ShowDetailsViewModel,
+} from '../../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -57,8 +62,8 @@ const panelEpisodes = computed((): Episode[] => {
 });
 
 const backPath = computed(() => ({
-  path: '/',
-  query: { type: route.query.type ?? 'tv-shows' },
+  path: PATH_HOME,
+  query: { [TYPE_PARAM]: route.query[TYPE_PARAM] ?? DEFAULT_NAV_CATEGORY },
 }));
 </script>
 

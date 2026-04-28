@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ShowDetails } from '~/domains/showDetails/viewModel/showDetailsViewModel.type';
+import type { ShowDetails } from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const props = defineProps<{
   show: ShowDetails | null;

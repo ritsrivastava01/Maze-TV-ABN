@@ -1,8 +1,7 @@
+import { FALLBACK_IMAGE } from '../../constants/appConstant';
 import { mapRatingToStarFills } from '../../dashboard/mappers/dashboard.mapper';
 import type { SearchResultApiModel } from '../../tvmaze/api/tvmaze.api';
 import type { SearchResultViewModel, SearchViewModel } from '../viewModel/searchViewModel.type';
-
-const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 
 const mapSearchResultApiToViewModel = (result: SearchResultApiModel): SearchResultViewModel => {
   const { show } = result;

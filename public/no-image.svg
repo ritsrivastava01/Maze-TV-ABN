@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210" height="295" viewBox="0 0 210 295">
+  <style>
+    .pulse {
+      animation: pulse 1.8s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="210" height="295" fill="#111827"/>
+
+  <!-- Animated group -->
+  <g class="pulse">
+    <!-- Image frame -->
+    <rect x="35" y="60" width="140" height="140" rx="16"
+          fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+    <!-- Sun -->
+    <circle cx="70" cy="95" r="12"
+            fill="none" stroke="#9ca3af" stroke-width="3"/>
+
+    <!-- Mountain -->
+    <path d="M50 170 L90 130 L115 150 L150 120"
+          fill="none" stroke="#9ca3af" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

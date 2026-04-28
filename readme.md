@@ -228,15 +228,15 @@ Current unit/integration specs include:
 
 ```bash
 npm run test:e2e
-npm run test:e2e:headed
 npm run test:e2e:ui
 npm run test:e2e:report
 ```
 
 Current e2e specs:
 
-- `tests/e2e/home.spec.ts`
-- `tests/e2e/show-detail.spec.ts`
+- `tests/e2e/dashboard.spec.ts`
+- `tests/e2e/details.spec.ts`
+- `tests/e2e/search.spec.ts`
 
 ## TODO / Improvements
 

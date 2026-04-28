@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Episode, Season } from '~/domains/showDetails/viewModel/showDetailsViewModel.type';
+import type { Episode, Season } from '../../domains/showDetails/viewModel/showDetailsViewModel.type';
 
 const props = defineProps<{
   seasonList: Season[];

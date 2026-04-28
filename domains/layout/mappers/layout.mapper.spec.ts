@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
+import { DEFAULT_NAV_CATEGORY } from '../../constants/appConstant';
 import type { LayoutNavApiModel } from '../../tvmaze/api/tvmaze.api';
 import { mapHeaderNavItemsToViewModel } from './layout.mapper';
 
 const nav = (overrides: Partial<LayoutNavApiModel> = {}): LayoutNavApiModel => ({
-  value: 'tv-shows',
+  value: DEFAULT_NAV_CATEGORY,
   labelKey: 'nav.tvShows',
   enabled: true,
   order: 1,
@@ -18,7 +19,7 @@ describe('mapHeaderNavItemsToViewModel', () => {
       const input = [
         nav({ value: 'movies', order: 3, labelKey: 'nav.movies', enabled: false }),
         nav({ value: 'movies', order: 2, labelKey: 'nav.movies' }),
-        nav({ value: 'tv-shows', order: 1 }),
+        nav({ value: DEFAULT_NAV_CATEGORY, order: 1 }),
       ];
 
       // Act
@@ -26,7 +27,7 @@ describe('mapHeaderNavItemsToViewModel', () => {
 
       // Assert
       expect(result.headerNavItems).toEqual([
-        { value: 'tv-shows', labelKey: 'nav.tvShows', order: 1 },
+        { value: DEFAULT_NAV_CATEGORY, labelKey: 'nav.tvShows', order: 1 },
         { value: 'movies', labelKey: 'nav.movies', order: 2 },
       ]);
     });

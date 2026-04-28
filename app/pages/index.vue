@@ -8,6 +8,7 @@ import { useRoute } from 'vue-router';
 import { useAppNavigation } from '#imports';
 import type { ShowViewModel } from '~~/domains/dashboard/viewModel/show.type';
 
+import { DEFAULT_NAV_CATEGORY, TYPE_PARAM } from '../../domains/constants/appConstant';
 import type { DashboardCategory, DashboardViewModel } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 import Card from '../components/Card.vue';
 import Rail from '../components/Rail.vue';
@@ -26,12 +27,12 @@ const { getShowPath } = useAppNavigation();
 const railShowClass = 'block h-72 w-52 min-w-52 shrink-0';
 
 const selectedCategory = computed<DashboardCategory>(() => {
-  const v = route.query.type;
-  return v === 'movies' || v === 'documentaries' || v === 'tv-shows' ? v : 'tv-shows';
+  const v = route.query[TYPE_PARAM];
+  return v === 'movies' || v === 'documentaries' || v === DEFAULT_NAV_CATEGORY ? v : DEFAULT_NAV_CATEGORY;
 });
 
 const { data, status, error } = await useFetch<DashboardViewModel, FetchError>('/api/dashboard', {
-  query: computed(() => ({ type: selectedCategory.value })),
+  query: computed(() => ({ [TYPE_PARAM]: selectedCategory.value })),
 });
 
 // SSR: await above finishes the request on the server; we can read `error` and throw before HTML is sent.

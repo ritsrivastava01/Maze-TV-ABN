@@ -7,4 +7,9 @@ import { vi } from 'vitest';
 export const tvmazeApiPresenterStub = {
   fetchTvMazeShows: vi.fn(),
   fetchTvMazeLayoutNavItems: vi.fn(),
+  fetchTvMazeSearchShows: vi.fn(),
+  fetchTvMazeShowById: vi.fn(),
+  fetchTvMazeShowSeasons: vi.fn(),
+  fetchTvMazeShowCast: vi.fn(),
+  fetchTvMazeSeasonEpisodes: vi.fn(),
 };

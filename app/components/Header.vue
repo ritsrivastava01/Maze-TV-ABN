@@ -6,6 +6,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import { SEARCH_PARAM } from '../../domains/constants/appConstant';
 import type { HeaderViewModel, LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
 import { useAppNavigation } from '../composables/useAppNavigation';
 
@@ -69,7 +70,7 @@ const closeSearch = (): void => {
 
 // open search bar, pre-filling the input with the current URL query if on search page
 const openSearch = (): void => {
-  searchQuery.value = typeof route.query.q === 'string' ? route.query.q : '';
+  searchQuery.value = typeof route.query[SEARCH_PARAM] === 'string' ? route.query[SEARCH_PARAM] : '';
   isSearchOpen.value = true;
   // Input mounts on next tick; focus then is friendlier to keyboard/AT than a second watch
   void nextTick(() => searchInputRef.value?.focus());

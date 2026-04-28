@@ -4,6 +4,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { tvmazeApiPresenterStub } from '../../../tests/mocks/tvmaze-api.presenter.stub';
+import { DEFAULT_NAV_CATEGORY } from '../../constants/appConstant';
 import type { ShowApiModel } from '../../tvmaze/api/tvmaze.api';
 import { fetchTvMazeShows } from '../../tvmaze/api/tvmaze.api';
 import { dashboardPresenter } from './dashboard.presenter';
@@ -38,7 +39,7 @@ describe('dashboardPresenter — getDashboard()', () => {
 
     // Act
     const { getDashboard } = dashboardPresenter();
-    const result = await getDashboard('tv-shows');
+    const result = await getDashboard(DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.title).toBe('Show A');
@@ -54,7 +55,7 @@ describe('dashboardPresenter — getDashboard()', () => {
 
     // Act
     const { getDashboard } = dashboardPresenter();
-    const result = await getDashboard('tv-shows');
+    const result = await getDashboard(DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow).toBeNull();
@@ -69,6 +70,6 @@ describe('dashboardPresenter — getDashboard()', () => {
     const { getDashboard } = dashboardPresenter();
 
     // Assert
-    await expect(getDashboard('tv-shows')).rejects.toThrow('Network error');
+    await expect(getDashboard(DEFAULT_NAV_CATEGORY)).rejects.toThrow('Network error');
   });
 });

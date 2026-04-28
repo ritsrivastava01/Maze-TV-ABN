@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { makeSearchResult } from '../../../tests/mocks/tvmaze-api.factory';
+import { FALLBACK_IMAGE } from '../../constants/appConstant';
 import type { SearchResultApiModel } from '../../tvmaze/api/tvmaze.api';
 import { mapSearchResultsApiToViewModel } from './search.mapper';
-
-const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 
 describe('mapSearchResultsApiToViewModel', () => {
   it('should map a result to the correct view model shape', () => {

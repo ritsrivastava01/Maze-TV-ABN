@@ -3,6 +3,14 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { useLocalePath } from '#i18n';
 
+import {
+  DEFAULT_NAV_CATEGORY,
+  PATH_HOME,
+  PATH_SEARCH,
+  PATH_SHOWS,
+  SEARCH_PARAM,
+  TYPE_PARAM,
+} from '../../domains/constants/appConstant';
 import type { LayoutNavCategory } from '../../domains/layout/viewModel/layoutViewModel.type';
 
 export const useAppNavigation = () => {
@@ -11,15 +19,15 @@ export const useAppNavigation = () => {
   const localePath = useLocalePath();
 
   const selectedCategory = computed<LayoutNavCategory>(() => {
-    return (route.query.type as LayoutNavCategory) ?? 'tv-shows';
+    return (route.query[TYPE_PARAM] as LayoutNavCategory) ?? DEFAULT_NAV_CATEGORY;
   });
 
   const setCategory = async (category: LayoutNavCategory): Promise<void> => {
     await router.push(
       localePath({
-        path: '/',
+        path: PATH_HOME,
 
-        query: { type: category },
+        query: { [TYPE_PARAM]: category },
       })
     );
   };
@@ -29,17 +37,17 @@ export const useAppNavigation = () => {
     if (!trimmed) return;
     await router.push(
       localePath({
-        path: '/search',
-        query: { ...route.query, q: trimmed },
+        path: PATH_SEARCH,
+        query: { ...route.query, [SEARCH_PARAM]: trimmed },
       })
     );
   };
 
   const getShowPath = (showId: number): string => {
     return localePath({
-      path: `/shows/${showId}`,
+      path: `${PATH_SHOWS}/${showId}`,
       query: {
-        type: selectedCategory.value,
+        [TYPE_PARAM]: selectedCategory.value,
       },
     });
   };

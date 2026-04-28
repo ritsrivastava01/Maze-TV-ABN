@@ -1,9 +1,7 @@
+import { DEFAULT_NAV_CATEGORY, FALLBACK_IMAGE } from '../../constants/appConstant';
 import type { ShowApiModel } from '../../tvmaze/api/tvmaze.api';
 import type { DashboardCategory, DashboardGenreRow, DashboardViewModel } from '../viewModel/dashboardViewModel.type';
 import type { ShowViewModel } from '../viewModel/show.type';
-
-// default fallback image
-const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 // number of stars
 const STAR_COUNT = 5;
 
@@ -58,7 +56,7 @@ const mapShowsApiToDashboardShows = (shows: ShowApiModel[]): ShowViewModel[] => 
  *   used to filter the shows by category
  */
 const filterShowsByCategory = (shows: ShowViewModel[], category: DashboardCategory): ShowViewModel[] => {
-  if (category === 'tv-shows') {
+  if (category === DEFAULT_NAV_CATEGORY) {
     return shows;
   }
 

@@ -1,5 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import {
+  DEFAULT_NAV_CATEGORY,
+  PATH_HOME,
+  PATH_SEARCH,
+  PATH_SHOWS,
+  SEARCH_PARAM,
+  TYPE_PARAM,
+} from '../../domains/constants/appConstant';
 import { i18nMockFactory, mockPush, routeState, vueRouterMockFactory } from '../../tests/mocks/app-navigation.stub';
 import { useAppNavigation } from './useAppNavigation';
 
@@ -14,23 +22,14 @@ describe('useAppNavigation', () => {
 
   describe('when reading selectedCategory', () => {
     it('should default to tv-shows when route has no type query', () => {
-      // Arrange
-      // Act
       const { selectedCategory } = useAppNavigation();
-
-      // Assert
-      expect(useAppNavigation().selectedCategory.value).toBe('tv-shows');
+      expect(selectedCategory.value).toBe(DEFAULT_NAV_CATEGORY);
     });
 
     it('should reflect route.query.type when it is set', () => {
-      // Arrange
-      routeState.query = { type: 'movies' };
-
-      // Act
+      routeState.query = { [TYPE_PARAM]: 'movies' };
       const { selectedCategory } = useAppNavigation();
-
-      // Assert
-      expect(useAppNavigation().selectedCategory.value).toBe('movies');
+      expect(selectedCategory.value).toBe('movies');
     });
   });
 
@@ -43,19 +42,19 @@ describe('useAppNavigation', () => {
       await setCategory('documentaries');
 
       // Assert
-      expect(mockPush).toHaveBeenLastCalledWith('/?type=documentaries');
+      expect(mockPush).toHaveBeenLastCalledWith(`${PATH_HOME}?${TYPE_PARAM}=documentaries`);
     });
 
     it('should push search with trimmed q and preserve other query', async () => {
       // Arrange
-      routeState.query = { type: 'movies' };
+      routeState.query = { [TYPE_PARAM]: 'movies' };
       const { setSearchQuery } = useAppNavigation();
 
       // Act
       await setSearchQuery('  breaking  ');
 
       // Assert
-      expect(mockPush).toHaveBeenLastCalledWith('/search?type=movies&q=breaking');
+      expect(mockPush).toHaveBeenLastCalledWith(`${PATH_SEARCH}?${TYPE_PARAM}=movies&${SEARCH_PARAM}=breaking`);
     });
 
     it('should not push when the search string is empty or whitespace', async () => {
@@ -73,23 +72,23 @@ describe('useAppNavigation', () => {
   describe('when building show URLs', () => {
     it('should include the current category in getShowPath', () => {
       // Arrange
-      routeState.query = { type: 'documentaries' };
+      routeState.query = { [TYPE_PARAM]: 'documentaries' };
       const { getShowPath } = useAppNavigation();
 
       // Act & Assert
-      expect(getShowPath(42)).toBe('/shows/42?type=documentaries');
+      expect(getShowPath(42)).toBe(`${PATH_SHOWS}/42?${TYPE_PARAM}=documentaries`);
     });
 
     it('should push the show path with category on goToShow', async () => {
       // Arrange
-      routeState.query = { type: 'documentaries' };
+      routeState.query = { [TYPE_PARAM]: 'documentaries' };
       const { goToShow } = useAppNavigation();
 
       // Act
       await goToShow(7);
 
       // Assert
-      expect(mockPush).toHaveBeenCalledWith('/shows/7?type=documentaries');
+      expect(mockPush).toHaveBeenCalledWith(`${PATH_SHOWS}/7?${TYPE_PARAM}=documentaries`);
     });
   });
 });

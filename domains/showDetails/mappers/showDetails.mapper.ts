@@ -1,8 +1,7 @@
+import { FALLBACK_IMAGE, IMDB_TITLE_BASE_URL } from '../../constants/appConstant';
 import { mapRatingToStarFills } from '../../dashboard/mappers/dashboard.mapper';
 import type { CastApi, EpisodeApi, SeasonApi, ShowApi } from '../../tvmaze/api/tvmaze.api';
 import type { Cast, Episode, Season, ShowDetailsViewModel } from '../viewModel/showDetailsViewModel.type';
-
-const FALLBACK_IMAGE = 'https://via.placeholder.com/210x295?text=No+Image';
 
 /** Format TVMaze date as `MMM D, YYYY` (e.g. "Apr 26, 2008"). */
 const formatDate = (date?: string | null): string => {
@@ -74,7 +73,7 @@ export const mapShowApiToShowDetailsViewModel = (
       country: apiShow.network?.country?.name ?? 'Unknown',
       scheduleDays: mapScheduleDays(apiShow.schedule),
       scheduleTime: mapScheduleTime(apiShow.schedule),
-      imdbUrl: apiShow.externals?.imdb ? `https://www.imdb.com/title/${apiShow.externals.imdb}` : null,
+      imdbUrl: apiShow.externals?.imdb ? `${IMDB_TITLE_BASE_URL}${apiShow.externals.imdb}` : null,
     },
     seasonList: mapSeasonApiListToSeasons(seasons),
     cast: cast.map(mapCastApiToCast),

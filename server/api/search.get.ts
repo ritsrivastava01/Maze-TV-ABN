@@ -1,3 +1,4 @@
+import { SEARCH_PARAM } from '../../domains/constants/appConstant';
 import { searchPresenter } from '../../domains/search/presenters/search.presenter';
 
 /**
@@ -7,8 +8,8 @@ import { searchPresenter } from '../../domains/search/presenters/search.presente
  */
 export default defineCachedEventHandler(
   async (event) => {
-    const { q = '' } = getQuery(event);
-    const query = String(q).trim();
+    const params = getQuery(event);
+    const query = String(params[SEARCH_PARAM] ?? '').trim();
 
     if (!query) {
       return { query: '', totalResults: 0, results: [] };
@@ -29,8 +30,10 @@ export default defineCachedEventHandler(
     maxAge: 30, // 30 seconds — search results can change more often than browse lists
     name: 'search',
     getKey: (event) => {
-      const { q = '' } = getQuery(event);
-      return String(q).trim().toLowerCase();
+      const params = getQuery(event);
+      return String(params[SEARCH_PARAM] ?? '')
+        .trim()
+        .toLowerCase();
     },
   }
 );

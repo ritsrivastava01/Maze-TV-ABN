@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { makeShowApi } from '../../../tests/mocks/tvmaze-api.factory';
+import { DEFAULT_NAV_CATEGORY } from '../../constants/appConstant';
 import { mapShowsApiToDashboardViewModel } from './dashboard.mapper';
 
 describe('mapShowsApiToDashboardViewModel', () => {
@@ -12,7 +13,7 @@ describe('mapShowsApiToDashboardViewModel', () => {
     ];
 
     // Act
-    const result = mapShowsApiToDashboardViewModel(input, 'tv-shows');
+    const result = mapShowsApiToDashboardViewModel(input, DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.title).toBe('Top Rated');
@@ -55,7 +56,7 @@ describe('mapShowsApiToDashboardViewModel', () => {
     const input = [makeShowApi({ rating: { average: 5 } })];
 
     // Act
-    const result = mapShowsApiToDashboardViewModel(input, 'tv-shows');
+    const result = mapShowsApiToDashboardViewModel(input, DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.ratingStarFills).toEqual([100, 100, 50, 0, 0]);
@@ -66,7 +67,7 @@ describe('mapShowsApiToDashboardViewModel', () => {
     const input = [makeShowApi({ rating: { average: 7.3 } })];
 
     // Act
-    const result = mapShowsApiToDashboardViewModel(input, 'tv-shows');
+    const result = mapShowsApiToDashboardViewModel(input, DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.ratingStarFills).toEqual([100, 100, 100, 75, 0]);
@@ -77,7 +78,7 @@ describe('mapShowsApiToDashboardViewModel', () => {
     const input = [makeShowApi({ rating: { average: 10 } })];
 
     // Act
-    const result = mapShowsApiToDashboardViewModel(input, 'tv-shows');
+    const result = mapShowsApiToDashboardViewModel(input, DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.ratingStarFills).toEqual([100, 100, 100, 100, 100]);
@@ -88,7 +89,7 @@ describe('mapShowsApiToDashboardViewModel', () => {
     const input = [makeShowApi({ rating: { average: 0 } })];
 
     // Act
-    const result = mapShowsApiToDashboardViewModel(input, 'tv-shows');
+    const result = mapShowsApiToDashboardViewModel(input, DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.ratingStarFills).toEqual([0, 0, 0, 0, 0]);
@@ -99,7 +100,7 @@ describe('mapShowsApiToDashboardViewModel', () => {
     const input = [makeShowApi({ rating: { average: null } })];
 
     // Act
-    const result = mapShowsApiToDashboardViewModel(input, 'tv-shows');
+    const result = mapShowsApiToDashboardViewModel(input, DEFAULT_NAV_CATEGORY);
 
     // Assert
     expect(result.featuredShow?.ratingStarFills).toEqual([0, 0, 0, 0, 0]);

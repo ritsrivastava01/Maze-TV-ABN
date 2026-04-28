@@ -1,4 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+/**
+ * When Playwright runs E2E, `page.route()` mocks browser fetches. Server-side SSR would call
+ * `/api/*` directly on Nitro — mocks never apply — so we disable SSR for E2E-only runs.
+ * Start Nuxt with `PLAYWRIGHT_E2E=1` (playwright.config does this for the spawned dev server).
+ */
+const isPlaywrightE2E = process.env.PLAYWRIGHT_E2E === '1';
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -15,9 +23,7 @@ export default defineNuxtConfig({
    * tailwind.css includes @tailwind base/components/utilities and
    * imports design-system.css into the correct Tailwind layer.
    */
-  tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css',
-  },
+  css: ['~/assets/css/tailwind.css'],
 
   vite: {
     optimizeDeps: {
@@ -34,4 +40,6 @@ export default defineNuxtConfig({
       { code: 'nl', language: 'nl-NL', file: 'nl.json', name: 'Nederlands' },
     ],
   },
+
+  ...(isPlaywrightE2E ? { routeRules: { '/**': { ssr: false } } } : {}),
 });

@@ -1,3 +1,4 @@
+import { DEFAULT_NAV_CATEGORY, TYPE_PARAM } from '../../domains/constants/appConstant';
 import { dashboardPresenter } from '../../domains/dashboard/presenters/dashboard.presenter';
 import type { DashboardCategory } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 
@@ -9,7 +10,7 @@ import type { DashboardCategory } from '../../domains/dashboard/viewModel/dashbo
 export default defineCachedEventHandler(
   async (event) => {
     const query = getQuery(event);
-    const category = (query.type ?? 'tv-shows') as DashboardCategory;
+    const category = (query[TYPE_PARAM] ?? DEFAULT_NAV_CATEGORY) as DashboardCategory;
     const { getDashboard } = dashboardPresenter();
 
     try {
@@ -26,7 +27,7 @@ export default defineCachedEventHandler(
     name: 'dashboard',
     getKey: (event) => {
       const query = getQuery(event);
-      return String(query.type ?? 'tv-shows');
+      return String(query[TYPE_PARAM] ?? DEFAULT_NAV_CATEGORY);
     },
   }
 );

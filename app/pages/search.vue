@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import { SEARCH_PARAM } from '../../domains/constants/appConstant';
 import type { SearchViewModel } from '../../domains/search/viewModel/searchViewModel.type';
 import Card from '../components/Card.vue';
 import RatingStars from '../components/RatingStars.vue';
@@ -16,10 +17,12 @@ const route = useRoute();
 const { t } = useI18n();
 const { getShowPath } = useAppNavigation();
 
-const searchQuery = computed<string>(() => (typeof route.query.q === 'string' ? route.query.q.trim() : ''));
+const searchQuery = computed<string>(() =>
+  typeof route.query[SEARCH_PARAM] === 'string' ? route.query[SEARCH_PARAM].trim() : ''
+);
 
 const { data, status } = useFetch<SearchViewModel>('/api/search', {
-  query: computed(() => ({ q: searchQuery.value })),
+  query: computed(() => ({ [SEARCH_PARAM]: searchQuery.value })),
   onResponseError({ response }) {
     showError({
       statusCode: response.status,
