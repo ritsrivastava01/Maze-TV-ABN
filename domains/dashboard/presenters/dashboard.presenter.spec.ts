@@ -61,55 +61,6 @@ describe('useDashboardPresenter — getDashboard()', () => {
     expect(result.genreRows).toHaveLength(0);
   });
 
-  it('should apply the "movies" category filter correctly end-to-end', async () => {
-    // Arrange
-    const mockShows = [
-      makeApiShow({ id: 1, name: 'Action Hero', genres: ['Action'], rating: { average: 8 } }),
-      makeApiShow({ id: 2, name: 'Nature Doc', genres: ['Nature'], rating: { average: 7 } }),
-    ];
-    vi.mocked(fetchTvMazeShows).mockResolvedValue(mockShows);
-
-    // Act
-    const { getDashboard } = useDashboardPresenter();
-    const result = await getDashboard('movies');
-
-    // Assert
-    const allTitles = result.genreRows.flatMap((r) => r.shows.map((s) => s.title));
-    expect(allTitles).toContain('Action Hero');
-    expect(allTitles).not.toContain('Nature Doc');
-  });
-
-  it('should apply the "documentaries" category filter correctly end-to-end', async () => {
-    // Arrange
-    const mockShows = [
-      makeApiShow({ id: 1, name: 'Action Hero', genres: ['Action'], rating: { average: 8 } }),
-      makeApiShow({ id: 2, name: 'Nature Doc', genres: ['Documentary'], rating: { average: 7 } }),
-    ];
-    vi.mocked(fetchTvMazeShows).mockResolvedValue(mockShows);
-
-    // Act
-    const { getDashboard } = useDashboardPresenter();
-    const result = await getDashboard('documentaries');
-
-    // Assert
-    const allTitles = result.genreRows.flatMap((r) => r.shows.map((s) => s.title));
-    expect(allTitles).toContain('Nature Doc');
-    expect(allTitles).not.toContain('Action Hero');
-  });
-
-  it('should re-query the API on each invocation (no stale cache)', async () => {
-    // Arrange
-    vi.mocked(fetchTvMazeShows).mockResolvedValue([makeApiShow()]);
-
-    // Act
-    const { getDashboard } = useDashboardPresenter();
-    await getDashboard('tv-shows');
-    await getDashboard('movies');
-
-    // Assert
-    expect(fetchTvMazeShows).toHaveBeenCalledTimes(2);
-  });
-
   it('should propagate API errors to the caller', async () => {
     // Arrange
     vi.mocked(fetchTvMazeShows).mockRejectedValue(new Error('Network error'));

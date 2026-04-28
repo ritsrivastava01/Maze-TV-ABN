@@ -7,7 +7,7 @@ const i18nComposables = fileURLToPath(
 );
 
 /**
- * Vitest configuration for unit and integration tests.
+ * Vitest config. Coverage HTML + lcov go under `coverage/vitest/` (see `coverage.reportsDirectory`).
  */
 export default defineConfig({
   test: {
@@ -16,9 +16,17 @@ export default defineConfig({
     include: ['domains/**/*.spec.ts', 'app/**/*.spec.ts'],
     coverage: {
       provider: 'v8',
+      reportsDirectory: 'coverage/vitest',
       reporter: ['text', 'html', 'lcov'],
       include: ['domains/**/*.ts', 'app/composables/**/*.ts', 'server/**/*.ts'],
-      exclude: ['**/*.type.ts', '**/*.d.ts', '**/*.spec.ts'],
+      exclude: [
+        '**/*.type.ts',
+        '**/*.d.ts',
+        '**/*.spec.ts',
+        // Not unit-tested — covered by Playwright e2e
+        'domains/tvmaze/**',
+        'server/**',
+      ],
     },
   },
   resolve: {
