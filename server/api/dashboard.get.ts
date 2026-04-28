@@ -1,4 +1,4 @@
-import { useDashboardPresenter } from '../../domains/dashboard/presenters/dashboard.presenter';
+import { dashboardPresenter } from '../../domains/dashboard/presenters/dashboard.presenter';
 import type { DashboardCategory } from '../../domains/dashboard/viewModel/dashboardViewModel.type';
 
 /**
@@ -10,7 +10,7 @@ export default defineCachedEventHandler(
   async (event) => {
     const query = getQuery(event);
     const category = (query.type ?? 'tv-shows') as DashboardCategory;
-    const { getDashboard } = useDashboardPresenter();
+    const { getDashboard } = dashboardPresenter();
 
     try {
       return await getDashboard(category);

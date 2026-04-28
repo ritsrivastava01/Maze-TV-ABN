@@ -8,7 +8,7 @@ import { mapEpisodeApiListToEpisodes, mapShowApiToShowDetailsViewModel } from '.
 import type { Episode, ShowDetailsViewModel } from '../viewModel/showDetailsViewModel.type';
 
 /** Show-details use-case: TVMaze data to `ShowDetailsViewModel`, plus per-season episode loading for API routes. */
-export const useShowDetailsPresenter = () => {
+export const showDetailsPresenter = () => {
   /** Fetches show, seasons, cast, and first-season episodes, mapped to `ShowDetailsViewModel`. */
   const getShowDetails = async (id: number): Promise<ShowDetailsViewModel> => {
     const [apiShow, seasons, cast] = await Promise.all([

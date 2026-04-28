@@ -1,7 +1,7 @@
-import { useLayoutPresenter } from '../../domains/layout/presenters/layout.presenter';
+import { layoutPresenter } from '../../domains/layout/presenters/layout.presenter';
 
 export default defineEventHandler(async () => {
-  const { getHeaderNavItems } = useLayoutPresenter();
+  const { getHeaderNavItems } = layoutPresenter();
 
   try {
     return await getHeaderNavItems();

@@ -3,11 +3,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeSearchResult } from '../../../tests/mocks/tvmaze-api.factory';
 import { tvmazeApiPresenterStub } from '../../../tests/mocks/tvmaze-api.presenter.stub';
 import { fetchTvMazeSearchShows } from '../../tvmaze/api/tvmaze.api';
-import { useSearchPresenter } from './search.presenter';
+import { searchPresenter } from './search.presenter';
 
 vi.mock('../../tvmaze/api/tvmaze.api', () => tvmazeApiPresenterStub);
 
-describe('useSearchPresenter — getSearchResults()', () => {
+describe('searchPresenter — getSearchResults()', () => {
   beforeEach(() => {
     vi.mocked(fetchTvMazeSearchShows).mockReset();
   });
@@ -21,7 +21,7 @@ describe('useSearchPresenter — getSearchResults()', () => {
     vi.mocked(fetchTvMazeSearchShows).mockResolvedValue(mockResults);
 
     // Act
-    const { getSearchResults } = useSearchPresenter();
+    const { getSearchResults } = searchPresenter();
     const result = await getSearchResults('breaking');
 
     // Assert
@@ -32,7 +32,7 @@ describe('useSearchPresenter — getSearchResults()', () => {
 
   it('should return empty results without calling the API for a blank query', async () => {
     // Act
-    const { getSearchResults } = useSearchPresenter();
+    const { getSearchResults } = searchPresenter();
     const result = await getSearchResults('   ');
 
     // Assert
@@ -46,7 +46,7 @@ describe('useSearchPresenter — getSearchResults()', () => {
     vi.mocked(fetchTvMazeSearchShows).mockRejectedValue(new Error('Network error'));
 
     // Act
-    const { getSearchResults } = useSearchPresenter();
+    const { getSearchResults } = searchPresenter();
 
     // Assert
     await expect(getSearchResults('breaking')).rejects.toThrow('Network error');

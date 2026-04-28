@@ -1,4 +1,4 @@
-import { useShowDetailsPresenter } from '../../../domains/showDetails/presenters/showDetails.presenter';
+import { showDetailsPresenter } from '../../../domains/showDetails/presenters/showDetails.presenter';
 
 export default defineEventHandler(async (event) => {
   const seasonId = Number(event.context.params?.id);
@@ -10,6 +10,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { getSeasonEpisodes } = useShowDetailsPresenter();
+  const { getSeasonEpisodes } = showDetailsPresenter();
   return await getSeasonEpisodes(seasonId);
 });

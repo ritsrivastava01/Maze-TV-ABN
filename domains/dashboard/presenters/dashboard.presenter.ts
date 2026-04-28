@@ -2,7 +2,7 @@ import { fetchTvMazeShows, type ShowApiModel } from '../../tvmaze/api/tvmaze.api
 import { mapShowsApiToDashboardViewModel } from '../mappers/dashboard.mapper';
 import type { DashboardCategory, DashboardViewModel } from '../viewModel/dashboardViewModel.type';
 
-export const useDashboardPresenter = () => {
+export const dashboardPresenter = () => {
   /**
    *   used to get the dashboard (shows, genres and featured show) for the given category from the query string
    */

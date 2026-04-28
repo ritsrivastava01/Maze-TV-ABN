@@ -8,11 +8,11 @@ import {
   fetchTvMazeShowCast,
   fetchTvMazeShowSeasons,
 } from '../../tvmaze/api/tvmaze.api';
-import { useShowDetailsPresenter } from './showDetails.presenter';
+import { showDetailsPresenter } from './showDetails.presenter';
 
 vi.mock('../../tvmaze/api/tvmaze.api', () => tvmazeApiPresenterStub);
 
-describe('useShowDetailsPresenter', () => {
+describe('showDetailsPresenter', () => {
   beforeEach(() => {
     vi.mocked(fetchTvMazeShowById).mockReset();
     vi.mocked(fetchTvMazeShowSeasons).mockReset();
@@ -36,7 +36,7 @@ describe('useShowDetailsPresenter', () => {
     vi.mocked(fetchTvMazeSeasonEpisodes).mockResolvedValue([makeEpisodeApi({ id: 1, name: 'Pilot' })]);
 
     // Act
-    const { getShowDetails } = useShowDetailsPresenter();
+    const { getShowDetails } = showDetailsPresenter();
     await getShowDetails(10);
 
     // Assert
@@ -51,7 +51,7 @@ describe('useShowDetailsPresenter', () => {
     vi.mocked(fetchTvMazeSeasonEpisodes).mockResolvedValue([makeEpisodeApi({ id: 3, name: 'Episode 3' })]);
 
     // Act
-    const { getSeasonEpisodes } = useShowDetailsPresenter();
+    const { getSeasonEpisodes } = showDetailsPresenter();
     await getSeasonEpisodes(300);
 
     // Assert
@@ -64,7 +64,7 @@ describe('useShowDetailsPresenter', () => {
     vi.mocked(fetchTvMazeShowById).mockRejectedValue(new Error('Network error'));
 
     // Act
-    const { getShowDetails } = useShowDetailsPresenter();
+    const { getShowDetails } = showDetailsPresenter();
 
     // Assert
     await expect(getShowDetails(1)).rejects.toThrow('Network error');

@@ -7,7 +7,7 @@ import type { HeaderViewModel } from '../viewModel/layoutViewModel.type';
  * @returns ViewModel for the layout domain
  */
 
-export const useLayoutPresenter = () => {
+export const layoutPresenter = () => {
   const getHeaderNavItems = async (): Promise<HeaderViewModel> => {
     const navItems: LayoutNavApiModel[] = await fetchTvMazeLayoutNavItems();
     return mapHeaderNavItemsToViewModel(navItems);

@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { tvmazeApiPresenterStub } from '../../../tests/mocks/tvmaze-api.presenter.stub';
 import type { ShowApiModel } from '../../tvmaze/api/tvmaze.api';
 import { fetchTvMazeShows } from '../../tvmaze/api/tvmaze.api';
-import { useDashboardPresenter } from './dashboard.presenter';
+import { dashboardPresenter } from './dashboard.presenter';
 
 vi.mock('../../tvmaze/api/tvmaze.api', () => tvmazeApiPresenterStub);
 
@@ -23,7 +23,7 @@ const makeApiShow = (overrides: Partial<ShowApiModel> = {}): ShowApiModel => ({
   ...overrides,
 });
 
-describe('useDashboardPresenter — getDashboard()', () => {
+describe('dashboardPresenter — getDashboard()', () => {
   beforeEach(() => {
     vi.mocked(fetchTvMazeShows).mockReset();
   });
@@ -37,7 +37,7 @@ describe('useDashboardPresenter — getDashboard()', () => {
     vi.mocked(fetchTvMazeShows).mockResolvedValue(mockShows);
 
     // Act
-    const { getDashboard } = useDashboardPresenter();
+    const { getDashboard } = dashboardPresenter();
     const result = await getDashboard('tv-shows');
 
     // Assert
@@ -53,7 +53,7 @@ describe('useDashboardPresenter — getDashboard()', () => {
     vi.mocked(fetchTvMazeShows).mockResolvedValue([]);
 
     // Act
-    const { getDashboard } = useDashboardPresenter();
+    const { getDashboard } = dashboardPresenter();
     const result = await getDashboard('tv-shows');
 
     // Assert
@@ -66,7 +66,7 @@ describe('useDashboardPresenter — getDashboard()', () => {
     vi.mocked(fetchTvMazeShows).mockRejectedValue(new Error('Network error'));
 
     // Act
-    const { getDashboard } = useDashboardPresenter();
+    const { getDashboard } = dashboardPresenter();
 
     // Assert
     await expect(getDashboard('tv-shows')).rejects.toThrow('Network error');

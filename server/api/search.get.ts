@@ -1,4 +1,4 @@
-import { useSearchPresenter } from '../../domains/search/presenters/search.presenter';
+import { searchPresenter } from '../../domains/search/presenters/search.presenter';
 
 /**
  * Returns search results for the given query string.
@@ -14,7 +14,7 @@ export default defineCachedEventHandler(
       return { query: '', totalResults: 0, results: [] };
     }
 
-    const { getSearchResults } = useSearchPresenter();
+    const { getSearchResults } = searchPresenter();
 
     try {
       return await getSearchResults(query);

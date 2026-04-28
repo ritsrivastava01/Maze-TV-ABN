@@ -2,7 +2,7 @@ import { fetchTvMazeSearchShows } from '../../tvmaze/api/tvmaze.api';
 import { mapSearchResultsApiToViewModel } from '../mappers/search.mapper';
 import type { SearchViewModel } from '../viewModel/searchViewModel.type';
 
-export const useSearchPresenter = () => {
+export const searchPresenter = () => {
   /**
    * Searches TVMaze for shows matching the given query string and returns
    * a mapped SearchViewModel with results ranked by relevance score.

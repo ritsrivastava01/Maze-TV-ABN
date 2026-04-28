@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { tvmazeApiPresenterStub } from '../../../tests/mocks/tvmaze-api.presenter.stub';
 import type { LayoutNavApiModel } from '../../tvmaze/api/tvmaze.api';
 import { fetchTvMazeLayoutNavItems } from '../../tvmaze/api/tvmaze.api';
-import { useLayoutPresenter } from './layout.presenter';
+import { layoutPresenter } from './layout.presenter';
 
 vi.mock('../../tvmaze/api/tvmaze.api', () => tvmazeApiPresenterStub);
 
@@ -15,7 +15,7 @@ const nav = (overrides: Partial<LayoutNavApiModel> = {}): LayoutNavApiModel => (
   ...overrides,
 });
 
-describe('useLayoutPresenter.getHeaderNavItems', () => {
+describe('layoutPresenter.getHeaderNavItems', () => {
   beforeEach(() => vi.mocked(fetchTvMazeLayoutNavItems).mockReset());
 
   describe('when the API returns navigation items', () => {
@@ -27,7 +27,7 @@ describe('useLayoutPresenter.getHeaderNavItems', () => {
       ]);
 
       // Act
-      const result = await useLayoutPresenter().getHeaderNavItems();
+      const result = await layoutPresenter().getHeaderNavItems();
 
       // Assert
       expect(result.headerNavItems.map((i) => i.value)).toEqual(['tv-shows', 'movies']);
@@ -40,8 +40,8 @@ describe('useLayoutPresenter.getHeaderNavItems', () => {
       vi.mocked(fetchTvMazeLayoutNavItems).mockResolvedValue([nav()]);
 
       // Act
-      await useLayoutPresenter().getHeaderNavItems();
-      await useLayoutPresenter().getHeaderNavItems();
+      await layoutPresenter().getHeaderNavItems();
+      await layoutPresenter().getHeaderNavItems();
 
       // Assert
       expect(fetchTvMazeLayoutNavItems).toHaveBeenCalledTimes(2);
@@ -54,7 +54,7 @@ describe('useLayoutPresenter.getHeaderNavItems', () => {
       vi.mocked(fetchTvMazeLayoutNavItems).mockRejectedValueOnce(new Error('unavailable'));
 
       // Act & Assert
-      await expect(useLayoutPresenter().getHeaderNavItems()).rejects.toThrow('unavailable');
+      await expect(layoutPresenter().getHeaderNavItems()).rejects.toThrow('unavailable');
     });
   });
 });
