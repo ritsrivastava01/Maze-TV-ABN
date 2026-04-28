@@ -2,6 +2,9 @@
   "brand": {
     "appName": "MAZE TV"
   },
+  "seo": {
+    "description": "Browse TV shows by genre with ratings from TVMaze, open rich show details, and search titles — responsive Maze TV dashboard."
+  },
   "a11y": {
     "mainNav": "Category navigation",
     "loadCategory": "Load category: {name}",

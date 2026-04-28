@@ -2,6 +2,9 @@
   "brand": {
     "appName": "MAZE TV"
   },
+  "seo": {
+    "description": "Blader tv-series per genre met beoordelingen van TVMaze, bekijk uitgebreide detailpagina's en zoek op titel — responsief Maze TV-dashboard."
+  },
   "a11y": {
     "mainNav": "Categorienavigatie",
     "loadCategory": "Categorie laden: {name}",

@@ -13,12 +13,22 @@ TV dashboard application built with Nuxt and Vue. It consumes the TVMaze API and
 
 This implementation addresses the assignment requirements:
 
-- list TV shows by category/genre
-- keep UI responsive and mobile friendly
+- list TV shows by category/genre in **horizontal rails** (per assignment: “preferably horizontal list”)
+- within each genre, shows are **sorted by rating** (highest first)
+- UI is responsive and mobile friendly
 - navigate from dashboard card to show details
 - include search flow
 - keep code reusable and clean
 - provide unit tests and end-to-end tests
+
+### Data fetching & performance
+
+All TVMaze access goes through **Nitro `/api/*` routes**. The strategy favors **fewer round-trips, parallel fetches where it helps, and HTTP caching** on the server.
+
+- **Dashboard** — **`GET /shows`** loads the browse catalog in one shot. The app **groups rails by each show’s `genres[]`**, **filters** by the selected category (`tv-shows` / `movies` / `documentaries`), and **sorts by `rating.average`**. **`/api/dashboard`** is **cached for 5 minutes** (per category) so typical navigation does not hammer TVMaze.
+- **Search** — **`GET /search/shows?q=...`**. **`/api/search`** uses a **30-second cache** per normalized query to smooth repeat searches.
+- **Show detail** — **`GET /shows/:id`**, **`GET /shows/:id/seasons`**, and **`GET /shows/:id/cast`** run **in parallel**. **Only the first season’s episodes** load initially via **`GET /seasons/{seasonId}/episodes`**. When the user picks another season, **`/api/season/:id`** fetches that season’s episodes **on demand**, so we **do not download every season’s episode list up front**.
+
 - design system foundation: reusable `ds-*` CSS classes built on top of Tailwind, scoped in `assets/css/design-system.css`
 - code quality enforced with Prettier, ESLint (with unused-import and import-sort plugins), and Commitlint (conventional commits)
 - pre-commit hooks via Husky + lint-staged run ESLint + Prettier automatically on staged files
@@ -154,31 +164,36 @@ Internationalization is enabled with `@nuxtjs/i18n`.
 
 ## Setup and Run
 
-## Prerequisites
+### Prerequisites
 
-- Node.js: `v22.17.0`
-- npm: `11.4.2`
+- **Node.js**: `v22.17.0` (use the same major version when possible; run `node -v` to confirm)
+- **npm**: `11.4.2` (`npm -v`)
 
-## Install
+### Before submission (assignment checklist)
+
+- Run `npm run dev`, click through dashboard → details → search, and confirm **no errors in the browser console**
+- Run `npm test` and `npm run build` successfully
+
+### Install
 
 ```bash
 npm install
 ```
 
-## Development
+### Development
 
 ```bash
 npm run dev
 ```
 
-## Build and Preview
+### Build and Preview
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Lint and Format
+### Lint and Format
 
 ```bash
 npm run lint
@@ -240,7 +255,6 @@ Current e2e specs:
 
 ## TODO / Improvements
 
-- improve error-state UX consistency across all pages (dedicated visual states)
-- add more unite test and 2e2 test
-- replace the layout (header and footer)dd ata with actual api
+- add more unit tests and e2e tests
+- replace the layout (header and footer) data with an actual API
 - add API contract tests for server routes
