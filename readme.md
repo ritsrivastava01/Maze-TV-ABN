@@ -199,15 +199,7 @@ npm run format:check
 
 ## Testing
 
-### Unit/Integration (Vitest)
-
-```bash
-npm test
-npm run test:watch
-npm run test:coverage   # runs Vitest with v8 coverage and opens HTML report
-```
-
-## Lighthouse scores
+### Lighthouse scores
 
 Scores from **Google Chrome Lighthouse** (April 2026), run on the **production** app.
 
@@ -223,6 +215,14 @@ Desktop and mobile use each Lighthouse device profile. Screenshots in the table 
 |                            Desktop                            |                           Mobile                            |
 | :-----------------------------------------------------------: | :---------------------------------------------------------: |
 | ![Lighthouse report — desktop](./docs/lighthouse-desktop.png) | ![Lighthouse report — mobile](./docs/lighthouse-mobile.png) |
+
+### Unit/Integration (Vitest)
+
+```bash
+npm test
+npm run test:watch
+npm run test:coverage   # runs Vitest with v8 coverage and opens HTML report
+```
 
 Coverage report is generated in `coverage/vitest/index.html`.
 
